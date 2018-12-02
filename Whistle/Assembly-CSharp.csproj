@@ -61,7 +61,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Scripts\PlayerController.cs" />
+    <Compile Include="Assets\Scripts\Game\Characters.cs" />
+    <Compile Include="Assets\Scripts\Game\Conditions.cs" />
+    <Compile Include="Assets\Scripts\Game\GameController.cs" />
+    <Compile Include="Assets\Scripts\GiveBuff.cs" />
+    <Compile Include="Assets\Scripts\GiveDebuff.cs" />
+    <Compile Include="Assets\Scripts\MonsterController.cs" />
+    <Compile Include="Assets\Scripts\Player\PlayerAnimator.cs" />
+    <Compile Include="Assets\Scripts\Player\PlayerController.cs" />
+    <Compile Include="Assets\Scripts\ShowHealth.cs" />
+    <Compile Include="Assets\Scripts\TestMover.cs" />
     <Compile Include="Assets\Spine Examples\Scripts\AttackSpineboy.cs" />
     <Compile Include="Assets\Spine Examples\Scripts\DataAssetsFromExportsExample.cs" />
     <Compile Include="Assets\Spine Examples\Scripts\DraggableTransform.cs" />
@@ -205,7 +214,6 @@
     <Compile Include="Assets\Spine\spine-unity\SkeletonUtility\SkeletonUtilityBone.cs" />
     <Compile Include="Assets\Spine\spine-unity\SkeletonUtility\SkeletonUtilityConstraint.cs" />
     <Compile Include="Assets\Spine\spine-unity\SpineAttributes.cs" />
-    <Compile Include="Assets\TestMover.cs" />
     <None Include="Assets\Spine Examples\Spine\Eyes\eyes.atlas.txt" />
     <None Include="Assets\Spine\spine-unity\Shaders\Utility\HiddenPass.shader" />
     <None Include="Assets\Spine\spine-unity\Modules\Shaders\Spine-Skeleton-Fill.shader" />
@@ -221,6 +229,7 @@
     <None Include="Assets\Spine Examples\Spine\Hero\license.txt" />
     <None Include="Assets\Spine Examples\Spine\Goblins\goblins.atlas.txt" />
     <None Include="Assets\Spine Examples\Spine\Strechyman\stretchyman-diffuse-pma.atlas.txt" />
+    <None Include="Assets\Sprites\Ichabod\ichabod.atlas.txt" />
     <None Include="Assets\Spine Examples\Spine\Raptor\raptor.atlas.txt" />
     <None Include="Assets\Spine\spine-unity\Modules\Shaders\Sprite\CGIncludes\SpriteLighting.cginc" />
     <None Include="Assets\Spine\spine-unity\Modules\SlotBlendModes\Spine-Skeleton-PMA-Screen.shader" />
@@ -241,6 +250,7 @@
     <None Include="Assets\Spine\spine-unity\Modules\Shaders\Sprite\SpriteUnlit.cginc" />
     <None Include="Assets\Spine\spine-unity\Modules\Shaders\Sprite\SpritePixelLighting.cginc" />
     <None Include="Assets\Spine Examples\Spine\Dragon\dragon.atlas.txt" />
+    <None Include="Assets\Sprites\Ichabod\skeleton.atlas.txt" />
     <None Include="Assets\Spine\spine-unity\Modules\Shaders\Sprite\CameraDepthNormalsTexture.shader" />
     <None Include="Assets\Spine\spine-unity\Shaders\Spine-Skeleton-TintBlack.shader" />
     <None Include="Assets\Spine\spine-unity\Modules\Shaders\Sprite\CGIncludes\ShaderShared.cginc" />
@@ -260,6 +270,9 @@
     <None Include="Assets\Spine\spine-unity\Modules\Shaders\Sprite\CGIncludes\SpriteSpecular.cginc" />
     <None Include="Assets\Spine\spine-unity\Modules\Shaders\Straight Alpha\Spine-Straight-Skeleton-Fill.shader" />
     <None Include="Assets\Spine Examples\Spine\FootSoldier\Equipment\Equipment.atlas.txt" />
+    <Reference Include="Unity.2D.SpriteShape.Editor">
+      <HintPath>C:/Users/noahj/OneDrive/Documents/GitHub/whistle/Whistle/Library/ScriptAssemblies/Unity.2D.SpriteShape.Editor.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEditor.StandardEvents">
       <HintPath>C:/Users/noahj/OneDrive/Documents/GitHub/whistle/Whistle/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>
     </Reference>
@@ -269,12 +282,6 @@
     <Reference Include="Unity.PackageManagerUI.Editor">
       <HintPath>C:/Users/noahj/OneDrive/Documents/GitHub/whistle/Whistle/Library/ScriptAssemblies/Unity.PackageManagerUI.Editor.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.TextMeshPro">
-      <HintPath>C:/Users/noahj/OneDrive/Documents/GitHub/whistle/Whistle/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.2D.SpriteShape.Editor">
-      <HintPath>C:/Users/noahj/OneDrive/Documents/GitHub/whistle/Whistle/Library/ScriptAssemblies/Unity.2D.SpriteShape.Editor.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.InternalAPIEngineBridge.001">
       <HintPath>C:/Users/noahj/OneDrive/Documents/GitHub/whistle/Whistle/Library/ScriptAssemblies/Unity.InternalAPIEngineBridge.001.dll</HintPath>
     </Reference>
@@ -283,6 +290,9 @@
     </Reference>
     <Reference Include="Unity.2D.SpriteShape.Runtime">
       <HintPath>C:/Users/noahj/OneDrive/Documents/GitHub/whistle/Whistle/Library/ScriptAssemblies/Unity.2D.SpriteShape.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.TextMeshPro">
+      <HintPath>C:/Users/noahj/OneDrive/Documents/GitHub/whistle/Whistle/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
     </Reference>
     <Reference Include="Unity.2D.Common.Editor">
       <HintPath>C:/Users/noahj/OneDrive/Documents/GitHub/whistle/Whistle/Library/ScriptAssemblies/Unity.2D.Common.Editor.dll</HintPath>
