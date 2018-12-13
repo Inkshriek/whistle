@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Spine.Unity;
 using UnityEngine;
+using Whistle.Characters;
 
 public class PlayerAnimator : MonoBehaviour {
 
@@ -22,19 +23,28 @@ public class PlayerAnimator : MonoBehaviour {
         
         if (controller.isTouchingGround) {
             if (controller.moveDirection != 0) {
-
-                if (controller.isRunning)
-                    changeState("run", true);
-                else if (controller.isCrouching)
-                    changeState("crouch_walk", true);
-                else
-                    changeState("walk", true);
+                
+                switch (controller.state) {
+                    case PlayerState.Running:
+                        changeState("run", true);
+                        break;
+                    case PlayerState.Crouching:
+                        changeState("crouch_walk", true);
+                        break;
+                    case PlayerState.Walking:
+                        changeState("walk", true);
+                        break;
+                }
             }
             else {
-                if (controller.isCrouching)
-                    changeState("crouch_idle", true);
-                else
-                    changeState("idle", true);
+                switch (controller.state) {
+                    case PlayerState.Crouching:
+                        changeState("crouch_idle", true);
+                        break;
+                    default:
+                        changeState("idle", true);
+                        break;
+                }
             }
         }
         else if (controller.airV > 0)

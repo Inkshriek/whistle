@@ -8,29 +8,28 @@ using Whistle.Characters;
 [RequireComponent(typeof(BoxCollider2D))]
 public class PlayerController : Player, ICharacter, IHealth, IConditions {
 
-    public float walkSpeed;
-    public float runSpeed;
-    public float crouchSpeed;
-    public float jumpHeight;
-    public float friction;
-    public float aerialControl;
-    [Range(0, 90)] public float slopeTolerance;
-    public float maxHealth;
-    public float effectiveHealth;
-    public float currentHealth;
+    [SerializeField] public float walkSpeed;
+    [SerializeField] public float runSpeed;
+    [SerializeField] public float crouchSpeed;
+    [SerializeField] private float jumpHeight;
+    [SerializeField] private float friction;
+    [SerializeField] private float aerialControl;
+    [SerializeField] [Range(0, 90)] public float slopeTolerance;
+    [SerializeField] private float maxHealth;
+    [SerializeField] private float effectiveHealth;
+    [SerializeField] private float currentHealth;
 
     private Transform trans;
     private Rigidbody2D rb;
     private BoxCollider2D col;
-    public PhysicsMaterial2D matAir;
-    public PhysicsMaterial2D matGround;
+    [SerializeField] private PhysicsMaterial2D matAir;
+    [SerializeField] private PhysicsMaterial2D matGround;
 
     private string charname = "Ichabod";
 
     [HideInInspector] public float moveDirection;
     [HideInInspector] public bool isTouchingGround;
-    [HideInInspector] public bool isCrouching;
-    [HideInInspector] public bool isRunning;
+    [HideInInspector] public PlayerState state;
     [HideInInspector] public bool allowCrouch;
     [HideInInspector] public bool allowJump;
     [HideInInspector] public bool allowMidairJump;
@@ -48,12 +47,20 @@ public class PlayerController : Player, ICharacter, IHealth, IConditions {
 
     public float ActiveSpeed {
         get {
-            if (isRunning)
-                return runSpeed;
-            else if (isCrouching)
-                return crouchSpeed;
-            else
-                return walkSpeed;
+            switch (state) {
+                case PlayerState.Walking:
+                    return walkSpeed;
+
+                case PlayerState.Crouching:
+                    return crouchSpeed;
+
+                case PlayerState.Running:
+                    return runSpeed;
+
+                default:
+                    Debug.LogError("PlayerState is in an impossible position! May want to fix that quick.");
+                    return 0;
+            }
         }
     }
 
@@ -126,18 +133,13 @@ public class PlayerController : Player, ICharacter, IHealth, IConditions {
         airHInitial = 0;
         airH = 0;
         airV = 0;
-        isCrouching = false;
 
-
+        state = PlayerState.Walking;
     }
 
     void Update() {
         if (isTouchingGround && Input.GetKeyDown(KeyCode.Space))
             rb.velocity = new Vector2(0, jumpHeight);
-    }
-
-    void EarlyUpdate() {
-
     }
 
     void FixedUpdate() {
@@ -147,14 +149,13 @@ public class PlayerController : Player, ICharacter, IHealth, IConditions {
         //Get some values to make this a little easier to manage.
         currentPosition = new Vector2(trans.position.x, trans.position.y + col.offset.y);
 
-        if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
-            isRunning = true;
-        else
-            isRunning = false;
         if (Input.GetAxisRaw("Vertical") < 0)
-            SetCrouching(true);
+            state = PlayerState.Crouching;
+        else if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
+            state = PlayerState.Running;
         else
-            SetCrouching(false);
+            state = PlayerState.Walking;
+
 
         moveDirection = Input.GetAxisRaw("Horizontal");
 
@@ -243,24 +244,13 @@ public class PlayerController : Player, ICharacter, IHealth, IConditions {
 
     }
 
-    void jump()
-    {
-        //??????????
-    }
-
-    public void SetCrouching(bool state)
-    {
-
-        isCrouching = state;
-    }
-
     private List<ContactPoint2D> CheckGround() {
         ContactPoint2D[] contactsAll = new ContactPoint2D[20];
         List<ContactPoint2D> contacts = new List<ContactPoint2D>();
         int contactsNum = col.GetContacts(contactsAll);
         for (int i = 0; i < contactsNum; i++) {
             float ang = Vector2.Angle(transform.up, contactsAll[i].normal);
-            if (ang < slopeTolerance && overlapCheck.collider != contactsAll[i].collider) {
+            if (ang < slopeTolerance && airV <= 0) {
                 contacts.Add(contactsAll[i]);
             }
         }

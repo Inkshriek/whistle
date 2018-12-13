@@ -61,6 +61,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\Conditions\Buffs_Interface.cs" />
     <Compile Include="Assets\Scripts\Game\Characters.cs" />
     <Compile Include="Assets\Scripts\Game\Conditions.cs" />
     <Compile Include="Assets\Scripts\Game\GameController.cs" />

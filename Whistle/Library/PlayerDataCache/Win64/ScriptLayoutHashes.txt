@@ -136,6 +136,7 @@ fc061f3ae8a876c0687e86378d4a447c UnityEngine.Networking.dll:UnityEngine.Networki
 7ca56e063bd071986fff4f513cc4f477 UnityEngine.Networking.dll:UnityEngine.Networking.NetworkTransformVisualizer
 025faea4ecb86b4d5c2a9b28e50be75a Assembly-CSharp.dll:Spine.Unity.Modules.SpriteAttacher
 0a006f3734181ba8b26758f0866152c0 UnityEngine.SpatialTracking.dll:UnityEngine.SpatialTracking.TrackedPoseDriver
+486cd95c82d8305219c352c06b776e1f Assembly-CSharp.dll:.MonsterController
 86c007ea1d85fc93bdb4bdc19840d0f5 Assembly-CSharp.dll:Spine.Unity.Examples.SpineboyPole
 382b8ef512fa8d6108723a01b57af65b UnityEngine.Analytics.dll:UnityEngine.Analytics.AnalyticsEventTracker
 d22c788799ee45d8676254eccf20e8b8 UnityEngine.Analytics.dll:UnityEngine.Analytics.AnalyticsTracker
@@ -160,6 +161,7 @@ f16835701e71dd5d6fb1fed4b7aff1d8 Unity.TextMeshPro.dll:TMPro.TMP_Asset
 2df2784e9e4471793a517c6f8a634cc8 Assembly-CSharp.dll:Spine.Unity.Examples.CombinedSkin
 0d39de36f8fecc4b4dac5fac56aff1b5 Assembly-CSharp.dll:Spine.Unity.SkeletonAnimator
 588996f976d70d1084abbc89c6e7e874 Assembly-CSharp.dll:Spine.Unity.Examples.Goblins
+6740d9ff7fa1a3ae8476e8d526928ad6 Assembly-CSharp.dll:.ShowHealth
 51d569cb6d92d1cef5bb25621c99b810 Assembly-CSharp.dll:Spine.Unity.Examples.BasicPlatformerController
 009385f4a696b64f593ac76cd06eb7ab Assembly-CSharp.dll:Spine.Unity.Examples.SpineboyFootplanter
 486cd95c82d8305219c352c06b776e1f Unity.TextMeshPro.dll:TMPro.TMP_SpriteAnimator
@@ -231,6 +233,7 @@ f92db63be0883c6bc5908d8bb7f57849 Assembly-CSharp.dll:Spine.Unity.Examples.Raptor
 e3263af677fc71e0906893053c1d8970 Assembly-CSharp.dll:.ReloadSceneOnKeyDown
 486cd95c82d8305219c352c06b776e1f Assembly-CSharp.dll:Spine.Unity.Modules.SkeletonPartsRenderer
 b5ef10bb880258f445a0623c806ef7be Assembly-CSharp.dll:.PlayerAnimator
+486cd95c82d8305219c352c06b776e1f Assembly-CSharp.dll:.GiveBuff
 75c1432fe9d2fe3c9c376815be3e5e3f Assembly-CSharp.dll:Spine.Unity.Examples.HandleEventWithAudioExample
 e04611b8715e6833d2bd7010fc6be10b Unity.TextMeshPro.dll:TMPro.TMP_StyleSheet
 42614536f55642c8ba6c2bb9f13a2e41 Assembly-CSharp.dll:Spine.Unity.Examples.MaterialPropertyBlockExample
@@ -242,10 +245,7 @@ d34c601928eb7c9e7a11379225bf1c7d Assembly-CSharp.dll:Spine.Unity.SkeletonUtility
 9318334b30e9f195f573b2ce00154b95 Unity.TextMeshPro.dll:TMPro.TMP_ColorGradient
 486cd95c82d8305219c352c06b776e1f Assembly-CSharp.dll:Spine.Unity.Examples.Spineboy
 93307bd34e39d73fd24e00ec39c25a91 Unity.TextMeshPro.dll:TMPro.TMP_SubMesh
-3a24c2f0dc717bb3911b30e593fc6e35 Assembly-CSharp.dll:.PlayerController
+39b19d5d0fbb0bb04237bbe206c1a97c Assembly-CSharp.dll:.PlayerController
 86d9ece2920a149f1047d9c3544c2d6b Assembly-CSharp.dll:Spine.Unity.Examples.EquipSystemExample
 2843d6ffcaa9b2f8d1a38e3758a8cd7a Assembly-CSharp.dll:Spine.Unity.Examples.DataAssetsFromExportsExample
-486cd95c82d8305219c352c06b776e1f Assembly-CSharp.dll:.GiveBuff
-486cd95c82d8305219c352c06b776e1f Assembly-CSharp.dll:.MonsterController
-6740d9ff7fa1a3ae8476e8d526928ad6 Assembly-CSharp.dll:.ShowHealth
 486cd95c82d8305219c352c06b776e1f Assembly-CSharp.dll:.GiveDebuff

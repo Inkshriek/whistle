@@ -95,7 +95,7 @@ public class MonsterController : MonoBehaviour, ICharacter, IConditions, IHealth
                 if (condsApplied[i] == null) {
                     condsApplied[i] = cond;
                     Debug.Log(condsApplied[i].name + " was applied to " + Name + "!");
-                    condsApplied[i].ApplyInitialEffect(gameObject);
+                    condsApplied[i].ApplyInitialEffect();
                     break;
                 }
             }
@@ -106,7 +106,7 @@ public class MonsterController : MonoBehaviour, ICharacter, IConditions, IHealth
         for (int i = 0; i < condsApplied.Length; i++) {
             if (condsApplied[i] != null && condsApplied[i].name == cond.name) {
                 Debug.Log(condsApplied[i].name + " has been removed from " + Name + ".");
-                condsApplied[i].RemoveEffect(gameObject);
+                condsApplied[i].RemoveEffect();
                 condsApplied[i] = null;
                 RealignCondList();
                 break;
@@ -120,12 +120,12 @@ public class MonsterController : MonoBehaviour, ICharacter, IConditions, IHealth
                 condsApplied[i].time -= Time.deltaTime;
                 if (condsApplied[i].time <= 0) {
                     Debug.Log(condsApplied[i].name + " has been removed from " + Name + " after running out of time.");
-                    condsApplied[i].RemoveEffect(gameObject);
+                    condsApplied[i].RemoveEffect();
                     condsApplied[i] = null;
                     RealignCondList();
                 }
                 else {
-                    condsApplied[i].ApplyContinuousEffect(gameObject);
+                    condsApplied[i].ApplyContinuousEffect();
                 }
             }
         }
