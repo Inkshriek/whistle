@@ -1,9 +1,14 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using Whistle.Characters;
 
 namespace Whistle.Conditions {
+
+    public interface IConditions {
+        //This interface works with conditions. For classes that use them (especially characters and the player), you should probably implement this.
+        Cond GetCond(string name);
+        void AddCond(Cond cond);
+        void RemoveCond(Cond cond);
+    }
 
     public abstract class Cond {
         public GameObject obj; //The GameObject this condition is supposed to be "attached" to, in a sense.
@@ -11,13 +16,20 @@ namespace Whistle.Conditions {
         public string name; //The name of the condition. Used for identification.
         public string description; //The description of the condition.
         public float time; //The time left on the condition. Used and ticked by controllers automatically.
-        public bool overwrite; //Do we want this condition to be overwriteable or not? Used by controllers to determine if they should overwrite preexisting conds in their list or always add new ones.
+        public bool overwriteable; //Do we want this condition to be overwriteable or not? Used by controllers to determine if they should overwrite preexisting conds in their list or always add new ones.
 
-        public Cond(string name, string description, float time, bool overwrite) {
+        public Cond(string name, string description, float time) {
             this.name = name;
             this.description = description;
             this.time = time;
-            this.overwrite = overwrite;
+            this.overwriteable = true;
+        }
+
+        public Cond(string name, string description, float time, bool overwriteable) {
+            this.name = name;
+            this.description = description;
+            this.time = time;
+            this.overwriteable = overwriteable;
         }
 
         public abstract void ApplyInitialEffect(); //The initial effect of the condition. This is what occurs when it is first applied.
@@ -31,7 +43,7 @@ namespace Whistle.Conditions {
 
     public class SpeedUp : Cond {
 
-        public SpeedUp(float time, bool overwrite) : base("Speed Up!", "Gotta go fast.", time, overwrite) {
+        public SpeedUp(float time) : base("Speed Up!", "Gotta go fast.", time) {
         }
 
         public override void ApplyInitialEffect() {
@@ -56,7 +68,7 @@ namespace Whistle.Conditions {
 
     public class Poison : Cond {
 
-        public Poison(float time, bool overwrite) : base("Poison", "Oh fuck.", time, overwrite) {
+        public Poison(float time) : base("Poison", "Oh fuck.", time) {
         }
 
         public override void ApplyInitialEffect() {

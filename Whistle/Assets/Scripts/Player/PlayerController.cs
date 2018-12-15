@@ -6,122 +6,16 @@ using Whistle.Characters;
 
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(BoxCollider2D))]
-public class PlayerController : Player, ICharacter, IHealth, IConditions {
-
-    [SerializeField] public float walkSpeed;
-    [SerializeField] public float runSpeed;
-    [SerializeField] public float crouchSpeed;
-    [SerializeField] private float jumpHeight;
-    [SerializeField] private float friction;
-    [SerializeField] private float aerialControl;
-    [SerializeField] [Range(0, 90)] public float slopeTolerance;
-    [SerializeField] private float maxHealth;
-    [SerializeField] private float effectiveHealth;
-    [SerializeField] private float currentHealth;
+public class PlayerController : Player {
 
     private Transform trans;
     private Rigidbody2D rb;
     private BoxCollider2D col;
-    [SerializeField] private PhysicsMaterial2D matAir;
     [SerializeField] private PhysicsMaterial2D matGround;
-
-    private string charname = "Ichabod";
-
-    [HideInInspector] public float moveDirection;
-    [HideInInspector] public bool isTouchingGround;
-    [HideInInspector] public PlayerState state;
-    [HideInInspector] public bool allowCrouch;
-    [HideInInspector] public bool allowJump;
-    [HideInInspector] public bool allowMidairJump;
-
-    [HideInInspector] public float groundH;
-    [HideInInspector] public float groundV;
-
-    [HideInInspector] public float airHInitial;
-    [HideInInspector] public float airH;
-    [HideInInspector] public float airV;
+    [SerializeField] private PhysicsMaterial2D matAir;
 
     private Vector2 currentPosition;
     private RaycastHit2D overlapCheck;
-    private Vector2 newVelocity;
-
-    public float ActiveSpeed {
-        get {
-            switch (state) {
-                case PlayerState.Walking:
-                    return walkSpeed;
-
-                case PlayerState.Crouching:
-                    return crouchSpeed;
-
-                case PlayerState.Running:
-                    return runSpeed;
-
-                default:
-                    Debug.LogError("PlayerState is in an impossible position! May want to fix that quick.");
-                    return 0;
-            }
-        }
-    }
-
-    public float Speed {
-        get {
-            return walkSpeed;
-        }
-        set {
-            float multRun = runSpeed / walkSpeed;
-            float multCrouch = crouchSpeed / walkSpeed;
-            walkSpeed = value;
-            runSpeed = value * multRun;
-            crouchSpeed = value * multCrouch;
-        }
-    }
-
-    public string Name {
-        get {
-            return charname;
-        }
-        set {
-            charname = value;
-        }
-    }
-
-    public float JumpHeight {
-        get {
-            return jumpHeight;
-        }
-        set {
-            jumpHeight = value;
-        }
-    }
-
-    public float CurrentHealth {
-        get {
-            return currentHealth;
-        }
-        set {
-            currentHealth = Mathf.Max(0, value);
-        }
-    }
-
-    public float EffectiveHealth {
-        get {
-            throw new System.NotImplementedException();
-        }
-        set {
-
-        }
-    }
-
-    public float MaxHealth {
-        get {
-            return maxHealth;
-        }
-        set {
-            maxHealth = value;
-        }
-    }
-
 
     void Start () {
         trans = GetComponent<Transform>();
@@ -139,7 +33,7 @@ public class PlayerController : Player, ICharacter, IHealth, IConditions {
 
     void Update() {
         if (isTouchingGround && Input.GetKeyDown(KeyCode.Space))
-            rb.velocity = new Vector2(0, jumpHeight);
+            rb.velocity = new Vector2(0, JumpHeight);
     }
 
     void FixedUpdate() {
@@ -195,7 +89,7 @@ public class PlayerController : Player, ICharacter, IHealth, IConditions {
             Vector2 targetPosition = new Vector2(groundH, groundV);
             Vector2 referencePoint = new Vector2(rb.velocity.x + currentPosition.x + moveDirection * col.size.x / 2, rb.velocity.y + currentPosition.y - col.size.y / 2); //Getting this because groundcheck.point is unreliable here.            
             sidecheck = Physics2D.Raycast(referencePoint, targetPosition, ActiveSpeed * Time.deltaTime);
-            if (sidecheck && Vector2.Angle(transform.up,sidecheck.normal) > slopeTolerance) {
+            if (sidecheck && Vector2.Angle(transform.up,sidecheck.normal) > SlopeTolerance) {
 
                 Debug.DrawLine(referencePoint, sidecheck.point, Color.red);
 
@@ -214,9 +108,9 @@ public class PlayerController : Player, ICharacter, IHealth, IConditions {
 
             sidecheck = Physics2D.BoxCast(currentPosition, new Vector2(col.size.x, col.size.y), 0f, Vector2.right * Mathf.Sign(airH), Mathf.Infinity);
 
-            float minSpd = -walkSpeed;
-            float maxSpd = walkSpeed;
-            float addedSpd = moveDirection * walkSpeed * Time.deltaTime * aerialControl;
+            float minSpd = -Speed;
+            float maxSpd = Speed;
+            float addedSpd = moveDirection * Speed * Time.deltaTime * AerialControl;
 
             if (addedSpd + airH > maxSpd)
                 addedSpd = maxSpd - airH;
@@ -250,7 +144,7 @@ public class PlayerController : Player, ICharacter, IHealth, IConditions {
         int contactsNum = col.GetContacts(contactsAll);
         for (int i = 0; i < contactsNum; i++) {
             float ang = Vector2.Angle(transform.up, contactsAll[i].normal);
-            if (ang < slopeTolerance && airV <= 0) {
+            if (ang < SlopeTolerance && airV <= 0) {
                 contacts.Add(contactsAll[i]);
             }
         }
@@ -261,4 +155,6 @@ public class PlayerController : Player, ICharacter, IHealth, IConditions {
     void OnCollisionEnter2D(Collision2D c) {
 
     }
+
+    
 }

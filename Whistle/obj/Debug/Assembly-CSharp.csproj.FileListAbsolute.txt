@@ -1,0 +1,2 @@
+C:\Users\noahj\OneDrive\Documents\GitHub\whistle\Whistle\obj\Debug\Assembly-CSharp.csprojAssemblyReference.cache
+C:\Users\noahj\OneDrive\Documents\GitHub\whistle\Whistle\obj\Debug\Assembly-CSharp.csproj.CoreCompileInputs.cache

@@ -42,8 +42,25 @@ GameObject:
   - component: {fileID: 114891151122931072}
   - component: {fileID: 114896563010616930}
   m_Layer: 0
-  m_Name: Ichabod_Sprites
+  m_Name: Ichabod Sprites
   m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1877856312850954
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4062197405741748}
+  - component: {fileID: 20668851482683686}
+  - component: {fileID: 81398809044075118}
+  m_Layer: 0
+  m_Name: Main Camera
+  m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -58,8 +75,22 @@ Transform:
   m_LocalPosition: {x: 5.49, y: 3.73, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 4062197405741748}
   - {fileID: 4938564355546988}
   m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4062197405741748
+Transform:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1877856312850954}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4033559743368848}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4938564355546988
@@ -73,8 +104,48 @@ Transform:
   m_LocalScale: {x: 0.32352, y: 0.32352, z: 0.32352}
   m_Children: []
   m_Father: {fileID: 4033559743368848}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!20 &20668851482683686
+Camera:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1877856312850954}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_ClearFlags: 1
+  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_projectionMatrixMode: 1
+  m_SensorSize: {x: 36, y: 24}
+  m_LensShift: {x: 0, y: 0}
+  m_FocalLength: 50
+  m_NormalizedViewPortRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+  near clip plane: 0.3
+  far clip plane: 1000
+  field of view: 90
+  orthographic: 0
+  orthographic size: 10
+  m_Depth: -1
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RenderingPath: -1
+  m_TargetTexture: {fileID: 0}
+  m_TargetDisplay: 0
+  m_TargetEye: 0
+  m_HDR: 1
+  m_AllowMSAA: 0
+  m_AllowDynamicResolution: 0
+  m_ForceIntoRT: 0
+  m_OcclusionCulling: 0
+  m_StereoConvergence: 10
+  m_StereoSeparation: 0.022
 --- !u!23 &23149405667111530
 MeshRenderer:
   m_ObjectHideFlags: 1
@@ -128,7 +199,7 @@ Rigidbody2D:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1082299116756670}
-  m_BodyType: 1
+  m_BodyType: 0
   m_Simulated: 1
   m_UseFullKinematicContacts: 1
   m_UseAutoMass: 0
@@ -149,7 +220,7 @@ BoxCollider2D:
   m_GameObject: {fileID: 1082299116756670}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 6200000, guid: ada59c38784ca344f95f5ec515d1d5da, type: 2}
+  m_Material: {fileID: 6200000, guid: 5d081461e6fca954a938552ed42c3c1d, type: 2}
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
@@ -166,6 +237,13 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.5, y: 2.75}
   m_EdgeRadius: 0
+--- !u!81 &81398809044075118
+AudioListener:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1877856312850954}
+  m_Enabled: 1
 --- !u!114 &114831255305149876
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -177,22 +255,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3bc32cfeca14fee43874df6f1f4873f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkSpeed: 5
+  walkSpeed: 4
   runSpeed: 8
   crouchSpeed: 2
   jumpHeight: 15
-  friction: 0
-  aerialControl: 12
+  aerialControl: 10
   slopeTolerance: 60
   maxHealth: 100
   effectiveHealth: 0
   currentHealth: 100
-  matAir: {fileID: 6200000, guid: ada59c38784ca344f95f5ec515d1d5da, type: 2}
-  matGround: {fileID: 6200000, guid: 5d081461e6fca954a938552ed42c3c1d, type: 2}
+  charMode: 1
   moveDirection: 0
   isTouchingGround: 0
-  isCrouching: 0
-  isRunning: 0
+  state: 0
   allowCrouch: 0
   allowJump: 0
   allowMidairJump: 0
@@ -201,6 +276,8 @@ MonoBehaviour:
   airHInitial: 0
   airH: 0
   airV: 0
+  matGround: {fileID: 6200000, guid: 5d081461e6fca954a938552ed42c3c1d, type: 2}
+  matAir: {fileID: 6200000, guid: ada59c38784ca344f95f5ec515d1d5da, type: 2}
 --- !u!114 &114891151122931072
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -237,7 +314,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1301579657227688}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: db55ea9d01bfa54449251e0723d6d781, type: 3}
   m_Name: 

@@ -61,9 +61,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Scripts\Conditions\Buffs_Interface.cs" />
+    <Compile Include="Assets\Scripts\Familiars\Feu.cs" />
     <Compile Include="Assets\Scripts\Game\Characters.cs" />
     <Compile Include="Assets\Scripts\Game\Conditions.cs" />
+    <Compile Include="Assets\Scripts\Game\Core.cs" />
+    <Compile Include="Assets\Scripts\Game\Cutscenes.cs" />
+    <Compile Include="Assets\Scripts\Game\Familiars.cs" />
     <Compile Include="Assets\Scripts\Game\GameController.cs" />
     <Compile Include="Assets\Scripts\GiveBuff.cs" />
     <Compile Include="Assets\Scripts\GiveDebuff.cs" />
@@ -235,8 +238,10 @@
     <None Include="Assets\Spine\spine-unity\Modules\Shaders\Sprite\CGIncludes\SpriteLighting.cginc" />
     <None Include="Assets\Spine\spine-unity\Modules\SlotBlendModes\Spine-Skeleton-PMA-Screen.shader" />
     <None Include="Assets\Spine Examples\Spine\spineboy-unity\spineboy.atlas.txt" />
+    <None Include="Assets\Sprites\Feu\hell_dog.atlas.txt" />
     <None Include="Assets\Spine\spine-unity\Modules\Shaders\Sprite\CGIncludes\SpriteUnlit.cginc" />
     <None Include="Assets\Spine Examples\Spine\FootSoldier\license.txt" />
+    <None Include="Assets\Sprites\Feu\skeleton.atlas.txt" />
     <None Include="Assets\Spine\spine-unity\version.txt" />
     <None Include="Assets\Spine\spine-unity\Modules\Shaders\Sprite\SpriteVertexLighting.cginc" />
     <None Include="Assets\Spine\spine-unity\Modules\Shaders\Sprite\SpritesPixelLit.shader" />

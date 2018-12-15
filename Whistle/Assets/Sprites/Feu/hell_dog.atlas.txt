@@ -1,0 +1,192 @@
+
+hell_dog.png
+size: 1024,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+ear back
+  rotate: false
+  xy: 445, 36
+  size: 81, 103
+  orig: 81, 103
+  offset: 0, 0
+  index: -1
+ear front
+  rotate: false
+  xy: 206, 2
+  size: 118, 137
+  orig: 118, 137
+  offset: 0, 0
+  index: -1
+eyes
+  rotate: false
+  xy: 326, 36
+  size: 117, 103
+  orig: 117, 103
+  offset: 0, 0
+  index: -1
+fire 1
+  rotate: false
+  xy: 477, 141
+  size: 473, 881
+  orig: 473, 881
+  offset: 0, 0
+  index: -1
+fire 6
+  rotate: false
+  xy: 2, 141
+  size: 473, 881
+  orig: 473, 881
+  offset: 0, 0
+  index: -1
+foot back
+  rotate: true
+  xy: 952, 796
+  size: 95, 64
+  orig: 95, 64
+  offset: 0, 0
+  index: -1
+foot front
+  rotate: true
+  xy: 952, 796
+  size: 95, 64
+  orig: 95, 64
+  offset: 0, 0
+  index: -1
+leg back 2
+  rotate: false
+  xy: 952, 893
+  size: 64, 129
+  orig: 64, 129
+  offset: 0, 0
+  index: -1
+leg front 2
+  rotate: false
+  xy: 952, 893
+  size: 64, 129
+  orig: 64, 129
+  offset: 0, 0
+  index: -1
+snout
+  rotate: false
+  xy: 2, 2
+  size: 202, 137
+  orig: 202, 137
+  offset: 0, 0
+  index: -1
+
+hell_dog2.png
+size: 1024,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+fire 2
+  rotate: false
+  xy: 2, 2
+  size: 473, 881
+  orig: 473, 881
+  offset: 0, 0
+  index: -1
+fire 3
+  rotate: false
+  xy: 477, 2
+  size: 473, 881
+  orig: 473, 881
+  offset: 0, 0
+  index: -1
+
+hell_dog3.png
+size: 1024,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+fire 4
+  rotate: false
+  xy: 2, 2
+  size: 473, 881
+  orig: 473, 881
+  offset: 0, 0
+  index: -1
+fire 5
+  rotate: false
+  xy: 477, 2
+  size: 473, 881
+  orig: 473, 881
+  offset: 0, 0
+  index: -1
+
+hell_dog4.png
+size: 1024,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+body
+  rotate: true
+  xy: 2, 146
+  size: 436, 272
+  orig: 436, 272
+  offset: 0, 0
+  index: -1
+butt fluff
+  rotate: false
+  xy: 276, 327
+  size: 157, 255
+  orig: 157, 255
+  offset: 0, 0
+  index: -1
+collar
+  rotate: false
+  xy: 329, 589
+  size: 257, 157
+  orig: 257, 157
+  offset: 0, 0
+  index: -1
+front leg
+  rotate: true
+  xy: 2, 2
+  size: 142, 217
+  orig: 142, 217
+  offset: 0, 0
+  index: -1
+front leg back
+  rotate: false
+  xy: 276, 108
+  size: 142, 217
+  orig: 142, 217
+  offset: 0, 0
+  index: -1
+head
+  rotate: false
+  xy: 612, 752
+  size: 275, 269
+  orig: 275, 269
+  offset: 0, 0
+  index: -1
+leck back 1
+  rotate: false
+  xy: 435, 374
+  size: 148, 213
+  orig: 148, 213
+  offset: 0, 0
+  index: -1
+leg front 1
+  rotate: false
+  xy: 435, 374
+  size: 148, 213
+  orig: 148, 213
+  offset: 0, 0
+  index: -1
+neck
+  rotate: false
+  xy: 329, 748
+  size: 281, 273
+  orig: 281, 273
+  offset: 0, 0
+  index: -1
+tail
+  rotate: false
+  xy: 2, 584
+  size: 325, 437
+  orig: 325, 437
+  offset: 0, 0
+  index: -1

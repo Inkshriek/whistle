@@ -20,10 +20,10 @@ public class GiveDebuff : MonoBehaviour {
         string tag = other.gameObject.tag;
         switch (tag) {
             case "Player":
-                other.gameObject.GetComponent<IConditions>().AddCond(new Poison(10, true));
+                other.gameObject.GetComponent<IConditions>().AddCond(new Poison(10));
                 break;
             case "Monster":
-                other.gameObject.GetComponent<IConditions>().AddCond(new Poison(5, true));
+                other.gameObject.GetComponent<IConditions>().AddCond(new Poison(5));
                 break;
             default:
                 Debug.Log("Well that's a fine howdy-do!");
