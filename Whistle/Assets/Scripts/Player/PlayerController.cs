@@ -90,7 +90,7 @@ public class PlayerController : Player {
 
 
         if (isTouchingGround && !snappingToGround) {
-            //If you are touching the ground, the script will simulate walking.
+            //If you are touching the ground, the script will simulate walking. 
 
             Debug.DrawLine(currentPosition, contacts[0].point);
 
@@ -102,6 +102,7 @@ public class PlayerController : Player {
             Vector2 targetPosition = new Vector2(groundH, groundV);
             Vector2 referencePoint = new Vector2(rb.velocity.x + currentPosition.x + moveDirection * col.size.x / 2, rb.velocity.y + currentPosition.y - col.size.y / 2); //Getting this because groundcheck.point is unreliable here.            
             sidecheck = Physics2D.Raycast(referencePoint, targetPosition, ActiveSpeed * Time.deltaTime + (Physics2D.defaultContactOffset * 5));
+            /*
             if (sidecheck && Vector2.Angle(transform.up,sidecheck.normal) > SlopeTolerance) {
 
                 Debug.DrawLine(referencePoint, sidecheck.point, Color.red);
@@ -111,6 +112,7 @@ public class PlayerController : Player {
                 float percentdiff = distanceA / distanceB;
                 targetPosition *= percentdiff;
             }
+            */
 
             rb.position += targetPosition * Time.deltaTime;
         }
