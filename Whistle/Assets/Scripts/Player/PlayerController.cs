@@ -54,30 +54,43 @@ public class PlayerController : Player {
         moveDirection = Input.GetAxisRaw("Horizontal");
 
         List<ContactPoint2D> contacts = CheckGround();
-        float ang = Vector2.SignedAngle(transform.up, contacts[0].normal);
-        float angR = Mathf.Deg2Rad * ang;
+        float ang;
 
         RaycastHit2D sidecheck;
+        bool snappingToGround = false;
 
-        if (contacts.Count > 1) {
-            if (!isTouchingGround)
+        if (contacts.Count > 0) {
+            ang = Vector2.SignedAngle(transform.up, contacts[0].normal);
+
+            if (!isTouchingGround) {
                 rb.velocity = new Vector2(0, rb.velocity.y);
+            }
 
             isTouchingGround = true;
         }
         else {
+            ang = 0;
             if (isTouchingGround) {
+                RaycastHit2D neargroundCheck = Physics2D.BoxCast(currentPosition - new Vector2(0, col.size.y / 2 - col.size.y / 20), new Vector2(col.size.x, col.size.y / 10), 0f, Vector2.down, 0.5f);
+                if (neargroundCheck && Vector2.Angle(transform.up, neargroundCheck.normal) < SlopeTolerance) {
+                    snappingToGround = true;
+
+                    rb.position += new Vector2(groundH * Time.deltaTime, neargroundCheck.point.y - (currentPosition.y - col.size.y / 2));
+                }
+                else {
+                    isTouchingGround = false;
+                }
+
                 airHInitial = rb.velocity.x;
                 airH = airHInitial + moveDirection * ActiveSpeed;
             }
-            isTouchingGround = false;
         }
 
+        float angR = Mathf.Deg2Rad * ang;
 
 
-
-        if (isTouchingGround) {
-            //If you are touching the ground, the script will simulate walking.
+        if (isTouchingGround && !snappingToGround) {
+            //If you are touching the ground, the script will simulate walking. 
 
             Debug.DrawLine(currentPosition, contacts[0].point);
 
@@ -88,20 +101,22 @@ public class PlayerController : Player {
 
             Vector2 targetPosition = new Vector2(groundH, groundV);
             Vector2 referencePoint = new Vector2(rb.velocity.x + currentPosition.x + moveDirection * col.size.x / 2, rb.velocity.y + currentPosition.y - col.size.y / 2); //Getting this because groundcheck.point is unreliable here.            
-            sidecheck = Physics2D.Raycast(referencePoint, targetPosition, ActiveSpeed * Time.deltaTime);
+            sidecheck = Physics2D.Raycast(referencePoint, targetPosition, ActiveSpeed * Time.deltaTime + (Physics2D.defaultContactOffset * 5));
+            /*
             if (sidecheck && Vector2.Angle(transform.up,sidecheck.normal) > SlopeTolerance) {
 
                 Debug.DrawLine(referencePoint, sidecheck.point, Color.red);
 
-                float distanceA = Vector2.Distance(referencePoint, new Vector2(sidecheck.point.x - Physics2D.defaultContactOffset * moveDirection, sidecheck.point.y));
+                float distanceA = Vector2.Distance(referencePoint, new Vector2(sidecheck.point.x - (Physics2D.defaultContactOffset * moveDirection * 5), sidecheck.point.y));
                 float distanceB = Vector2.Distance(referencePoint, contacts[0].point + targetPosition * Time.deltaTime);
                 float percentdiff = distanceA / distanceB;
                 targetPosition *= percentdiff;
             }
+            */
 
             rb.position += targetPosition * Time.deltaTime;
         }
-        else {
+        else if (!isTouchingGround) {
             //If you are not touching the ground, the script will simulate being in the air.
 
             col.sharedMaterial = matAir;
@@ -148,7 +163,6 @@ public class PlayerController : Player {
                 contacts.Add(contactsAll[i]);
             }
         }
-        contacts.Add(new ContactPoint2D());
         return contacts;
     }
 
