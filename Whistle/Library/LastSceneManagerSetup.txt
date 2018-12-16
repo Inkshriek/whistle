@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Scenes/daddy cum in me.unity
+- path: Assets/Scenes/SampleScene.unity
   isLoaded: 1
   isActive: 1
