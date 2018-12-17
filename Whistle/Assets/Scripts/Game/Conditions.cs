@@ -47,7 +47,7 @@ namespace Whistle.Conditions {
         }
 
         public override void ApplyInitialEffect() {
-            ICharacter character = obj.GetComponent<ICharacter>();
+            Player character = obj.GetComponent<Player>();
             character.Speed *= 2;
         }
 
@@ -60,7 +60,7 @@ namespace Whistle.Conditions {
         }
 
         public override void RemoveEffect() {
-            ICharacter character = obj.GetComponent<ICharacter>();
+            Player character = obj.GetComponent<Player>();
             character.Speed /= 2;
         }
 
@@ -78,9 +78,9 @@ namespace Whistle.Conditions {
 
         public override void ApplyContinuousEffect() {
             ICharacter character = obj.GetComponent<ICharacter>();
-            if (character.GetType() == typeof(PlayerController)) {
+            if (character.GetType() == typeof(Player)) {
 
-                (character as PlayerController).CurrentHealth -= 2 * Time.deltaTime;
+                (character as Player).CurrentHealth -= 2 * Time.deltaTime;
             }
             else {
                 Debug.LogError(character.Name + " is not a valid recipient for " + this.name);

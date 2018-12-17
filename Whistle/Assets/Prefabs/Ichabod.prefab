@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4033559743368848}
   - component: {fileID: 50083691027528608}
   - component: {fileID: 61515313940699106}
+  - component: {fileID: 114611369708171764}
   - component: {fileID: 114831255305149876}
   m_Layer: 2
   m_Name: Ichabod
@@ -72,7 +73,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1082299116756670}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.49, y: 3.73, z: -1}
+  m_LocalPosition: {x: -7.68, y: -3.38, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4062197405741748}
@@ -182,8 +183,8 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -475496985
+  m_SortingLayer: 3
   m_SortingOrder: 0
 --- !u!33 &33867310429086618
 MeshFilter:
@@ -244,6 +245,25 @@ AudioListener:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1877856312850954}
   m_Enabled: 1
+--- !u!114 &114611369708171764
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1082299116756670}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e374ca103ee1e8347bd8fc22f6b338f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  movementType: 0
+  friction: 0
+  aerialControl: 5
+  slopeTolerance: 60
+  feetRadius: 0.1
+  isTouchingGround: 0
+  H: 0
+  V: 0
 --- !u!114 &114831255305149876
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -259,25 +279,11 @@ MonoBehaviour:
   runSpeed: 8
   crouchSpeed: 2
   jumpHeight: 15
-  aerialControl: 10
-  slopeTolerance: 60
   maxHealth: 100
   effectiveHealth: 0
   currentHealth: 100
   charMode: 1
-  moveDirection: 0
-  isTouchingGround: 0
   state: 0
-  allowCrouch: 0
-  allowJump: 0
-  allowMidairJump: 0
-  groundH: 0
-  groundV: 0
-  airHInitial: 0
-  airH: 0
-  airV: 0
-  matGround: {fileID: 6200000, guid: 5d081461e6fca954a938552ed42c3c1d, type: 2}
-  matAir: {fileID: 6200000, guid: ada59c38784ca344f95f5ec515d1d5da, type: 2}
 --- !u!114 &114891151122931072
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -319,4 +325,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db55ea9d01bfa54449251e0723d6d781, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  controller: {fileID: 114831255305149876}
+  player: {fileID: 114831255305149876}

@@ -6,7 +6,8 @@ using Whistle.Characters;
 
 public class PlayerAnimator : MonoBehaviour {
 
-    public PlayerController controller;
+    public Player player;
+    private CharController controller;
     private Transform trans;
     private SkeletonAnimation anim;
     private string animationState;
@@ -15,6 +16,7 @@ public class PlayerAnimator : MonoBehaviour {
 	void Start () {
         trans = GetComponent<Transform>();
         anim = GetComponent<SkeletonAnimation>();
+        controller = player.GetComponent<CharController>();
         animationState = "";
     }
 	
@@ -22,9 +24,9 @@ public class PlayerAnimator : MonoBehaviour {
 	void FixedUpdate () {
         
         if (controller.isTouchingGround) {
-            if (controller.moveDirection != 0) {
+            if (controller.Motion.x != 0) {
                 
-                switch (controller.state) {
+                switch (player.state) {
                     case PlayerState.Running:
                         changeState("run", true);
                         break;
@@ -37,7 +39,7 @@ public class PlayerAnimator : MonoBehaviour {
                 }
             }
             else {
-                switch (controller.state) {
+                switch (player.state) {
                     case PlayerState.Crouching:
                         changeState("crouch_idle", true);
                         break;
@@ -47,13 +49,13 @@ public class PlayerAnimator : MonoBehaviour {
                 }
             }
         }
-        else if (controller.airV > 0)
+        else if (controller.V > 0)
             changeState("jump", false);
         else
             changeState("fall", true);
 
-        if (controller.moveDirection != 0)
-            trans.localScale = new Vector3(Mathf.Abs(trans.localScale.x) * Mathf.Sign(controller.moveDirection), trans.localScale.y, trans.localScale.z);
+        if (controller.Motion.x != 0)
+            trans.localScale = new Vector3(Mathf.Abs(trans.localScale.x) * Mathf.Sign(controller.Motion.x), trans.localScale.y, trans.localScale.z);
 	}
 
     void changeState(string animation, bool loop)

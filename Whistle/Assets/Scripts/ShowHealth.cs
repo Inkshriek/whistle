@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class ShowHealth : MonoBehaviour {
 
-    public PlayerController character;
+    public Player character;
     private Slider slider;
 
 	// Use this for initialization

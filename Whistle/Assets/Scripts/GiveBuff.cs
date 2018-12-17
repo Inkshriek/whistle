@@ -17,7 +17,7 @@ public class GiveBuff : MonoBehaviour {
 
     void OnTriggerEnter2D(Collider2D other) {
         if (other.gameObject.CompareTag("Player")) {
-            other.gameObject.GetComponent<PlayerController>().AddCond(new SpeedUp(10));
+            other.gameObject.GetComponent<Player>().AddCond(new SpeedUp(10));
         }
     }
 }
