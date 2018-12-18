@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - Monster
+  - Familiar
   layers:
   - Default
   - TransparentFX
@@ -48,11 +49,11 @@ TagManager:
   - name: Background
     uniqueID: 231158553
     locked: 0
-  - name: Entities
-    uniqueID: 3819470311
-    locked: 0
   - name: Foreground
     uniqueID: 396526941
+    locked: 0
+  - name: Entities
+    uniqueID: 3819470311
     locked: 0
   - name: Far Foreground
     uniqueID: 323816219

@@ -2,11 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Whistle.Familiars;
+using Whistle.Characters;
 
+[RequireComponent(typeof(CharController))]
 public class Feu : Familiar {
 
     private string familiarName = "Feu";
 
+    private FamiliarAIType ai;
+    private Player player;
+    private float speed;
+    private CharController controller;
+
+    [SerializeField] private bool active;
+    [SerializeField] private CharacterMode charMode;
 
     public override string Name {
         get {
@@ -18,44 +27,64 @@ public class Feu : Familiar {
         }
     }
 
-    public override FamiliarState State {
+    public override CharController Controller {
         get {
-            throw new System.NotImplementedException();
+            return controller;
         }
 
         set {
-            throw new System.NotImplementedException();
+            controller = value;
         }
     }
-    public override GameObject Player {
+    
+    public override CharacterMode Mode {
         get {
-            throw new System.NotImplementedException();
+            return charMode;
         }
 
         set {
-            throw new System.NotImplementedException();
+            charMode = value;
         }
     }
-    public override string Speed {
+
+    public override Player Player {
         get {
-            throw new System.NotImplementedException();
+            return player;
         }
 
         set {
-            throw new System.NotImplementedException();
+            player = value;
         }
     }
 
-    public override void Activate() {
-        throw new System.NotImplementedException();
+    public override float Speed {
+        get {
+            return speed;
+        }
+
+        set {
+            speed = value;
+        }
     }
 
-    public override void Deactivate() {
-        throw new System.NotImplementedException();
+    public override FamiliarAIType AI {
+        get {
+            return ai;
+        }
+
+        set {
+            ai = value;
+        }
     }
 
-    protected override void MovePosition() {
-        base.MovePosition();
+    public override bool Active {
+        get {
+            return active;
+        }
+
+        set {
+            active = value;
+        }
     }
 
     protected override void PrimaryAction() {

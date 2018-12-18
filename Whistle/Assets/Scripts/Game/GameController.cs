@@ -8,13 +8,23 @@ using Whistle.Conditions;
 
 public class GameController : MonoBehaviour {
 
+    private static GameObject[] familiarsDatabase;
+
     [SerializeField] private Player player;
     [SerializeField] private List<Familiar> familiars; //The list of familiars the player presently has access to. These are intended to be prefabs.
     private Familiar currentFamiliar; //The familiar currently active.
 
+    public static KeyCode jumpKey = KeyCode.Space;
 
-	// Use this for initialization
-	private void Start () {
+    private void Awake() {
+        Debug.Log("Initializing!");
+        familiarsDatabase = new GameObject[] {
+            Resources.Load("Familiars/Familiar_Feu") as GameObject
+        };
+        Debug.Log(familiarsDatabase.Length);
+    }
+    // Use this for initialization
+    private void Start () {
         StartCoroutine(LoadGame());
 
         
@@ -34,8 +44,9 @@ public class GameController : MonoBehaviour {
     }
 
     private IEnumerator LoadGame() {
-        for (int i = 0; i < familiars.Count; i++) {
-            familiars[i] = Instantiate(familiars[i], player.transform.position, Quaternion.identity);
+        for (int i = 0; i < familiarsDatabase.Length; i++) {
+            GameObject obj = Instantiate(familiarsDatabase[i], player.transform.position, Quaternion.identity);
+            familiars.Add(obj.GetComponent<Familiar>());
         }
 
         yield return new WaitForSeconds(3f);

@@ -35,7 +35,7 @@ public class CharController : MonoBehaviour {
     float ang;
 
     public void ApplyJump(float height) {
-        rb.velocity = new Vector2(0, height);
+        rb.velocity += new Vector2(0, height);
         hasJumped = true;
     }
 
@@ -108,7 +108,7 @@ public class CharController : MonoBehaviour {
     private void MoveOnGround(float force, bool snapdown) {
         if (snapdown) {
             Debug.Log("Snapping!");
-            rb.position += new Vector2(Motion.x * Time.deltaTime, neargroundCheck.point.y - col.bounds.min.y);
+            rb.position += new Vector2(forceSmoothed * Time.deltaTime, neargroundCheck.point.y - col.bounds.min.y);
         }
         else {
 

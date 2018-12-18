@@ -4,7 +4,7 @@ using UnityEngine;
 using Whistle.Conditions;
 using Whistle.Characters;
 
-[RequireComponent(typeof(CharacterController))]
+[RequireComponent(typeof(CharController))]
 public class Player : MonoBehaviour, ICharacter, IConditions, IHealth {
 
     private string charName = "Ichabod";
@@ -25,6 +25,7 @@ public class Player : MonoBehaviour, ICharacter, IConditions, IHealth {
     private BoxCollider2D col;
 
     private Cond[] condsApplied = new Cond[12];
+    private bool jumping;
 
     public float ActiveSpeed {
         get {
@@ -107,11 +108,11 @@ public class Player : MonoBehaviour, ICharacter, IConditions, IHealth {
 
     public CharacterMode Mode {
         get {
-            throw new System.NotImplementedException();
+            return charMode;
         }
 
         set {
-            throw new System.NotImplementedException();
+            charMode = value;
         }
     }
 
@@ -122,11 +123,14 @@ public class Player : MonoBehaviour, ICharacter, IConditions, IHealth {
         Controller = GetComponent<CharController>();
 
         state = PlayerState.Walking;
+        jumping = false;
     }
 
     void Update() {
-        if (Controller.isTouchingGround && Input.GetKeyDown(KeyCode.Space)) {
+        if (Controller.isTouchingGround && Input.GetKeyDown(GameController.jumpKey)) {
             Controller.ApplyJump(JumpHeight);
+            jumping = true;
+            rb.gravityScale /= 1.5f;
         }
 
         if (Input.GetAxisRaw("Vertical") < 0) {
@@ -146,6 +150,10 @@ public class Player : MonoBehaviour, ICharacter, IConditions, IHealth {
             Controller.Motion = new Vector2(Input.GetAxisRaw("Horizontal") * Speed, 0);
         }
         
+        if (jumping && (!Input.GetKey(GameController.jumpKey) || rb.velocity.y < 0)) {
+            rb.gravityScale *= 1.5f;
+            jumping = false;
+        }
 
         TickConds();
     }

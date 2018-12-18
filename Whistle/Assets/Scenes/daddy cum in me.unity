@@ -3122,6 +3122,26 @@ Prefab:
       propertyPath: aerialControl
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 50083691027528608, guid: e3c1d5e1130841f4e8b49c2e6884b0e4,
+        type: 2}
+      propertyPath: m_AngularDrag
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 50083691027528608, guid: e3c1d5e1130841f4e8b49c2e6884b0e4,
+        type: 2}
+      propertyPath: m_GravityScale
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 114831255305149876, guid: e3c1d5e1130841f4e8b49c2e6884b0e4,
+        type: 2}
+      propertyPath: jumpHeight
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 50083691027528608, guid: e3c1d5e1130841f4e8b49c2e6884b0e4,
+        type: 2}
+      propertyPath: m_Interpolate
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e3c1d5e1130841f4e8b49c2e6884b0e4, type: 2}
   m_IsPrefabAsset: 0

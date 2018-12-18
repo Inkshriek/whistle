@@ -73,7 +73,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1082299116756670}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -7.68, y: -3.38, z: 0}
+  m_LocalPosition: {x: 17.993504, y: 4.754375, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4062197405741748}
@@ -184,7 +184,7 @@ MeshRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -475496985
-  m_SortingLayer: 3
+  m_SortingLayer: 4
   m_SortingOrder: 0
 --- !u!33 &33867310429086618
 MeshFilter:
@@ -258,12 +258,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementType: 0
   friction: 1
-  aerialControl: 10
+  aerialControl: 1
   slopeTolerance: 60
   snapdownRadius: 0.2
   horizontalRays: 20
   verticalRays: 5
-  isTouchingGround: 0
+  isTouchingGround: 1
   H: 0
   V: 0
 --- !u!114 &114831255305149876
@@ -280,12 +280,12 @@ MonoBehaviour:
   walkSpeed: 4
   runSpeed: 8
   crouchSpeed: 2
-  jumpHeight: 15
+  jumpHeight: 12
   maxHealth: 100
   effectiveHealth: 0
   currentHealth: 100
   charMode: 1
-  state: 0
+  state: 1
 --- !u!114 &114891151122931072
 MonoBehaviour:
   m_ObjectHideFlags: 1
