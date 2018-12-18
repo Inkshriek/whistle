@@ -3120,12 +3120,7 @@ Prefab:
     - target: {fileID: 114611369708171764, guid: e3c1d5e1130841f4e8b49c2e6884b0e4,
         type: 2}
       propertyPath: aerialControl
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 114611369708171764, guid: e3c1d5e1130841f4e8b49c2e6884b0e4,
-        type: 2}
-      propertyPath: feetRadius
-      value: 0.2
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e3c1d5e1130841f4e8b49c2e6884b0e4, type: 2}

@@ -1,8 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using Whistle.Characters;
-using Whistle.Conditions;
 
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(BoxCollider2D))]
@@ -12,11 +10,14 @@ public class CharController : MonoBehaviour {
     [SerializeField] public float friction;
     [SerializeField] public float aerialControl;
     [SerializeField] [Range(0, 90)] public float slopeTolerance;
-    [SerializeField] [Range(0, 1)] public float feetRadius;
+    [SerializeField] [Range(0, 1)] public float snapdownRadius;
+    [SerializeField] public int horizontalRays;
+    [SerializeField] public int verticalRays;
 
     [HideInInspector] public bool isTouchingGround;
     [HideInInspector] public float H;
     [HideInInspector] public float V;
+    [HideInInspector] private float forceSmoothed;
 
     private Transform trans;
     private Rigidbody2D rb;
@@ -25,11 +26,12 @@ public class CharController : MonoBehaviour {
     private PhysicsMaterial2D airMaterial;
 
     private bool hasJumped;
+    private int layerMask;
     private RaycastHit2D neargroundCheck;
 
     public Vector2 Motion { get; set; }
 
-    List<ContactPoint2D> groundContacts;
+    List<ContactPoint2D> validContacts;
     float ang;
 
     public void ApplyJump(float height) {
@@ -43,21 +45,24 @@ public class CharController : MonoBehaviour {
         rb = GetComponent<Rigidbody2D>();
         col = GetComponent<BoxCollider2D>();
 
+        layerMask = 1 << 8;
+        layerMask = ~layerMask;
+
         baseMaterial = Resources.Load("Mat_CharGround") as PhysicsMaterial2D;
         airMaterial = Resources.Load("Mat_CharAir") as PhysicsMaterial2D;
     }
 	
 
 	void FixedUpdate () {
-        groundContacts = CheckGround();
+        validContacts = CheckGroundContacts();
 
-        neargroundCheck = Physics2D.BoxCast(new Vector2(trans.position.x, col.bounds.min.y + col.size.y * (feetRadius / 2)), new Vector2(col.size.x, col.size.y * feetRadius), 0f, Vector2.down, 0.5f);
         bool snapToGround = false;
 
-        if (groundContacts.Count > 0) {
-            ang = Vector2.SignedAngle(transform.up, groundContacts[0].normal);
+        if (validContacts.Count > 0) {
+            ang = Vector2.SignedAngle(transform.up, validContacts[0].normal);
 
             if (!isTouchingGround) {
+                forceSmoothed = rb.velocity.x;
                 rb.velocity = Vector2.zero;
             }
 
@@ -67,15 +72,15 @@ public class CharController : MonoBehaviour {
             ang = 0;
 
             if (isTouchingGround) {
+                neargroundCheck = CheckColliders(verticalRays, Vector2.down * snapdownRadius, new Vector2(col.bounds.min.x, col.bounds.min.y), new Vector2(col.bounds.max.x, col.bounds.min.y));
                 if (neargroundCheck && Vector2.Angle(transform.up, neargroundCheck.normal) < slopeTolerance && !hasJumped) {
                     snapToGround = true;
                 }
                 else {
                     hasJumped = false;
                     isTouchingGround = false;
+                    rb.velocity += new Vector2(forceSmoothed, 0);
                 }
-
-                H = rb.velocity.x + Motion.x;
             }
         }
 
@@ -107,23 +112,31 @@ public class CharController : MonoBehaviour {
         }
         else {
 
+            if (forceSmoothed < force) {
+                forceSmoothed = Mathf.Min(forceSmoothed + friction, force);
+            }
+            else if (forceSmoothed > force) {
+                forceSmoothed = Mathf.Max(forceSmoothed - friction, force);
+            }
+
             col.sharedMaterial = baseMaterial;
 
-            H = force * Mathf.Cos(Mathf.Deg2Rad * ang);
-            V = force * Mathf.Sin(Mathf.Deg2Rad * ang);
+            H = forceSmoothed * Mathf.Cos(Mathf.Deg2Rad * ang);
+            V = forceSmoothed * Mathf.Sin(Mathf.Deg2Rad * ang);
 
             Vector2 move = new Vector2(H, V);
 
-            Vector2 cornerPoint = new Vector2(rb.position.x + Mathf.Sign(force) * (col.size.x / 2), col.bounds.min.y);
-            RaycastHit2D sideCheck = Physics2D.Linecast(cornerPoint, move * Time.deltaTime + cornerPoint);
+            
+
+            Vector2 cornerPoint = new Vector2(rb.position.x + Mathf.Sign(forceSmoothed) * (col.size.x / 2), col.bounds.min.y);
+            //RaycastHit2D sideCheck = Physics2D.Linecast(cornerPoint, move * Time.deltaTime + cornerPoint, layerMask);
+
+            RaycastHit2D sideCheck = CheckColliders(horizontalRays, move * Time.deltaTime, new Vector2(rb.position.x + Mathf.Sign(forceSmoothed) * (col.size.x / 2), col.bounds.min.y), new Vector2(rb.position.x + Mathf.Sign(forceSmoothed) * (col.size.x / 2), col.bounds.max.y));
             
             if (sideCheck && Vector2.Angle(transform.up, sideCheck.normal) > slopeTolerance) {
-
-                float distanceA = col.bounds.SqrDistance(new Vector2(sideCheck.point.x - Mathf.Sign(force) * 0.02f, sideCheck.point.y));
+                float distanceA = col.bounds.SqrDistance(new Vector2(sideCheck.point.x - Mathf.Sign(forceSmoothed) * 0.02f, sideCheck.point.y));
                 float distanceB = col.bounds.SqrDistance(move * Time.deltaTime + cornerPoint);
                 float percentdiff = distanceA / distanceB;
-                Debug.DrawLine(sideCheck.point, move * Time.deltaTime + cornerPoint);
-                Debug.Log(percentdiff);
                 move *= Mathf.Max(percentdiff, 0);
             }
 
@@ -135,31 +148,26 @@ public class CharController : MonoBehaviour {
 
         col.sharedMaterial = airMaterial;
 
-        RaycastHit2D sideCheck = Physics2D.BoxCast(trans.position, new Vector2(col.size.x, col.size.y), 0f, Vector2.right * Mathf.Sign(H), Mathf.Infinity);
-
-        Vector2 minSpd = -force;
-        Vector2 maxSpd = force;
-        float addedSpd = Motion.x * Time.deltaTime * aerialControl;
-
-        if (addedSpd + H > maxSpd.x)
-            addedSpd = maxSpd.x - H;
-        else if (addedSpd + H < minSpd.x)
-            addedSpd = minSpd.x - H;
-
-        if ((H < maxSpd.x && force.x > 0) || (H > minSpd.x && force.x < 0))
-            H += addedSpd;
-
-        if (sideCheck && col.IsTouching(sideCheck.collider))
+        if (rb.velocity.x < force.x && force.x > 0) {
+            H = Mathf.Min(aerialControl, force.x - rb.velocity.x);
+        }
+        else if (rb.velocity.x > force.x && force.x < 0) {
+            H = Mathf.Max(-aerialControl, force.x - rb.velocity.x);
+        }
+        else {
             H = 0;
+        }
 
-        V = rb.velocity.y;
+        V = 0;
+
 
         Vector2 move = new Vector2(H, V);
 
-        rb.velocity = move;
+
+        rb.velocity += move;
     }
 
-    private List<ContactPoint2D> CheckGround() {
+    private List<ContactPoint2D> CheckGroundContacts() {
         ContactPoint2D[] contactsAll = new ContactPoint2D[20];
         List<ContactPoint2D> contacts = new List<ContactPoint2D>();
         int contactsNum = col.GetContacts(contactsAll);
@@ -170,5 +178,30 @@ public class CharController : MonoBehaviour {
             }
         }
         return contacts;
+    }
+
+    private RaycastHit2D CheckColliders(int raycastCount, Vector2 direction, Vector2 start, Vector2 end) {
+
+        RaycastHit2D[] raycastArray = new RaycastHit2D[raycastCount];
+        float closestDistance = Mathf.Infinity;
+        RaycastHit2D bestValid = new RaycastHit2D();
+
+        for (int i = 0; i < raycastCount; i++) {
+            
+            Vector2 originPoint = Vector2.Lerp(start, end, (float)i / (raycastCount - 1));
+            Debug.DrawRay(originPoint, direction, Color.red);
+            RaycastHit2D ray = Physics2D.Linecast(originPoint, direction + originPoint, layerMask);
+
+            if (ray) {
+                float rayDistance = col.bounds.SqrDistance(ray.point);
+                if (rayDistance < closestDistance) {
+                    bestValid = ray;
+                }
+                closestDistance = Mathf.Min(rayDistance, closestDistance);
+            }
+            raycastArray[i] = ray;
+        }
+
+        return bestValid;
     }
 }

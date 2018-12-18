@@ -49,7 +49,7 @@ public class PlayerAnimator : MonoBehaviour {
                 }
             }
         }
-        else if (controller.V > 0)
+        else if (controller.gameObject.GetComponent<Rigidbody2D>().velocity.y > 0)
             changeState("jump", false);
         else
             changeState("fall", true);

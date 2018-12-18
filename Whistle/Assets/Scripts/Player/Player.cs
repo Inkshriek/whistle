@@ -139,7 +139,13 @@ public class Player : MonoBehaviour, ICharacter, IConditions, IHealth {
             state = PlayerState.Walking;
         }
 
-        Controller.Motion = new Vector2(Input.GetAxisRaw("Horizontal") * ActiveSpeed, 0);
+        if (Controller.isTouchingGround) {
+            Controller.Motion = new Vector2(Input.GetAxisRaw("Horizontal") * ActiveSpeed, 0);
+        }
+        else {
+            Controller.Motion = new Vector2(Input.GetAxisRaw("Horizontal") * Speed, 0);
+        }
+        
 
         TickConds();
     }

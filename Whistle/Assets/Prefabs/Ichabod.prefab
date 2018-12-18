@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 61515313940699106}
   - component: {fileID: 114611369708171764}
   - component: {fileID: 114831255305149876}
-  m_Layer: 2
+  m_Layer: 8
   m_Name: Ichabod
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -42,7 +42,7 @@ GameObject:
   - component: {fileID: 23149405667111530}
   - component: {fileID: 114891151122931072}
   - component: {fileID: 114896563010616930}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Ichabod Sprites
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -59,7 +59,7 @@ GameObject:
   - component: {fileID: 4062197405741748}
   - component: {fileID: 20668851482683686}
   - component: {fileID: 81398809044075118}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Main Camera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
@@ -257,10 +257,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementType: 0
-  friction: 0
-  aerialControl: 5
+  friction: 1
+  aerialControl: 10
   slopeTolerance: 60
-  feetRadius: 0.1
+  snapdownRadius: 0.2
+  horizontalRays: 20
+  verticalRays: 5
   isTouchingGround: 0
   H: 0
   V: 0
