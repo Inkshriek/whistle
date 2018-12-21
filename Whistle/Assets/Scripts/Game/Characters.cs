@@ -1,16 +1,22 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Whistle.Conditions;
 
 namespace Whistle.Characters {
 
     public interface ICharacter {
         //The most basic interface meant for all characters to use.
-        string Name { get; set; }
+        string DisplayName { get; }
         CharController Controller { get; }
         CharacterMode Mode { get; set; }
     }
+
+    public interface IBehavior {
+        //This interface works with behavior and behavior management. Goes nice with AI.
+        void ApplyBehavior(Behavior newBehavior);
+        void ResetBehavior();
+    }
+
 
     public interface IHealth {
         //This interface works with "health" values on a basic level.
@@ -28,14 +34,14 @@ namespace Whistle.Characters {
     public enum CharacterMode {
         //A set of modes intended to be used for managing characters.
         Inactive,
-        Active,
-        Cutscene
+        Active
     }
 
     public enum MovementType {
         //A set of modes intended to be used for managing characters.
-        Normal,
-        Flying,
-        Swimming
+        Normal,  
+        Flying
     }
+
+    public delegate void Behavior(CharacterMode mode);
 }

@@ -69,6 +69,7 @@
     <Compile Include="Assets\Scripts\Game\Cutscenes.cs" />
     <Compile Include="Assets\Scripts\Game\Familiars.cs" />
     <Compile Include="Assets\Scripts\Game\GameController.cs" />
+    <Compile Include="Assets\Scripts\Game\NavMesh.cs" />
     <Compile Include="Assets\Scripts\GiveBuff.cs" />
     <Compile Include="Assets\Scripts\GiveDebuff.cs" />
     <Compile Include="Assets\Scripts\MonsterController.cs" />

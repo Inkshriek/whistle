@@ -73,7 +73,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1082299116756670}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 17.993504, y: 4.754375, z: 0}
+  m_LocalPosition: {x: 5.49, y: 3.73, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4062197405741748}
@@ -260,7 +260,7 @@ MonoBehaviour:
   friction: 1
   aerialControl: 1
   slopeTolerance: 60
-  snapdownRadius: 0.2
+  snapdownRadius: 0.25
   horizontalRays: 20
   verticalRays: 5
   isTouchingGround: 1
@@ -284,7 +284,7 @@ MonoBehaviour:
   maxHealth: 100
   effectiveHealth: 0
   currentHealth: 100
-  charMode: 1
+  charMode: 0
   state: 1
 --- !u!114 &114891151122931072
 MonoBehaviour:

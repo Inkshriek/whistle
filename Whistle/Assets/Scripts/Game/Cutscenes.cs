@@ -1,16 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Whistle.Characters;
 
-public class Cutscenes : MonoBehaviour {
+namespace Whistle.Cutscenes {
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    public delegate IEnumerator Cutscene();
+
+    public class CutsceneControl {
+        //These are methods you can use to aid with developing and controlling cutscenes.
+
+        public void FinishScene() {
+            //USE THIS METHOD AT THE END OF ALL CUTSCENES! It is important as to allow the game to unlock and make room for a new cutscene.
+            GameController.sceneRunning = false;
+        }
+    }
 }

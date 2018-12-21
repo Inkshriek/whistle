@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 using Whistle.Characters;
 using Whistle.Familiars;
 using Whistle.Conditions;
+using Whistle.Cutscenes;
 
 public class GameController : MonoBehaviour {
 
@@ -13,6 +14,9 @@ public class GameController : MonoBehaviour {
     [SerializeField] private Player player;
     [SerializeField] private List<Familiar> familiars; //The list of familiars the player presently has access to. These are intended to be prefabs.
     private Familiar currentFamiliar; //The familiar currently active.
+
+    private Cutscene activeCutscene;
+    public static bool sceneRunning;
 
     public static KeyCode jumpKey = KeyCode.Space;
 
@@ -26,7 +30,7 @@ public class GameController : MonoBehaviour {
     // Use this for initialization
     private void Start () {
         StartCoroutine(LoadGame());
-
+        sceneRunning = false;
         
 		
 	}
@@ -63,5 +67,10 @@ public class GameController : MonoBehaviour {
         catch {
             Debug.LogError("Familiar could not be instantiated! You may have entered an invalid index, or the element called is not a prefab.");
         }
+    }
+
+    public void StartCutscene(Cutscene scene) {
+        StartCoroutine("activeCutscene");
+        sceneRunning = true;
     }
 }

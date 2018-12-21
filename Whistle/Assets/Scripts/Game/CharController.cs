@@ -173,7 +173,7 @@ public class CharController : MonoBehaviour {
         int contactsNum = col.GetContacts(contactsAll);
         for (int i = 0; i < contactsNum; i++) {
             float ang = Vector2.Angle(transform.up, contactsAll[i].normal);
-            if (ang < slopeTolerance && (V <= 0 || isTouchingGround)) {
+            if (ang < slopeTolerance) {
                 contacts.Add(contactsAll[i]);
             }
         }

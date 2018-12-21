@@ -7,8 +7,6 @@ using Whistle.Characters;
 [RequireComponent(typeof(CharController))]
 public class Feu : Familiar {
 
-    private string familiarName = "Feu";
-
     private FamiliarAIType ai;
     private Player player;
     private float speed;
@@ -16,16 +14,6 @@ public class Feu : Familiar {
 
     [SerializeField] private bool active;
     [SerializeField] private CharacterMode charMode;
-
-    public override string Name {
-        get {
-            return familiarName;
-        }
-
-        set {
-            familiarName = value;
-        }
-    }
 
     public override CharController Controller {
         get {
@@ -93,11 +81,6 @@ public class Feu : Familiar {
 
     // Use this for initialization
     void Start() {
-        
-    }
-
-    // Update is called once per frame
-    void Update() {
-
+        DisplayName = "Feu";
     }
 }

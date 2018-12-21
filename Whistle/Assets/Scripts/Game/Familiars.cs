@@ -7,7 +7,8 @@ using Whistle.Conditions;
 namespace Whistle.Familiars {
 
     public abstract class Familiar : MonoBehaviour, ICharacter, IConditions {
-        public abstract string Name { get; set; }
+        public string DisplayName { get; set; }
+
         public abstract CharController Controller { get; set; }
         public abstract CharacterMode Mode { get; set; }
 
@@ -22,6 +23,12 @@ namespace Whistle.Familiars {
             }
 
             if (Active) {
+                Player player = FindObjectOfType<Player>();
+
+                NavMesh nav = NavMesh.SceneNavMesh;
+
+                transform.position += (Vector3)nav.FindDirectionToGo(transform.position, player.transform.position, NavMesh.Accuracy.Low, 0.5f);
+
                 if (Input.GetAxisRaw("Familiar Ability") > 0) {
                     PrimaryAction();
                 }

@@ -5,9 +5,9 @@ using Whistle.Conditions;
 using Whistle.Characters;
 
 [RequireComponent(typeof(CharController))]
-public class Player : MonoBehaviour, ICharacter, IConditions, IHealth {
+public class Player : MonoBehaviour, ICharacter, IBehavior, IConditions, IHealth {
 
-    private string charName = "Ichabod";
+    public string DisplayName { get; set; }
 
     [SerializeField] private float walkSpeed;
     [SerializeField] private float runSpeed;
@@ -25,6 +25,7 @@ public class Player : MonoBehaviour, ICharacter, IConditions, IHealth {
     private BoxCollider2D col;
 
     private Cond[] condsApplied = new Cond[12];
+    private Behavior currentBehavior;
     private bool jumping;
 
     public float ActiveSpeed {
@@ -56,15 +57,6 @@ public class Player : MonoBehaviour, ICharacter, IConditions, IHealth {
             walkSpeed = value;
             runSpeed = value * multRun;
             crouchSpeed = value * multCrouch;
-        }
-    }
-
-    public string Name {
-        get {
-            return charName;
-        }
-        set {
-            charName = value;
         }
     }
 
@@ -110,23 +102,39 @@ public class Player : MonoBehaviour, ICharacter, IConditions, IHealth {
         get {
             return charMode;
         }
-
         set {
             charMode = value;
         }
     }
 
     void Start () {
+        DisplayName = "Ichabod";
+
         trans = GetComponent<Transform>();
         rb = GetComponent<Rigidbody2D>();
         col = GetComponent<BoxCollider2D>();
         Controller = GetComponent<CharController>();
 
         state = PlayerState.Walking;
+        currentBehavior = DefaultBehavior;
         jumping = false;
     }
 
     void Update() {
+        currentBehavior(Mode);
+
+        TickConds();
+    }
+
+    public void ApplyBehavior(Behavior newBehavior) {
+        currentBehavior = newBehavior;
+    }
+
+    public void ResetBehavior() {
+        currentBehavior = DefaultBehavior;
+    }
+
+    private void DefaultBehavior(CharacterMode mode) {
         if (Controller.isTouchingGround && Input.GetKeyDown(GameController.jumpKey)) {
             Controller.ApplyJump(JumpHeight);
             jumping = true;
@@ -149,13 +157,11 @@ public class Player : MonoBehaviour, ICharacter, IConditions, IHealth {
         else {
             Controller.Motion = new Vector2(Input.GetAxisRaw("Horizontal") * Speed, 0);
         }
-        
+
         if (jumping && (!Input.GetKey(GameController.jumpKey) || rb.velocity.y < 0)) {
             rb.gravityScale *= 1.5f;
             jumping = false;
         }
-
-        TickConds();
     }
 
     public Cond GetCond(string name) {
@@ -167,7 +173,7 @@ public class Player : MonoBehaviour, ICharacter, IConditions, IHealth {
         bool duplicateFound = false;
         for (int i = 0; i < condsApplied.Length; i++) {
             if (condsApplied[i] != null && condsApplied[i].name == cond.name && cond.overwriteable == true) {
-                Debug.Log(condsApplied[i].name + " was reapplied to " + Name + "!");
+                Debug.Log(condsApplied[i].name + " was reapplied to " + name + "!");
                 condsApplied[i].OverwriteEffect(cond);
                 duplicateFound = true;
                 break;
@@ -177,7 +183,7 @@ public class Player : MonoBehaviour, ICharacter, IConditions, IHealth {
             for (int i = 0; i < condsApplied.Length; i++) {
                 if (condsApplied[i] == null) {
                     condsApplied[i] = cond;
-                    Debug.Log(condsApplied[i].name + " was applied to " + Name + "!");
+                    Debug.Log(condsApplied[i].name + " was applied to " + name + "!");
                     condsApplied[i].ApplyInitialEffect();
                     break;
                 }
@@ -188,7 +194,7 @@ public class Player : MonoBehaviour, ICharacter, IConditions, IHealth {
     public void RemoveCond(Cond cond) {
         for (int i = 0; i < condsApplied.Length; i++) {
             if (condsApplied[i] != null && condsApplied[i].name == cond.name) {
-                Debug.Log(condsApplied[i].name + " has been removed from " + Name + ".");
+                Debug.Log(condsApplied[i].name + " has been removed from " + name + ".");
                 condsApplied[i].RemoveEffect();
                 condsApplied[i] = null;
                 RealignCondList();
@@ -202,7 +208,7 @@ public class Player : MonoBehaviour, ICharacter, IConditions, IHealth {
             if (condsApplied[i] != null) {
                 condsApplied[i].time -= Time.deltaTime;
                 if (condsApplied[i].time <= 0) {
-                    Debug.Log(condsApplied[i].name + " has been removed from " + Name + " after running out of time.");
+                    Debug.Log(condsApplied[i].name + " has been removed from " + name + " after running out of time.");
                     condsApplied[i].RemoveEffect();
                     condsApplied[i] = null;
                     RealignCondList();

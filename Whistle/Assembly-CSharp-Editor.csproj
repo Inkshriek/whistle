@@ -62,6 +62,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Editor\GameControllerEditor.cs" />
+    <Compile Include="Assets\Editor\NavMeshEditor.cs" />
     <Compile Include="Assets\Editor\PlayerControllerEditor.cs" />
     <Compile Include="Assets\Spine\spine-unity\Editor\AnimationReferenceAssetEditor.cs" />
     <Compile Include="Assets\Spine\spine-unity\Editor\AssetDatabaseAvailabilityDetector.cs" />
