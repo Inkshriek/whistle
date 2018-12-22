@@ -92,10 +92,14 @@ public class Feu : Familiar {
                 Vector2 direction;
                 int index = AI.ParsePathForDirection(transform.position, out direction);
 
-                if (direction.y > 0) {
-                    while (direction.x == 0) {
+
+                while (direction.x == 0) {
+                    if (direction.y > 0) {
                         index++;
                         AI.ParsePathForDirection(index, out direction);
+                    }
+                    else {
+                        break;
                     }
                 }
 
