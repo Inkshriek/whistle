@@ -43,5 +43,5 @@ namespace Whistle.Characters {
         Flying
     }
 
-    public delegate void Behavior(CharacterMode mode);
+    public delegate void Behavior();
 }

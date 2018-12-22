@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using Whistle.Familiars;
 using Whistle.Characters;
+using System.Threading;
 
 [RequireComponent(typeof(CharController))]
 public class Feu : Familiar {
 
-    private FamiliarAIType ai;
     private Player player;
     private float speed;
     private CharController controller;
@@ -55,16 +55,6 @@ public class Feu : Familiar {
         }
     }
 
-    public override FamiliarAIType AI {
-        get {
-            return ai;
-        }
-
-        set {
-            ai = value;
-        }
-    }
-
     public override bool Active {
         get {
             return active;
@@ -75,12 +65,53 @@ public class Feu : Familiar {
         }
     }
 
+    // Use this for initialization
+    void Start() {
+        player = FindObjectOfType<Player>();
+        AI = new AIAgent(NavMesh.SceneNavMesh);
+        Mode = CharacterMode.Active;
+        Controller = GetComponent<CharController>();
+
+        currentBehavior = Behavior;
+
+        DisplayName = "Feu";
+    }
+
+    public override void ApplyBehavior(Behavior behavior) {
+        throw new System.NotImplementedException();
+    }
+
+    public override void ResetBehavior() {
+        throw new System.NotImplementedException();
+    }
+
+    private void Behavior() {
+
+        if (!AI.Operating) {
+            if (AI.PathReady) {
+                Vector2 direction;
+                int index = AI.ParsePathForDirection(transform.position, out direction);
+
+                if (direction.y > 0) {
+                    while (direction.x == 0) {
+                        index++;
+                        AI.ParsePathForDirection(index, out direction);
+                    }
+                }
+
+
+                Controller.Motion = new Vector2(Mathf.Sign(direction.x) * 5, 0);
+            }
+
+            AI.ResetPath();
+            AI.GeneratePath(transform.position, player.transform.position);
+        }
+    }
+
     protected override void PrimaryAction() {
         throw new System.NotImplementedException();
     }
 
-    // Use this for initialization
-    void Start() {
-        DisplayName = "Feu";
-    }
+
+
 }

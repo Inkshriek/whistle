@@ -1,12 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Threading;
 
 public class NavMesh : MonoBehaviour {
 
     [SerializeField] public NavRect[] mesh;
-    //[SerializeField] public Vector2 nodeSpacing;
-    //[SerializeField] public Bounds nodeBounds;
+    [SerializeField] public Vector2 nodeSpacing;
+    [SerializeField] public Bounds nodeBounds;
     //private Dictionary<Vector2, NavRectFlag> nodeGraph = new Dictionary<Vector2, NavRectFlag>();
     public bool forceStop = false;
 
@@ -18,8 +19,13 @@ public class NavMesh : MonoBehaviour {
         }
     }
 
-    void Awake() {
+    void Start() {
+        nodeSpacing = new Vector2(0.5f,0.5f);
+        nodeBounds = new Bounds();
+        nodeBounds.center = Vector2.zero;
+        nodeBounds.size = new Vector2(30, 30);
 
+        //GenerateNodeGraph();
     }
 
     void Update() {
@@ -59,125 +65,127 @@ public class NavMesh : MonoBehaviour {
     }
     */
 
-    public Vector2 FindDirectionToGo(Vector2 start, Vector2 end, Accuracy accuracy, float nodeDensity) { 
-        //This finds a normalized direction to move in, in order to take a step to reach the end destination.
+    public Vector2[] GetPath(Vector2 start, Vector2 end, Accuracy accuracy) { 
 
-        if (forceStop) {
-            return Vector2.zero;
+        //This finds a full set of Vector2 that constitutes the best valid "path" for the recipient to take.
+        //Do not call this directly, as it will be executed in the main thread. Instead use the AIAgent class for all operations.
+
+        //Realigning the input vectors to the node graph.
+        start = new Vector2(Mathf.Round(start.x / nodeSpacing.x) * nodeSpacing.x, Mathf.Round(start.y / nodeSpacing.y) * nodeSpacing.y);
+        end = new Vector2(Mathf.Round(end.x / nodeSpacing.x) * nodeSpacing.x, Mathf.Round(end.y / nodeSpacing.y) * nodeSpacing.y);
+
+        if (PointIntersecting(end) == NavRectFlag.Nothing) {
+            return null;
         }
-        try {
-            //Realigning the input vectors to the node graph.
-            start = new Vector2(Mathf.Round(start.x / nodeDensity) * nodeDensity, Mathf.Round(start.y / nodeDensity) * nodeDensity);
-            end = new Vector2(Mathf.Round(end.x / nodeDensity) * nodeDensity, Mathf.Round(end.y / nodeDensity) * nodeDensity);
 
-            Debug.Log(start + " till " + end);
+        //Deciding how to calculate this, based on accuracy.
+        switch (accuracy) {
+            case Accuracy.High:
 
-            //Deciding how to calculate this, based on accuracy.
-            switch (accuracy) {
-                case Accuracy.Low:
+                List<Node> openLocs = new List<Node>();
+                List<Node> closedLocs = new List<Node>();
+                Node[] adjacentNodes;
+                bool evaluating = true;
 
-                    List<Node> openLocs = new List<Node>();
-                    List<Node> closedLocs = new List<Node>();
-                    Node[] adjacentNodes;
-                    bool evaluating = true;
+                Node current = new Node(start);
+                Node final = new Node(end);
+                openLocs.Add(current);
+                int e = 0;
 
-                    Node current = new Node(start);
-                    openLocs.Add(current);
-                    int i = 0;
+                while (evaluating) {
+                    e++;
+                    if (e > 1000) {
+                        Debug.LogError("The NavMesh pathfinding algorithm has been force stopped due to too many iterations.");
+                        return null;
 
-                    while (evaluating) {
-                        i++;
-                        if (i > 1000) {
-                            Debug.LogError("The NavMesh pathfinding algorithm has been force stopped due to too many iterations. Please restart the game.");
-                            forceStop = true;
-                            return Vector2.zero;
-                            
+                    }
+
+                    float lowestFcost = Mathf.Infinity;
+
+                    int savedi = 0;
+                    for (int i = 0; i < openLocs.Count; i++) {
+                        float Gcost = Vector2.Distance(openLocs[i].loc, start);
+                        float Hcost = Vector2.Distance(openLocs[i].loc, end);
+                        float Fcost = Gcost + Hcost;
+
+                        if (Fcost < lowestFcost) {
+                            current = openLocs[i];
+                            savedi = i;
+                            lowestFcost = Mathf.Min(lowestFcost, Fcost);
                         }
+                    }
 
-                        float lowestFcost = Mathf.Infinity;
+                    openLocs.RemoveAt(savedi);
+                    closedLocs.Add(current);
 
-                        foreach (Node node in openLocs) {
-                            float Gcost = Vector2.Distance(node.loc, start);
-                            float Hcost = Vector2.Distance(node.loc, end);
-                            float Fcost = Gcost + Hcost;
+                    if (current.loc == end) {
+                        evaluating = false;
+                        final.parent = current.parent;
+                        break;
+                    }
 
-                            if (Fcost < lowestFcost) {
-                                current = node;
-                                lowestFcost = Mathf.Min(lowestFcost, Fcost);
-                            }
-                        }
-
-                        openLocs.Remove(current);
-                        closedLocs.Add(current);
-
-                        if (current.loc == end) {
-                            evaluating = false;
-                            break;
-                        }
-
-                        adjacentNodes = new Node[] {
-                            GetNodeFromMesh(new Vector2(current.loc.x - nodeDensity, current.loc.y)),
-                            GetNodeFromMesh(new Vector2(current.loc.x - nodeDensity, current.loc.y + nodeDensity)),
-                            GetNodeFromMesh(new Vector2(current.loc.x, current.loc.y + nodeDensity)),
-                            GetNodeFromMesh(new Vector2(current.loc.x + nodeDensity, current.loc.y + nodeDensity)),
-                            GetNodeFromMesh(new Vector2(current.loc.x + nodeDensity, current.loc.y)),
-                            GetNodeFromMesh(new Vector2(current.loc.x + nodeDensity, current.loc.y - nodeDensity)),
-                            GetNodeFromMesh(new Vector2(current.loc.x, current.loc.y - nodeDensity)),
-                            GetNodeFromMesh(new Vector2(current.loc.x - nodeDensity, current.loc.y - nodeDensity)),
+                    adjacentNodes = new Node[] {
+                            GetNodeFromMesh(new Vector2(current.loc.x - nodeSpacing.x, current.loc.y)),
+                            GetNodeFromMesh(new Vector2(current.loc.x - nodeSpacing.x, current.loc.y + nodeSpacing.y)),
+                            GetNodeFromMesh(new Vector2(current.loc.x, current.loc.y + nodeSpacing.y)),
+                            GetNodeFromMesh(new Vector2(current.loc.x + nodeSpacing.x, current.loc.y + nodeSpacing.y)),
+                            GetNodeFromMesh(new Vector2(current.loc.x + nodeSpacing.x, current.loc.y)),
+                            GetNodeFromMesh(new Vector2(current.loc.x + nodeSpacing.x, current.loc.y - nodeSpacing.y)),
+                            GetNodeFromMesh(new Vector2(current.loc.x, current.loc.y - nodeSpacing.y)),
+                            GetNodeFromMesh(new Vector2(current.loc.x - nodeSpacing.x, current.loc.y - nodeSpacing.y)),
                         };
 
-                        foreach (Node node in adjacentNodes) {
-                            if (!IsTraversible(node.flag) || IsInGroup(node.loc, closedLocs)) {
-                                continue;
-                            }
+                    foreach (Node node in adjacentNodes) {
+                        if (!IsTraversible(node.flag) || IsInGroup(node.loc, closedLocs)) {
+                            continue;
+                        }
 
-                            float Gcost = Vector2.Distance(node.loc, start);
-                            float Hcost = Vector2.Distance(node.loc, end);
-                            float Fcost = Gcost + Hcost;
+                        float Gcost = Vector2.Distance(node.loc, start);
+                        float Hcost = Vector2.Distance(node.loc, end);
+                        float Fcost = Gcost + Hcost;
 
-                            if (Fcost < lowestFcost || !IsInGroup(node.loc, openLocs)) {
-                                node.parent = current;
-                                if (!IsInGroup(node.loc, openLocs)) {
-                                    openLocs.Add(node);
-                                }
+                        if (Fcost < lowestFcost || !IsInGroup(node.loc, openLocs)) {
+                            node.parent = current;
+                            if (!IsInGroup(node.loc, openLocs)) {
+                                openLocs.Add(node);
                             }
                         }
                     }
+                }
 
-                    //Returning direction found.
-                    Node processingNode = closedLocs[closedLocs.Count - 1];
-                    List<Node> path = new List<Node>();
+                //Returning path found.
+                Node processingNode = final;
+                List<Node> pathNodes = new List<Node>();
 
-                    bool gettingPath = true;
+                bool gettingPath = true;
 
-                    while (gettingPath) {
-                        if (processingNode.parent != null) {
-                            path.Add(processingNode);
-                        }
-                        else {
-                            gettingPath = false;
-                        }
+                while (gettingPath) {
+                    if (processingNode.parent != null) {
+                        processingNode = processingNode.parent;
+                        pathNodes.Add(processingNode);
+
                     }
+                    else {
+                        gettingPath = false;
+                    }
+                }
 
-                    Vector2 difference = path[path.Count - 1].loc - start;
-                    difference.Normalize();
-                    return difference;
+                Vector2[] path = new Vector2[pathNodes.Count];
+                for (int i = 0; i < path.Length; i++) {
+                    path[i] = pathNodes[i].loc;
+                }
 
-                case Accuracy.Medium:
+                return path;
 
-                    break;
-                case Accuracy.High:
+            case Accuracy.Medium:
 
-                    break;
-            }
+                break;
+            case Accuracy.Low:
 
-            return Vector2.zero;
+                break;
         }
-        catch {
-            Debug.LogError("The node graph couldn't be parsed! Did you forget to generate it?");
 
-            return Vector2.zero;
-        }
+        return null;
     }
 
     /*
@@ -263,6 +271,7 @@ public class NavMesh : MonoBehaviour {
 
         Node node = new Node(loc);
         node.flag = PointIntersecting(loc);
+        
         return node;
         
 

@@ -1,18 +1,20 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 using Whistle.Characters;
 using Whistle.Conditions;
 
 namespace Whistle.Familiars {
 
-    public abstract class Familiar : MonoBehaviour, ICharacter, IConditions {
+    public abstract class Familiar : MonoBehaviour, ICharacter, IBehavior, IConditions {
         public string DisplayName { get; set; }
 
         public abstract CharController Controller { get; set; }
         public abstract CharacterMode Mode { get; set; }
 
-        public abstract FamiliarAIType AI { get; set; }
+        protected Behavior currentBehavior;
+        protected AIAgent AI;
         public abstract Player Player { get; set; }
         public abstract float Speed { get; set; }
         public abstract bool Active { get; set; }
@@ -23,17 +25,16 @@ namespace Whistle.Familiars {
             }
 
             if (Active) {
-                Player player = FindObjectOfType<Player>();
-
-                NavMesh nav = NavMesh.SceneNavMesh;
-
-                transform.position += (Vector3)nav.FindDirectionToGo(transform.position, player.transform.position, NavMesh.Accuracy.Low, 0.5f);
+                currentBehavior();
 
                 if (Input.GetAxisRaw("Familiar Ability") > 0) {
                     PrimaryAction();
                 }
             }
         }
+
+        public abstract void ApplyBehavior(Behavior behavior);
+        public abstract void ResetBehavior();
 
         protected abstract void PrimaryAction();
 
@@ -69,9 +70,7 @@ namespace Whistle.Familiars {
         }
     }
 
-    public enum FamiliarAIType {
-        Normal,
-        Flying
+    public class FamiliarAI {
+        
     }
-
 }
