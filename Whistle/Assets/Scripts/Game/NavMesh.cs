@@ -28,47 +28,10 @@ public class NavMesh : MonoBehaviour {
         //GenerateNodeGraph();
     }
 
-    void Update() {
-
-    }
-
-    /*
-    public void GenerateNodeGraph() {
-        //Generates a node graph based on the navigation mesh, nodeSpacing, and nodeBounds. This is what gets used for pathfinding.
-
-        try {
-            nodeGraph = new Dictionary<Vector2, NavRectFlag>();
-            float currentPosX = nodeBounds.min.x;
-            float currentPosY = nodeBounds.min.y;
-
-            while (currentPosY <= nodeBounds.max.y) {
-
-                while (currentPosX <= nodeBounds.max.x) {
-                    nodeGraph.Add(new Vector2(currentPosX, currentPosY), PointIntersecting(new Vector2(currentPosX, currentPosY)));
-
-                    NavRectFlag flag;
-
-                    nodeGraph.TryGetValue(new Vector2(currentPosX, currentPosY), out flag);
-                    Debug.Log("Node Position: " + new Vector2(currentPosX, currentPosY) + " | Node Flag: " + flag);
-                    currentPosX += nodeSpacing.x;
-                }
-                currentPosY += nodeSpacing.y;
-                currentPosX = nodeBounds.min.x;
-            }
-        }
-        catch {
-
-        }
-
-        Debug.Log(nodeGraph.Count);
-        Debug.Log("Node graph successfully generated!");
-    }
-    */
-
     public Vector2[] GetPath(Vector2 start, Vector2 end, Accuracy accuracy) { 
 
         //This finds a full set of Vector2 that constitutes the best valid "path" for the recipient to take.
-        //Do not call this directly, as it will be executed in the main thread. Instead use the AIAgent class for all operations.
+        //Do not call this directly, as it will be executed in the main thread. Instead use the NavAgent class for all operations.
 
         //Realigning the input vectors to the node graph.
         start = new Vector2(Mathf.Round(start.x / nodeSpacing.x) * nodeSpacing.x, Mathf.Round(start.y / nodeSpacing.y) * nodeSpacing.y);
@@ -83,35 +46,21 @@ public class NavMesh : MonoBehaviour {
             case Accuracy.High:
 
                 List<Node> openLocs = new List<Node>();
-                List<Node> closedLocs = new List<Node>();
+                HashSet<Node> closedLocs = new HashSet<Node>();
                 Node[] adjacentNodes;
-                bool evaluating = true;
 
                 Node current = new Node(start);
                 Node final = new Node(end);
                 openLocs.Add(current);
-                int e = 0;
 
-                while (evaluating) {
-                    e++;
-                    if (e > 1000) {
-                        Debug.LogError("The NavMesh pathfinding algorithm has been force stopped due to too many iterations.");
-                        return null;
-
-                    }
-
-                    float lowestFcost = Mathf.Infinity;
+                while (openLocs.Count > 0) {
+                    current = openLocs[0];
 
                     int savedi = 0;
                     for (int i = 0; i < openLocs.Count; i++) {
-                        float Gcost = Vector2.Distance(openLocs[i].loc, start);
-                        float Hcost = Vector2.Distance(openLocs[i].loc, end);
-                        float Fcost = Gcost + Hcost;
-
-                        if (Fcost < lowestFcost) {
+                        if ((openLocs[i].Fcost == current.Fcost && openLocs[i].Hcost < current.Hcost) || openLocs[i].Fcost < current.Fcost) {
                             current = openLocs[i];
                             savedi = i;
-                            lowestFcost = Mathf.Min(lowestFcost, Fcost);
                         }
                     }
 
@@ -119,7 +68,6 @@ public class NavMesh : MonoBehaviour {
                     closedLocs.Add(current);
 
                     if (current.loc == end) {
-                        evaluating = false;
                         final.parent = current.parent;
                         break;
                     }
@@ -135,19 +83,20 @@ public class NavMesh : MonoBehaviour {
                             GetNodeFromMesh(new Vector2(current.loc.x - nodeSpacing.x, current.loc.y - nodeSpacing.y)),
                         };
 
-                    foreach (Node node in adjacentNodes) {
-                        if (!IsTraversible(node.flag) || IsInGroup(node.loc, closedLocs)) {
+                    foreach (Node adjacent in adjacentNodes) {
+                        if (!IsTraversible(adjacent.flag) || IsInGroup(adjacent.loc, closedLocs)) {
                             continue;
                         }
 
-                        float Gcost = Vector2.Distance(node.loc, start);
-                        float Hcost = Vector2.Distance(node.loc, end);
-                        float Fcost = Gcost + Hcost;
+                        float costToAdjacent = current.Gcost + Vector2.Distance(current.loc, adjacent.loc);
 
-                        if (Fcost < lowestFcost || !IsInGroup(node.loc, openLocs)) {
-                            node.parent = current;
-                            if (!IsInGroup(node.loc, openLocs)) {
-                                openLocs.Add(node);
+                        if (costToAdjacent < adjacent.Gcost || !IsInGroup(adjacent.loc, openLocs)) {
+                            adjacent.Gcost = costToAdjacent;
+                            adjacent.Hcost = Vector2.Distance(adjacent.loc, end);
+                            adjacent.parent = current;
+
+                            if (!IsInGroup(adjacent.loc, openLocs)) {
+                                openLocs.Add(adjacent);
                             }
                         }
                     }
@@ -256,8 +205,19 @@ public class NavMesh : MonoBehaviour {
         public NavRectFlag flag;
         public Node parent;
 
+        public float Gcost;
+        public float Hcost;
+
+        public float Fcost {
+            get {
+                return Gcost + Hcost;
+            }
+        }
+
         public Node(Vector2 loc) {
             this.loc = loc;
+            Gcost = 0;
+            Hcost = 0;
         }
     }
 
@@ -287,6 +247,16 @@ public class NavMesh : MonoBehaviour {
     }
 
     private bool IsInGroup(Vector2 loc, List<Node> set) {
+        foreach (Node node in set) {
+            if (node.loc == loc) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private bool IsInGroup(Vector2 loc, HashSet<Node> set) {
         foreach (Node node in set) {
             if (node.loc == loc) {
                 return true;

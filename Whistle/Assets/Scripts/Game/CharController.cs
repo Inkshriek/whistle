@@ -19,7 +19,6 @@ public class CharController : MonoBehaviour {
     [HideInInspector] public float V;
     [HideInInspector] private float forceSmoothed;
 
-    private Transform trans;
     private Rigidbody2D rb;
     private BoxCollider2D col;
     private PhysicsMaterial2D baseMaterial;
@@ -41,12 +40,10 @@ public class CharController : MonoBehaviour {
 
 
     void Start () {
-        trans = GetComponent<Transform>();
         rb = GetComponent<Rigidbody2D>();
         col = GetComponent<BoxCollider2D>();
 
-        layerMask = 1 << 8;
-        layerMask = ~layerMask;
+        layerMask = 1;
 
         baseMaterial = Resources.Load("Mat_CharGround") as PhysicsMaterial2D;
         airMaterial = Resources.Load("Mat_CharAir") as PhysicsMaterial2D;
@@ -138,6 +135,7 @@ public class CharController : MonoBehaviour {
                 float distanceB = col.bounds.SqrDistance(move * Time.deltaTime + cornerPoint);
                 float percentdiff = distanceA / distanceB;
                 move *= Mathf.Max(percentdiff, 0);
+                forceSmoothed = 0;
             }
 
             rb.position += move * Time.deltaTime;

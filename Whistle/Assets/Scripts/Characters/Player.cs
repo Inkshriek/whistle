@@ -5,7 +5,7 @@ using Whistle.Conditions;
 using Whistle.Characters;
 
 [RequireComponent(typeof(CharController))]
-public class Player : MonoBehaviour, ICharacter, IBehavior, IConditions, IHealth {
+public class Player : MonoBehaviour, ICharacter, IConditions, IHealth {
 
     public string DisplayName { get; set; }
 
@@ -16,40 +16,33 @@ public class Player : MonoBehaviour, ICharacter, IBehavior, IConditions, IHealth
     [SerializeField] private float maxHealth;
     [SerializeField] private float effectiveHealth;
     [SerializeField] private float currentHealth;
-    [SerializeField] private CharacterMode charMode;
 
-    [HideInInspector] public PlayerState state;
-
-    private Transform trans;
     private Rigidbody2D rb;
-    private BoxCollider2D col;
 
-    private Cond[] condsApplied = new Cond[12];
-    private Behavior currentBehavior;
+    private List<Cond> conds;
     private bool jumping;
 
-    public float ActiveSpeed {
+    public CharController Controller { get; private set; }
+
+    public CharacterMode Mode { get; set; }
+    public PlayerState State { get; set; }
+
+    public float Speed {
         get {
-            switch (state) {
+            switch (State) {
                 case PlayerState.Walking:
-                    return walkSpeed;
+                    return Modifier.AdjustNumber(conds, walkSpeed, Modifier.Tag.Speed);
 
                 case PlayerState.Crouching:
-                    return crouchSpeed;
+                    return Modifier.AdjustNumber(conds, crouchSpeed, Modifier.Tag.Speed);
 
                 case PlayerState.Running:
-                    return runSpeed;
+                    return Modifier.AdjustNumber(conds, runSpeed, Modifier.Tag.Speed);
 
                 default:
                     Debug.LogError("PlayerState is in an impossible position! May want to fix that quick.");
                     return 0;
             }
-        }
-    }
-
-    public float Speed {
-        get {
-            return walkSpeed;
         }
         set {
             float multRun = runSpeed / walkSpeed;
@@ -62,7 +55,7 @@ public class Player : MonoBehaviour, ICharacter, IBehavior, IConditions, IHealth
 
     public float JumpHeight {
         get {
-            return jumpHeight;
+            return Modifier.AdjustNumber(conds, jumpHeight, Modifier.Tag.JumpHeight);
         }
         set {
             jumpHeight = value;
@@ -80,88 +73,81 @@ public class Player : MonoBehaviour, ICharacter, IBehavior, IConditions, IHealth
 
     public float EffectiveHealth {
         get {
-            throw new System.NotImplementedException();
+            return effectiveHealth;
         }
         set {
-
+            effectiveHealth = Mathf.Max(0, value);
         }
     }
 
     public float MaxHealth {
         get {
-            return maxHealth;
+            return Modifier.AdjustNumber(conds, maxHealth, Modifier.Tag.MaxHealth);
         }
         set {
-            maxHealth = value;
+            maxHealth = Mathf.Max(0, value);
         }
     }
 
-    public CharController Controller { get; private set; }
-
-    public CharacterMode Mode {
-        get {
-            return charMode;
-        }
-        set {
-            charMode = value;
-        }
-    }
-
-    void Start () {
+    void Awake() {
         DisplayName = "Ichabod";
+        conds = new List<Cond>();
 
-        trans = GetComponent<Transform>();
         rb = GetComponent<Rigidbody2D>();
-        col = GetComponent<BoxCollider2D>();
         Controller = GetComponent<CharController>();
 
-        state = PlayerState.Walking;
-        currentBehavior = Behavior;
+        State = PlayerState.Walking;
         jumping = false;
     }
 
     void Update() {
-        currentBehavior();
+        if (Mode == CharacterMode.Active) {
+            if (Controller.isTouchingGround && Input.GetKeyDown(GameController.jumpKey)) {
+                Controller.ApplyJump(JumpHeight);
+                jumping = true;
+                rb.gravityScale /= 1.5f;
+            }
 
-        TickConds();
+            if (Input.GetAxisRaw("Vertical") < 0) {
+                State = PlayerState.Crouching;
+            }
+            else if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)) {
+                State = PlayerState.Running;
+            }
+            else {
+                State = PlayerState.Walking;
+            }
+
+            if (Controller.isTouchingGround) {
+                Controller.Motion = new Vector2(Input.GetAxisRaw("Horizontal") * Speed, 0);
+            }
+            else {
+                Controller.Motion = new Vector2(Input.GetAxisRaw("Horizontal") * walkSpeed, 0);
+            }
+
+            if (jumping && (!Input.GetKey(GameController.jumpKey) || rb.velocity.y < 0)) {
+                rb.gravityScale *= 1.5f;
+                jumping = false;
+            }
+
+            TickConds();
+        }
     }
 
-    public void ApplyBehavior(Behavior newBehavior) {   
-        currentBehavior = newBehavior;
+    public void TakeDamage(float value) {
+        value = Modifier.AdjustNumber(conds, value, Modifier.Tag.Damage);
+        CurrentHealth = Mathf.Max(CurrentHealth - value, 0);
     }
 
-    public void ResetBehavior() {
-        currentBehavior = Behavior;
+    public void HealDamage(float value) {
+        value = Modifier.AdjustNumber(conds, value, Modifier.Tag.Damage);
+        CurrentHealth = Mathf.Max(CurrentHealth - value, 0);
     }
 
-    private void Behavior() {
-        if (Controller.isTouchingGround && Input.GetKeyDown(GameController.jumpKey)) {
-            Controller.ApplyJump(JumpHeight);
-            jumping = true;
-            rb.gravityScale /= 1.5f;
-        }
+    private void BleedHealth() {
+        //This whole method here intends to "adjust" the effective health to, over time, reach the real current health.
 
-        if (Input.GetAxisRaw("Vertical") < 0) {
-            state = PlayerState.Crouching;
-        }
-        else if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)) {
-            state = PlayerState.Running;
-        }
-        else {
-            state = PlayerState.Walking;
-        }
 
-        if (Controller.isTouchingGround) {
-            Controller.Motion = new Vector2(Input.GetAxisRaw("Horizontal") * ActiveSpeed, 0);
-        }
-        else {
-            Controller.Motion = new Vector2(Input.GetAxisRaw("Horizontal") * Speed, 0);
-        }
-
-        if (jumping && (!Input.GetKey(GameController.jumpKey) || rb.velocity.y < 0)) {
-            rb.gravityScale *= 1.5f;
-            jumping = false;
-        }
     }
 
     public Cond GetCond(string name) {
@@ -171,66 +157,44 @@ public class Player : MonoBehaviour, ICharacter, IBehavior, IConditions, IHealth
     public void AddCond(Cond cond) {
         cond.obj = gameObject;
         bool duplicateFound = false;
-        for (int i = 0; i < condsApplied.Length; i++) {
-            if (condsApplied[i] != null && condsApplied[i].name == cond.name && cond.overwriteable == true) {
-                Debug.Log(condsApplied[i].name + " was reapplied to " + name + "!");
-                condsApplied[i].OverwriteEffect(cond);
+        for (int i = 0; i < conds.Count; i++) {
+            if (conds[i] != null && conds[i].name == cond.name && cond.overwriteable == true) {
+                Debug.Log(conds[i].name + " was reapplied to " + DisplayName + "!");
+                conds[i].OverwriteEffect(cond);
                 duplicateFound = true;
                 break;
             }
         }
         if (!duplicateFound) {
-            for (int i = 0; i < condsApplied.Length; i++) {
-                if (condsApplied[i] == null) {
-                    condsApplied[i] = cond;
-                    Debug.Log(condsApplied[i].name + " was applied to " + name + "!");
-                    condsApplied[i].ApplyInitialEffect();
-                    break;
-                }
-            }
+            conds.Add(cond);
+            Debug.Log(cond.name + " was applied to " + name + "!");
+            cond.ApplyInitialEffect();
         }
     }
 
-    public void RemoveCond(Cond cond) {
-        for (int i = 0; i < condsApplied.Length; i++) {
-            if (condsApplied[i] != null && condsApplied[i].name == cond.name) {
-                Debug.Log(condsApplied[i].name + " has been removed from " + name + ".");
-                condsApplied[i].RemoveEffect();
-                condsApplied[i] = null;
-                RealignCondList();
+    public void RemoveCond(string name) {
+        for (int i = 0; i < conds.Count; i++) {
+            if (conds[i] != null && conds[i].name == name) {
+                Debug.Log(conds[i].name + " has been removed from " + DisplayName + ".");
+                conds[i].RemoveEffect();
+                conds[i] = null;
                 break;
             }
         }
     }
 
     protected void TickConds() {
-        for (int i = 0; i < condsApplied.Length; i++) {
-            if (condsApplied[i] != null) {
-                condsApplied[i].time -= Time.deltaTime;
-                if (condsApplied[i].time <= 0) {
-                    Debug.Log(condsApplied[i].name + " has been removed from " + name + " after running out of time.");
-                    condsApplied[i].RemoveEffect();
-                    condsApplied[i] = null;
-                    RealignCondList();
+        for (int i = 0; i < conds.Count; i++) {
+            if (conds[i] != null) {
+                conds[i].time -= Time.deltaTime;
+                if (conds[i].time <= 0) {
+                    Debug.Log(conds[i].name + " has been removed from " + DisplayName + " after running out of time.");
+                    conds[i].RemoveEffect();
+                    conds[i] = null;
                 }
                 else {
-                    condsApplied[i].ApplyContinuousEffect();
+                    conds[i].ApplyContinuousEffect();
                 }
-            }
-        }
-    }
-
-    protected void RealignCondList() {
-        int arrayShift = 0;
-        for (int i = 0; i < condsApplied.Length; i++) {
-            if (condsApplied[i] == null) {
-                arrayShift += 1;
-            }
-            if (i + arrayShift > condsApplied.Length - 1) {
-                condsApplied[i] = null;
-            }
-            else {
-                condsApplied[i] = condsApplied[i + arrayShift];
             }
         }
     }

@@ -7,14 +7,13 @@ using Whistle.Conditions;
 
 namespace Whistle.Familiars {
 
-    public abstract class Familiar : MonoBehaviour, ICharacter, IBehavior, IConditions {
+    public abstract class Familiar : MonoBehaviour, ICharacter, IConditions {
         public string DisplayName { get; set; }
 
         public abstract CharController Controller { get; set; }
         public abstract CharacterMode Mode { get; set; }
 
-        protected Behavior currentBehavior;
-        protected AIAgent AI;
+        protected NavAgent AI;
         public abstract Player Player { get; set; }
         public abstract float Speed { get; set; }
         public abstract bool Active { get; set; }
@@ -25,7 +24,7 @@ namespace Whistle.Familiars {
             }
 
             if (Active) {
-                currentBehavior();
+                Behavior();
 
                 if (Input.GetAxisRaw("Familiar Ability") > 0) {
                     PrimaryAction();
@@ -33,9 +32,7 @@ namespace Whistle.Familiars {
             }
         }
 
-        public abstract void ApplyBehavior(Behavior behavior);
-        public abstract void ResetBehavior();
-
+        protected abstract void Behavior();
         protected abstract void PrimaryAction();
 
         protected Cond condApplied;
@@ -52,8 +49,8 @@ namespace Whistle.Familiars {
             }
         }
 
-        public void RemoveCond(Cond cond) {
-            if (condApplied.name != cond.name) {
+        public void RemoveCond(string name) {
+            if (condApplied.name == name) {
                 condApplied.RemoveEffect();
                 condApplied = null;
             }

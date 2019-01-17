@@ -734,7 +734,7 @@
     </member>
     <member name="P:UnityEngine.AudioReverbFilter.hfReference">
       <summary>
-        <para>Reference high frequency in Hz. Ranges from 20.0 to 20000.0. Default is 5000.0.</para>
+        <para>Reference high frequency in Hz. Ranges from 1000.0 to 20000.0. Default is 5000.0.</para>
       </summary>
     </member>
     <member name="P:UnityEngine.AudioReverbFilter.lfReference">
@@ -1317,15 +1317,15 @@
     </member>
     <member name="M:UnityEngine.AudioSource.Play()">
       <summary>
-        <para>Plays the clip with an optional certain delay.</para>
+        <para>Plays the clip.</para>
       </summary>
-      <param name="delay">Delay in number of samples, assuming a 44100Hz sample rate (meaning that Play(44100) will delay the playing by exactly 1 sec).</param>
+      <param name="delay">Deprecated. Delay in number of samples, assuming a 44100Hz sample rate (meaning that Play(44100) will delay the playing by exactly 1 sec).</param>
     </member>
     <member name="M:UnityEngine.AudioSource.Play(System.UInt64)">
       <summary>
-        <para>Plays the clip with an optional certain delay.</para>
+        <para>Plays the clip.</para>
       </summary>
-      <param name="delay">Delay in number of samples, assuming a 44100Hz sample rate (meaning that Play(44100) will delay the playing by exactly 1 sec).</param>
+      <param name="delay">Deprecated. Delay in number of samples, assuming a 44100Hz sample rate (meaning that Play(44100) will delay the playing by exactly 1 sec).</param>
     </member>
     <member name="M:UnityEngine.AudioSource.PlayClipAtPoint(UnityEngine.AudioClip,UnityEngine.Vector3)">
       <summary>
@@ -1495,17 +1495,17 @@
     </member>
     <member name="F:UnityEngine.AudioVelocityUpdateMode.Auto">
       <summary>
-        <para>Updates the source or listener in the fixed update loop if it is attached to a Rigidbody, dynamic otherwise.</para>
+        <para>Updates the source or listener in the MonoBehaviour.FixedUpdate loop if it is attached to a Rigidbody, dynamic MonoBehaviour.Update otherwise.</para>
       </summary>
     </member>
     <member name="F:UnityEngine.AudioVelocityUpdateMode.Dynamic">
       <summary>
-        <para>Updates the source or listener in the dynamic update loop.</para>
+        <para>Updates the source or listener in the dynamic MonoBehaviour.Update loop.</para>
       </summary>
     </member>
     <member name="F:UnityEngine.AudioVelocityUpdateMode.Fixed">
       <summary>
-        <para>Updates the source or listener in the fixed update loop.</para>
+        <para>Updates the source or listener in the MonoBehaviour.FixedUpdate loop.</para>
       </summary>
     </member>
     <member name="T:UnityEngine.Experimental.Audio.AudioSampleProvider">

@@ -1,0 +1,354 @@
+-debug
+-target:library
+-nowarn:0169
+-langversion:4
+-out:Temp/Assembly-CSharp.dll
+-nostdlib
+-r:Library/ScriptAssemblies/Unity.2D.SpriteShape.Editor.dll
+-r:Library/ScriptAssemblies/UnityEditor.StandardEvents.dll
+-r:Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll
+-r:Library/ScriptAssemblies/Unity.PackageManagerUI.Editor.dll
+-r:Library/ScriptAssemblies/Unity.InternalAPIEngineBridge.001.dll
+-r:Library/ScriptAssemblies/Unity.2D.Common.Runtime.dll
+-r:Library/ScriptAssemblies/Unity.2D.SpriteShape.Runtime.dll
+-r:Library/ScriptAssemblies/Unity.TextMeshPro.dll
+-r:Library/ScriptAssemblies/Unity.2D.Common.Editor.dll
+-r:Library/ScriptAssemblies/Unity.InternalAPIEditorBridge.001.dll
+-r:"C:\Program Files\Unity\Hub\Editor\2017.4.17f1\Editor\Data\Managed/UnityEngine/UnityEngine.dll"
+-r:"C:\Program Files\Unity\Hub\Editor\2017.4.17f1\Editor\Data\Managed/UnityEngine/UnityEngine.AIModule.dll"
+-r:"C:\Program Files\Unity\Hub\Editor\2017.4.17f1\Editor\Data\Managed/UnityEngine/UnityEngine.ARModule.dll"
+-r:"C:\Program Files\Unity\Hub\Editor\2017.4.17f1\Editor\Data\Managed/UnityEngine/UnityEngine.AccessibilityModule.dll"
+-r:"C:\Program Files\Unity\Hub\Editor\2017.4.17f1\Editor\Data\Managed/UnityEngine/UnityEngine.AnimationModule.dll"
+-r:"C:\Program Files\Unity\Hub\Editor\2017.4.17f1\Editor\Data\Managed/UnityEngine/UnityEngine.AssetBundleModule.dll"
+-r:"C:\Program Files\Unity\Hub\Editor\2017.4.17f1\Editor\Data\Managed/UnityEngine/UnityEngine.AudioModule.dll"
+-r:"C:\Program Files\Unity\Hub\Editor\2017.4.17f1\Editor\Data\Managed/UnityEngine/UnityEngine.BaselibModule.dll"
+-r:"C:\Program Files\Unity\Hub\Editor\2017.4.17f1\Editor\Data\Managed/UnityEngine/UnityEngine.ClothModule.dll"
+-r:"C:\Program Files\Unity\Hub\Editor\2017.4.17f1\Editor\Data\Managed/UnityEngine/UnityEngine.CloudWebServicesModule.dll"
+-r:"C:\Program Files\Unity\Hub\Editor\2017.4.17f1\Editor\Data\Managed/UnityEngine/UnityEngine.ClusterInputModule.dll"
+-r:"C:\Program Files\Unity\Hub\Editor\2017.4.17f1\Editor\Data\Managed/UnityEngine/UnityEngine.ClusterRendererModule.dll"
+-r:"C:\Program Files\Unity\Hub\Editor\2017.4.17f1\Editor\Data\Managed/UnityEngine/UnityEngine.CoreModule.dll"
+-r:"C:\Program Files\Unity\Hub\Editor\2017.4.17f1\Editor\Data\Managed/UnityEngine/UnityEngine.CrashReportingModule.dll"
+-r:"C:\Program Files\Unity\Hub\Editor\2017.4.17f1\Editor\Data\Managed/UnityEngine/UnityEngine.DirectorModule.dll"
+-r:"C:\Program Files\Unity\Hub\Editor\2017.4.17f1\Editor\Data\Managed/UnityEngine/UnityEngine.FacebookModule.dll"
+-r:"C:\Program Files\Unity\Hub\Editor\2017.4.17f1\Editor\Data\Managed/UnityEngine/UnityEngine.FileSystemHttpModule.dll"
+-r:"C:\Program Files\Unity\Hub\Editor\2017.4.17f1\Editor\Data\Managed/UnityEngine/UnityEngine.GameCenterModule.dll"
+-r:"C:\Program Files\Unity\Hub\Editor\2017.4.17f1\Editor\Data\Managed/UnityEngine/UnityEngine.GridModule.dll"
+-r:"C:\Program Files\Unity\Hub\Editor\2017.4.17f1\Editor\Data\Managed/UnityEngine/UnityEngine.HotReloadModule.dll"
+-r:"C:\Program Files\Unity\Hub\Editor\2017.4.17f1\Editor\Data\Managed/UnityEngine/UnityEngine.IMGUIModule.dll"
+-r:"C:\Program Files\Unity\Hub\Editor\2017.4.17f1\Editor\Data\Managed/UnityEngine/UnityEngine.ImageConversionModule.dll"
+-r:"C:\Program Files\Unity\Hub\Editor\2017.4.17f1\Editor\Data\Managed/UnityEngine/UnityEngine.InputModule.dll"
+-r:"C:\Program Files\Unity\Hub\Editor\2017.4.17f1\Editor\Data\Managed/UnityEngine/UnityEngine.JSONSerializeModule.dll"
+-r:"C:\Program Files\Unity\Hub\Editor\2017.4.17f1\Editor\Data\Managed/UnityEngine/UnityEngine.LocalizationModule.dll"
+-r:"C:\Program Files\Unity\Hub\Editor\2017.4.17f1\Editor\Data\Managed/UnityEngine/UnityEngine.ParticleSystemModule.dll"
+-r:"C:\Program Files\Unity\Hub\Editor\2017.4.17f1\Editor\Data\Managed/UnityEngine/UnityEngine.ParticlesLegacyModule.dll"
+-r:"C:\Program Files\Unity\Hub\Editor\2017.4.17f1\Editor\Data\Managed/UnityEngine/UnityEngine.PerformanceReportingModule.dll"
+-r:"C:\Program Files\Unity\Hub\Editor\2017.4.17f1\Editor\Data\Managed/UnityEngine/UnityEngine.PhysicsModule.dll"
+-r:"C:\Program Files\Unity\Hub\Editor\2017.4.17f1\Editor\Data\Managed/UnityEngine/UnityEngine.Physics2DModule.dll"
+-r:"C:\Program Files\Unity\Hub\Editor\2017.4.17f1\Editor\Data\Managed/UnityEngine/UnityEngine.ProfilerModule.dll"
+-r:"C:\Program Files\Unity\Hub\Editor\2017.4.17f1\Editor\Data\Managed/UnityEngine/UnityEngine.ScreenCaptureModule.dll"
+-r:"C:\Program Files\Unity\Hub\Editor\2017.4.17f1\Editor\Data\Managed/UnityEngine/UnityEngine.SharedInternalsModule.dll"
+-r:"C:\Program Files\Unity\Hub\Editor\2017.4.17f1\Editor\Data\Managed/UnityEngine/UnityEngine.SpatialTrackingModule.dll"
+-r:"C:\Program Files\Unity\Hub\Editor\2017.4.17f1\Editor\Data\Managed/UnityEngine/UnityEngine.SpriteMaskModule.dll"
+-r:"C:\Program Files\Unity\Hub\Editor\2017.4.17f1\Editor\Data\Managed/UnityEngine/UnityEngine.SpriteShapeModule.dll"
+-r:"C:\Program Files\Unity\Hub\Editor\2017.4.17f1\Editor\Data\Managed/UnityEngine/UnityEngine.StreamingModule.dll"
+-r:"C:\Program Files\Unity\Hub\Editor\2017.4.17f1\Editor\Data\Managed/UnityEngine/UnityEngine.StyleSheetsModule.dll"
+-r:"C:\Program Files\Unity\Hub\Editor\2017.4.17f1\Editor\Data\Managed/UnityEngine/UnityEngine.SubstanceModule.dll"
+-r:"C:\Program Files\Unity\Hub\Editor\2017.4.17f1\Editor\Data\Managed/UnityEngine/UnityEngine.TLSModule.dll"
+-r:"C:\Program Files\Unity\Hub\Editor\2017.4.17f1\Editor\Data\Managed/UnityEngine/UnityEngine.TerrainModule.dll"
+-r:"C:\Program Files\Unity\Hub\Editor\2017.4.17f1\Editor\Data\Managed/UnityEngine/UnityEngine.TerrainPhysicsModule.dll"
+-r:"C:\Program Files\Unity\Hub\Editor\2017.4.17f1\Editor\Data\Managed/UnityEngine/UnityEngine.TextRenderingModule.dll"
+-r:"C:\Program Files\Unity\Hub\Editor\2017.4.17f1\Editor\Data\Managed/UnityEngine/UnityEngine.TilemapModule.dll"
+-r:"C:\Program Files\Unity\Hub\Editor\2017.4.17f1\Editor\Data\Managed/UnityEngine/UnityEngine.TimelineModule.dll"
+-r:"C:\Program Files\Unity\Hub\Editor\2017.4.17f1\Editor\Data\Managed/UnityEngine/UnityEngine.UIModule.dll"
+-r:"C:\Program Files\Unity\Hub\Editor\2017.4.17f1\Editor\Data\Managed/UnityEngine/UnityEngine.UIElementsModule.dll"
+-r:"C:\Program Files\Unity\Hub\Editor\2017.4.17f1\Editor\Data\Managed/UnityEngine/UnityEngine.UNETModule.dll"
+-r:"C:\Program Files\Unity\Hub\Editor\2017.4.17f1\Editor\Data\Managed/UnityEngine/UnityEngine.UmbraModule.dll"
+-r:"C:\Program Files\Unity\Hub\Editor\2017.4.17f1\Editor\Data\Managed/UnityEngine/UnityEngine.UnityAnalyticsModule.dll"
+-r:"C:\Program Files\Unity\Hub\Editor\2017.4.17f1\Editor\Data\Managed/UnityEngine/UnityEngine.UnityConnectModule.dll"
+-r:"C:\Program Files\Unity\Hub\Editor\2017.4.17f1\Editor\Data\Managed/UnityEngine/UnityEngine.UnityWebRequestModule.dll"
+-r:"C:\Program Files\Unity\Hub\Editor\2017.4.17f1\Editor\Data\Managed/UnityEngine/UnityEngine.UnityWebRequestAssetBundleModule.dll"
+-r:"C:\Program Files\Unity\Hub\Editor\2017.4.17f1\Editor\Data\Managed/UnityEngine/UnityEngine.UnityWebRequestAudioModule.dll"
+-r:"C:\Program Files\Unity\Hub\Editor\2017.4.17f1\Editor\Data\Managed/UnityEngine/UnityEngine.UnityWebRequestTextureModule.dll"
+-r:"C:\Program Files\Unity\Hub\Editor\2017.4.17f1\Editor\Data\Managed/UnityEngine/UnityEngine.UnityWebRequestWWWModule.dll"
+-r:"C:\Program Files\Unity\Hub\Editor\2017.4.17f1\Editor\Data\Managed/UnityEngine/UnityEngine.VRModule.dll"
+-r:"C:\Program Files\Unity\Hub\Editor\2017.4.17f1\Editor\Data\Managed/UnityEngine/UnityEngine.VehiclesModule.dll"
+-r:"C:\Program Files\Unity\Hub\Editor\2017.4.17f1\Editor\Data\Managed/UnityEngine/UnityEngine.VideoModule.dll"
+-r:"C:\Program Files\Unity\Hub\Editor\2017.4.17f1\Editor\Data\Managed/UnityEngine/UnityEngine.WindModule.dll"
+-r:"C:\Program Files\Unity\Hub\Editor\2017.4.17f1\Editor\Data\Managed/UnityEngine/UnityEngine.XRModule.dll"
+-r:"C:\Program Files\Unity\Hub\Editor\2017.4.17f1\Editor\Data\Managed/UnityEditor.dll"
+-r:"C:\Program Files\Unity\Hub\Editor\2017.4.17f1\Editor\Data\Managed/Unity.Locator.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/2017.4.17f1/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/2017.4.17f1/Editor/Data/UnityExtensions/Unity/Timeline/RuntimeEditor/UnityEngine.Timeline.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/2017.4.17f1/Editor/Data/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/2017.4.17f1/Editor/Data/UnityExtensions/Unity/UnityGoogleAudioSpatializer/RuntimeEditor/UnityEngine.GoogleAudioSpatializer.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/2017.4.17f1/Editor/Data/UnityExtensions/Unity/UnityHoloLens/RuntimeEditor/UnityEngine.HoloLens.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/2017.4.17f1/Editor/Data/UnityExtensions/Unity/UnitySpatialTracking/RuntimeEditor/UnityEngine.SpatialTracking.dll"
+-r:C:/Users/noahj/AppData/Local/Unity/cache/packages/packages.unity.com/com.unity.analytics@2.0.16/UnityEngine.Analytics.dll
+-r:C:/Users/noahj/AppData/Local/Unity/cache/packages/packages.unity.com/com.unity.standardevents@1.0.13/UnityEngine.StandardEvents.dll
+-r:"C:\Program Files\Unity\Hub\Editor\2017.4.17f1\Editor\Data\MonoBleedingEdge\lib\mono\unity\mscorlib.dll"
+-r:"C:\Program Files\Unity\Hub\Editor\2017.4.17f1\Editor\Data\MonoBleedingEdge\lib\mono\unity\System.dll"
+-r:"C:\Program Files\Unity\Hub\Editor\2017.4.17f1\Editor\Data\MonoBleedingEdge\lib\mono\unity\System.Core.dll"
+-r:"C:\Program Files\Unity\Hub\Editor\2017.4.17f1\Editor\Data\MonoBleedingEdge\lib\mono\unity\System.Runtime.Serialization.dll"
+-r:"C:\Program Files\Unity\Hub\Editor\2017.4.17f1\Editor\Data\MonoBleedingEdge\lib\mono\unity\System.Xml.dll"
+-r:"C:\Program Files\Unity\Hub\Editor\2017.4.17f1\Editor\Data\MonoBleedingEdge\lib\mono\unity\System.Xml.Linq.dll"
+-r:"C:\Program Files\Unity\Hub\Editor\2017.4.17f1\Editor\Data\MonoBleedingEdge\lib\mono\unity\UnityScript.dll"
+-r:"C:\Program Files\Unity\Hub\Editor\2017.4.17f1\Editor\Data\MonoBleedingEdge\lib\mono\unity\UnityScript.Lang.dll"
+-r:"C:\Program Files\Unity\Hub\Editor\2017.4.17f1\Editor\Data\MonoBleedingEdge\lib\mono\unity\Boo.Lang.dll"
+-define:UNITY_5_3_OR_NEWER
+-define:UNITY_5_4_OR_NEWER
+-define:UNITY_5_5_OR_NEWER
+-define:UNITY_5_6_OR_NEWER
+-define:UNITY_2017_1_OR_NEWER
+-define:UNITY_2017_2_OR_NEWER
+-define:UNITY_2017_3_OR_NEWER
+-define:UNITY_2017_4_OR_NEWER
+-define:UNITY_2018_1_OR_NEWER
+-define:UNITY_2018_2_OR_NEWER
+-define:UNITY_2018_2_17
+-define:UNITY_2018_2
+-define:UNITY_2018
+-define:PLATFORM_ARCH_64
+-define:UNITY_64
+-define:ENABLE_AUDIO
+-define:ENABLE_CACHING
+-define:ENABLE_CLOTH
+-define:ENABLE_DUCK_TYPING
+-define:ENABLE_MICROPHONE
+-define:ENABLE_MULTIPLE_DISPLAYS
+-define:ENABLE_PHYSICS
+-define:ENABLE_SPRITES
+-define:ENABLE_GRID
+-define:ENABLE_TILEMAP
+-define:ENABLE_TERRAIN
+-define:ENABLE_TEXTURE_STREAMING
+-define:ENABLE_DIRECTOR
+-define:ENABLE_UNET
+-define:ENABLE_LZMA
+-define:ENABLE_UNITYEVENTS
+-define:ENABLE_WEBCAM
+-define:ENABLE_WWW
+-define:ENABLE_CLOUD_SERVICES_COLLAB
+-define:ENABLE_CLOUD_SERVICES_COLLAB_SOFTLOCKS
+-define:ENABLE_CLOUD_SERVICES_ADS
+-define:ENABLE_CLOUD_HUB
+-define:ENABLE_CLOUD_PROJECT_ID
+-define:ENABLE_CLOUD_SERVICES_USE_WEBREQUEST
+-define:ENABLE_CLOUD_SERVICES_UNET
+-define:ENABLE_CLOUD_SERVICES_BUILD
+-define:ENABLE_CLOUD_LICENSE
+-define:ENABLE_EDITOR_HUB
+-define:ENABLE_EDITOR_HUB_LICENSE
+-define:ENABLE_WEBSOCKET_CLIENT
+-define:ENABLE_DIRECTOR_AUDIO
+-define:ENABLE_DIRECTOR_TEXTURE
+-define:ENABLE_TIMELINE
+-define:ENABLE_EDITOR_METRICS
+-define:ENABLE_EDITOR_METRICS_CACHING
+-define:ENABLE_MANAGED_JOBS
+-define:ENABLE_MANAGED_TRANSFORM_JOBS
+-define:ENABLE_MANAGED_ANIMATION_JOBS
+-define:INCLUDE_DYNAMIC_GI
+-define:INCLUDE_GI
+-define:ENABLE_MONO_BDWGC
+-define:PLATFORM_SUPPORTS_MONO
+-define:RENDER_SOFTWARE_CURSOR
+-define:INCLUDE_PUBNUB
+-define:ENABLE_VIDEO
+-define:ENABLE_PACKMAN
+-define:ENABLE_CUSTOM_RENDER_TEXTURE
+-define:ENABLE_LOCALIZATION
+-define:PLATFORM_STANDALONE_OSX
+-define:PLATFORM_STANDALONE
+-define:UNITY_STANDALONE_OSX
+-define:UNITY_STANDALONE
+-define:ENABLE_SUBSTANCE
+-define:ENABLE_GAMECENTER
+-define:ENABLE_RUNTIME_GI
+-define:ENABLE_MOVIES
+-define:ENABLE_NETWORK
+-define:ENABLE_CRUNCH_TEXTURE_COMPRESSION
+-define:ENABLE_UNITYWEBREQUEST
+-define:ENABLE_CLOUD_SERVICES
+-define:ENABLE_CLOUD_SERVICES_ANALYTICS
+-define:ENABLE_CLOUD_SERVICES_PURCHASING
+-define:ENABLE_CLOUD_SERVICES_CRASH_REPORTING
+-define:ENABLE_CLOUD_SERVICES_NATIVE_CRASH_REPORTING
+-define:ENABLE_CLUSTER_SYNC
+-define:ENABLE_CLUSTERINPUT
+-define:ENABLE_VR
+-define:ENABLE_AR
+-define:ENABLE_SPATIALTRACKING
+-define:ENABLE_WEBSOCKET_HOST
+-define:ENABLE_MONO
+-define:NET_2_0_SUBSET
+-define:ENABLE_PROFILER
+-define:DEBUG
+-define:TRACE
+-define:UNITY_ASSERTIONS
+-define:UNITY_EDITOR
+-define:UNITY_EDITOR_64
+-define:UNITY_EDITOR_WIN
+-define:ENABLE_UNITY_COLLECTIONS_CHECKS
+-define:ENABLE_BURST_AOT
+-define:UNITY_TEAM_LICENSE
+-define:ENABLE_VSTU
+Assets/Scripts/Familiars/Feu.cs
+Assets/Scripts/Game/AI.cs
+Assets/Scripts/Game/Characters.cs
+Assets/Scripts/Game/CharController.cs
+Assets/Scripts/Game/Conditions.cs
+Assets/Scripts/Game/Core.cs
+Assets/Scripts/Game/Cutscenes.cs
+Assets/Scripts/Game/Familiars.cs
+Assets/Scripts/Game/GameController.cs
+Assets/Scripts/Game/NavMesh.cs
+Assets/Scripts/GiveBuff.cs
+Assets/Scripts/GiveDebuff.cs
+Assets/Scripts/MonsterController.cs
+Assets/Scripts/Player/Player.cs
+Assets/Scripts/Player/PlayerAnimator.cs
+Assets/Scripts/ShowHealth.cs
+Assets/Scripts/TestMover.cs
+"Assets/Spine Examples/Scripts/AttackSpineboy.cs"
+"Assets/Spine Examples/Scripts/DataAssetsFromExportsExample.cs"
+"Assets/Spine Examples/Scripts/DraggableTransform.cs"
+"Assets/Spine Examples/Scripts/FootSoldierExample.cs"
+"Assets/Spine Examples/Scripts/Getting Started Scripts/BasicPlatformerController.cs"
+"Assets/Spine Examples/Scripts/Getting Started Scripts/ConstrainedCamera.cs"
+"Assets/Spine Examples/Scripts/Getting Started Scripts/Raptor.cs"
+"Assets/Spine Examples/Scripts/Getting Started Scripts/SpineBeginnerTwo.cs"
+"Assets/Spine Examples/Scripts/Getting Started Scripts/SpineBlinkPlayer.cs"
+"Assets/Spine Examples/Scripts/Getting Started Scripts/SpineboyBeginnerInput.cs"
+"Assets/Spine Examples/Scripts/Getting Started Scripts/SpineboyBeginnerModel.cs"
+"Assets/Spine Examples/Scripts/Getting Started Scripts/SpineboyBeginnerView.cs"
+"Assets/Spine Examples/Scripts/Getting Started Scripts/SpineboyTargetController.cs"
+"Assets/Spine Examples/Scripts/Getting Started Scripts/TransitionDictionaryExample.cs"
+"Assets/Spine Examples/Scripts/Goblins.cs"
+"Assets/Spine Examples/Scripts/HandleEventWithAudioExample.cs"
+"Assets/Spine Examples/Scripts/HurtFlashEffect.cs"
+"Assets/Spine Examples/Scripts/MaterialPropertyBlockExample.cs"
+"Assets/Spine Examples/Scripts/Mix and Match Character Customize/EquipAssetExample.cs"
+"Assets/Spine Examples/Scripts/Mix and Match Character Customize/EquipButtonExample.cs"
+"Assets/Spine Examples/Scripts/Mix and Match Character Customize/EquipsVisualsComponentExample.cs"
+"Assets/Spine Examples/Scripts/Mix and Match Character Customize/EquipSystemExample.cs"
+"Assets/Spine Examples/Scripts/MixAndMatch.cs"
+"Assets/Spine Examples/Scripts/MixAndMatchGraphic.cs"
+"Assets/Spine Examples/Scripts/RaggedySpineboy.cs"
+"Assets/Spine Examples/Scripts/ReloadSceneOnKeyDown.cs"
+"Assets/Spine Examples/Scripts/Rotator.cs"
+"Assets/Spine Examples/Scripts/Sample Components/BoneLocalOverride.cs"
+"Assets/Spine Examples/Scripts/Sample Components/CombinedSkin.cs"
+"Assets/Spine Examples/Scripts/Sample Components/Legacy/AtlasRegionAttacher.cs"
+"Assets/Spine Examples/Scripts/Sample Components/Legacy/CustomSkin.cs"
+"Assets/Spine Examples/Scripts/Sample Components/Legacy/SpriteAttacher.cs"
+"Assets/Spine Examples/Scripts/Sample Components/Sample VertexEffects/JitterEffectExample.cs"
+"Assets/Spine Examples/Scripts/Sample Components/Sample VertexEffects/TwoByTwoTransformEffectExample.cs"
+"Assets/Spine Examples/Scripts/Sample Components/SkeletonAnimationMulti/SkeletonAnimationMulti.cs"
+"Assets/Spine Examples/Scripts/Sample Components/SkeletonColorInitialize.cs"
+"Assets/Spine Examples/Scripts/Sample Components/SlotTintBlackFollower.cs"
+"Assets/Spine Examples/Scripts/Sample Components/SpineEventUnityHandler.cs"
+"Assets/Spine Examples/Scripts/SpawnFromSkeletonDataExample.cs"
+"Assets/Spine Examples/Scripts/Spineboy.cs"
+"Assets/Spine Examples/Scripts/SpineboyBodyTilt.cs"
+"Assets/Spine Examples/Scripts/SpineboyFacialExpression.cs"
+"Assets/Spine Examples/Scripts/SpineboyFootplanter.cs"
+"Assets/Spine Examples/Scripts/SpineboyFreeze.cs"
+"Assets/Spine Examples/Scripts/SpineboyPole.cs"
+"Assets/Spine Examples/Scripts/SpineGauge.cs"
+Assets/Spine/spine-csharp/Animation.cs
+Assets/Spine/spine-csharp/AnimationState.cs
+Assets/Spine/spine-csharp/AnimationStateData.cs
+Assets/Spine/spine-csharp/Atlas.cs
+Assets/Spine/spine-csharp/Attachments/AtlasAttachmentLoader.cs
+Assets/Spine/spine-csharp/Attachments/Attachment.cs
+Assets/Spine/spine-csharp/Attachments/AttachmentLoader.cs
+Assets/Spine/spine-csharp/Attachments/AttachmentType.cs
+Assets/Spine/spine-csharp/Attachments/BoundingBoxAttachment.cs
+Assets/Spine/spine-csharp/Attachments/ClippingAttachment.cs
+Assets/Spine/spine-csharp/Attachments/MeshAttachment.cs
+Assets/Spine/spine-csharp/Attachments/PathAttachment.cs
+Assets/Spine/spine-csharp/Attachments/PointAttachment.cs
+Assets/Spine/spine-csharp/Attachments/RegionAttachment.cs
+Assets/Spine/spine-csharp/Attachments/VertexAttachment.cs
+Assets/Spine/spine-csharp/BlendMode.cs
+Assets/Spine/spine-csharp/Bone.cs
+Assets/Spine/spine-csharp/BoneData.cs
+Assets/Spine/spine-csharp/Event.cs
+Assets/Spine/spine-csharp/EventData.cs
+Assets/Spine/spine-csharp/ExposedList.cs
+Assets/Spine/spine-csharp/IConstraint.cs
+Assets/Spine/spine-csharp/IkConstraint.cs
+Assets/Spine/spine-csharp/IkConstraintData.cs
+Assets/Spine/spine-csharp/IUpdatable.cs
+Assets/Spine/spine-csharp/Json.cs
+Assets/Spine/spine-csharp/MathUtils.cs
+Assets/Spine/spine-csharp/PathConstraint.cs
+Assets/Spine/spine-csharp/PathConstraintData.cs
+Assets/Spine/spine-csharp/Skeleton.cs
+Assets/Spine/spine-csharp/SkeletonBinary.cs
+Assets/Spine/spine-csharp/SkeletonBounds.cs
+Assets/Spine/spine-csharp/SkeletonClipping.cs
+Assets/Spine/spine-csharp/SkeletonData.cs
+Assets/Spine/spine-csharp/SkeletonJson.cs
+Assets/Spine/spine-csharp/Skin.cs
+Assets/Spine/spine-csharp/Slot.cs
+Assets/Spine/spine-csharp/SlotData.cs
+Assets/Spine/spine-csharp/TransformConstraint.cs
+Assets/Spine/spine-csharp/TransformConstraintData.cs
+Assets/Spine/spine-csharp/Triangulator.cs
+"Assets/Spine/spine-unity/Asset Types/AnimationReferenceAsset.cs"
+"Assets/Spine/spine-unity/Asset Types/AtlasAsset.cs"
+"Assets/Spine/spine-unity/Asset Types/EventDataReferenceAsset.cs"
+"Assets/Spine/spine-unity/Asset Types/RegionlessAttachmentLoader.cs"
+"Assets/Spine/spine-unity/Asset Types/SkeletonDataAsset.cs"
+Assets/Spine/spine-unity/Components/BoneFollower.cs
+Assets/Spine/spine-unity/Components/PointFollower.cs
+Assets/Spine/spine-unity/Components/SkeletonAnimation.cs
+Assets/Spine/spine-unity/Components/SkeletonAnimator.cs
+Assets/Spine/spine-unity/Components/SkeletonRenderer.cs
+Assets/Spine/spine-unity/ISkeletonAnimation.cs
+"Assets/Spine/spine-unity/Mesh Generation/DoubleBuffered.cs"
+"Assets/Spine/spine-unity/Mesh Generation/SpineMesh.cs"
+"Assets/Spine/spine-unity/Mesh Generation/Unused/ArraysMeshGenerator.cs"
+"Assets/Spine/spine-unity/Mesh Generation/Unused/ArraysSimpleMeshGenerator.cs"
+"Assets/Spine/spine-unity/Mesh Generation/Unused/ArraysSubmeshedMeshGenerator.cs"
+"Assets/Spine/spine-unity/Mesh Generation/Unused/ArraysSubmeshSetMeshGenerator.cs"
+"Assets/Spine/spine-unity/Mesh Generation/Unused/DoubleBufferedMesh.cs"
+"Assets/Spine/spine-unity/Mesh Generation/Unused/ISimpleMeshGenerator.cs"
+"Assets/Spine/spine-unity/Mesh Generation/Unused/ISubmeshedMeshGenerator.cs"
+Assets/Spine/spine-unity/Modules/AnimationTools/AnimationTools.cs
+Assets/Spine/spine-unity/Modules/AttachmentTools/AttachmentTools.cs
+Assets/Spine/spine-unity/Modules/BoundingBoxFollower/BoundingBoxFollower.cs
+Assets/Spine/spine-unity/Modules/CustomMaterials/SkeletonRendererCustomMaterials.cs
+Assets/Spine/spine-unity/Modules/Ghost/SkeletonGhost.cs
+Assets/Spine/spine-unity/Modules/Ghost/SkeletonGhostRenderer.cs
+Assets/Spine/spine-unity/Modules/Ragdoll/SkeletonRagdoll.cs
+Assets/Spine/spine-unity/Modules/Ragdoll/SkeletonRagdoll2D.cs
+Assets/Spine/spine-unity/Modules/SkeletonGraphic/BoneFollowerGraphic.cs
+Assets/Spine/spine-unity/Modules/SkeletonGraphic/SkeletonGraphic.cs
+Assets/Spine/spine-unity/Modules/SkeletonGraphic/SkeletonGraphicMirror.cs
+Assets/Spine/spine-unity/Modules/SkeletonRenderSeparator/SkeletonPartsRenderer.cs
+Assets/Spine/spine-unity/Modules/SkeletonRenderSeparator/SkeletonRenderSeparator.cs
+"Assets/Spine/spine-unity/Modules/SkeletonUtility Modules/SkeletonUtilityEyeConstraint.cs"
+"Assets/Spine/spine-unity/Modules/SkeletonUtility Modules/SkeletonUtilityGroundConstraint.cs"
+"Assets/Spine/spine-unity/Modules/SkeletonUtility Modules/SkeletonUtilityKinematicShadow.cs"
+Assets/Spine/spine-unity/Modules/SlotBlendModes/SlotBlendModes.cs
+"Assets/Spine/spine-unity/Modules/Timeline/PlayableHandle Component/SkeletonAnimationPlayableHandle.cs"
+"Assets/Spine/spine-unity/Modules/Timeline/PlayableHandle Component/SpinePlayableHandleBase.cs"
+Assets/Spine/spine-unity/Modules/Timeline/SpineAnimationState/SpineAnimationStateBehaviour.cs
+Assets/Spine/spine-unity/Modules/Timeline/SpineAnimationState/SpineAnimationStateClip.cs
+Assets/Spine/spine-unity/Modules/Timeline/SpineAnimationState/SpineAnimationStateMixerBehaviour.cs
+Assets/Spine/spine-unity/Modules/Timeline/SpineAnimationState/SpineAnimationStateTrack.cs
+Assets/Spine/spine-unity/Modules/Timeline/SpineSkeletonFlip/SpineSkeletonFlipBehaviour.cs
+Assets/Spine/spine-unity/Modules/Timeline/SpineSkeletonFlip/SpineSkeletonFlipClip.cs
+Assets/Spine/spine-unity/Modules/Timeline/SpineSkeletonFlip/SpineSkeletonFlipMixerBehaviour.cs
+Assets/Spine/spine-unity/Modules/Timeline/SpineSkeletonFlip/SpineSkeletonFlipTrack.cs
+Assets/Spine/spine-unity/Modules/TK2D/SpriteCollectionAttachmentLoader.cs
+Assets/Spine/spine-unity/Modules/YieldInstructions/WaitForSpineAnimationComplete.cs
+Assets/Spine/spine-unity/Modules/YieldInstructions/WaitForSpineEvent.cs
+Assets/Spine/spine-unity/Modules/YieldInstructions/WaitForSpineTrackEntryEnd.cs
+Assets/Spine/spine-unity/SkeletonExtensions.cs
+Assets/Spine/spine-unity/SkeletonUtility/SkeletonUtility.cs
+Assets/Spine/spine-unity/SkeletonUtility/SkeletonUtilityBone.cs
+Assets/Spine/spine-unity/SkeletonUtility/SkeletonUtilityConstraint.cs
+Assets/Spine/spine-unity/SpineAttributes.cs

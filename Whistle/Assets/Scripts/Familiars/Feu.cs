@@ -68,33 +68,22 @@ public class Feu : Familiar {
     // Use this for initialization
     void Start() {
         player = FindObjectOfType<Player>();
-        AI = new AIAgent(NavMesh.SceneNavMesh);
+        AI = new NavAgent(NavMesh.SceneNavMesh);
         Mode = CharacterMode.Active;
         Controller = GetComponent<CharController>();
-
-        currentBehavior = Behavior;
 
         DisplayName = "Feu";
     }
 
-    public override void ApplyBehavior(Behavior behavior) {
-        throw new System.NotImplementedException();
-    }
-
-    public override void ResetBehavior() {
-        throw new System.NotImplementedException();
-    }
-
-    private void Behavior() {
-
+    protected override void Behavior() {
         if (!AI.Operating) {
             if (AI.PathReady) {
+
                 Vector2 direction;
                 int index = AI.ParsePathForDirection(transform.position, out direction);
 
-
                 while (direction.x == 0) {
-                    if (direction.y > 0) {
+                    if (direction.y != 0) {
                         index++;
                         AI.ParsePathForDirection(index, out direction);
                     }
@@ -103,8 +92,16 @@ public class Feu : Familiar {
                     }
                 }
 
+                Debug.Log(direction);
 
-                Controller.Motion = new Vector2(Mathf.Sign(direction.x) * 5, 0);
+                if (direction.x != 0) {
+                    Controller.Motion = new Vector2(Mathf.Sign(direction.x) * 5, 0);
+                }
+                else {
+                    Controller.Motion = new Vector2(0, 0);
+                }
+                
+                
             }
 
             AI.ResetPath();

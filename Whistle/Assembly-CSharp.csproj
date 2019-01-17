@@ -62,23 +62,30 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\Characters\Glottis.cs" />
+    <Compile Include="Assets\Scripts\Characters\NavTest.cs" />
     <Compile Include="Assets\Scripts\Characters\Player.cs" />
     <Compile Include="Assets\Scripts\Characters\PlayerAnimator.cs" />
+    <Compile Include="Assets\Scripts\Entities\TransitionPoint.cs" />
     <Compile Include="Assets\Scripts\Familiars\Feu.cs" />
-    <Compile Include="Assets\Scripts\Game\AIAgent.cs" />
+    <Compile Include="Assets\Scripts\Game\CameraController.cs" />
     <Compile Include="Assets\Scripts\Game\Characters.cs" />
     <Compile Include="Assets\Scripts\Game\CharController.cs" />
     <Compile Include="Assets\Scripts\Game\Conditions.cs" />
-    <Compile Include="Assets\Scripts\Game\Core.cs" />
     <Compile Include="Assets\Scripts\Game\Cutscenes.cs" />
     <Compile Include="Assets\Scripts\Game\Familiars.cs" />
     <Compile Include="Assets\Scripts\Game\GameController.cs" />
+    <Compile Include="Assets\Scripts\Game\GameData.cs" />
+    <Compile Include="Assets\Scripts\Game\Logbook.cs" />
+    <Compile Include="Assets\Scripts\Game\NavAgent.cs" />
     <Compile Include="Assets\Scripts\Game\NavMesh.cs" />
     <Compile Include="Assets\Scripts\GiveBuff.cs" />
     <Compile Include="Assets\Scripts\GiveDebuff.cs" />
+    <Compile Include="Assets\Scripts\HUD\HealthMeter.cs" />
+    <Compile Include="Assets\Scripts\HUD\HUDController.cs" />
+    <Compile Include="Assets\Scripts\HUD\MessageBox.cs" />
     <Compile Include="Assets\Scripts\MonsterController.cs" />
-    <Compile Include="Assets\Scripts\ShowHealth.cs" />
     <Compile Include="Assets\Scripts\TestMover.cs" />
+    <Compile Include="Assets\Scripts\ui.cs" />
     <Compile Include="Assets\Spine Examples\Scripts\AttackSpineboy.cs" />
     <Compile Include="Assets\Spine Examples\Scripts\DataAssetsFromExportsExample.cs" />
     <Compile Include="Assets\Spine Examples\Scripts\DraggableTransform.cs" />

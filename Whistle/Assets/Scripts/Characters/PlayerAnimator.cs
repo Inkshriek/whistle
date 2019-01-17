@@ -26,7 +26,7 @@ public class PlayerAnimator : MonoBehaviour {
         if (controller.isTouchingGround) {
             if (controller.Motion.x != 0) {
                 
-                switch (player.state) {
+                switch (player.State) {
                     case PlayerState.Running:
                         changeState("run", true);
                         break;
@@ -39,7 +39,7 @@ public class PlayerAnimator : MonoBehaviour {
                 }
             }
             else {
-                switch (player.state) {
+                switch (player.State) {
                     case PlayerState.Crouching:
                         changeState("crouch_idle", true);
                         break;

@@ -10,9 +10,9 @@ namespace Whistle.Cutscenes {
     public class CutsceneControl {
         //These are methods you can use to aid with developing and controlling cutscenes.
 
-        public void FinishScene() {
+        public void End() {
             //USE THIS METHOD AT THE END OF ALL CUTSCENES! It is important as to allow the game to unlock and make room for a new cutscene.
-            GameController.sceneRunning = false;
+            GameController.cutsceneRunning = false;
         }
     }
 }

@@ -11,14 +11,25 @@ public class GameController : MonoBehaviour {
 
     private static GameObject[] familiarsDatabase;
 
-    [SerializeField] private Player player;
-    [SerializeField] private List<Familiar> familiars; //The list of familiars the player presently has access to. These are intended to be prefabs.
-    private Familiar currentFamiliar; //The familiar currently active.
+    [SerializeField] public string roomName; //The name of the room.
+    [SerializeField] private Player player; //The player character. This gets put somewhere in the scene according to the transition points.
+    [SerializeField] private TransitionPoint[] transitions; //A set of transition points the player can enter the scene in and out from. You should set these cuz this thing won't find them for you.
 
-    private Cutscene activeCutscene;
-    public static bool sceneRunning;
+    private static List<Familiar> familiars; //The list of familiars the player presently has access to. These are intended to be prefabs.
+    private static Familiar currentFamiliar; //The familiar currently active.
+
+    public static bool cutsceneRunning = false;
+    public static bool transitioningRoom = false;
+    public static int nextTPoint = 0;
 
     public static KeyCode jumpKey = KeyCode.Space;
+
+    public static GameController SceneGameController {
+        //Assuming you need the specific one in the scene, anyway.
+        get {
+            return (GameController)FindObjectOfType(typeof(GameController));
+        }
+    }
 
     private void Awake() {
         Debug.Log("Initializing!");
@@ -26,13 +37,30 @@ public class GameController : MonoBehaviour {
             Resources.Load("Familiars/Familiar_Feu") as GameObject
         };
         Debug.Log(familiarsDatabase.Length);
+
+        cutsceneRunning = false;
+
+        InitializeGame();
     }
+
     // Use this for initialization
-    private void Start () {
-        StartCoroutine(LoadGame());
-        sceneRunning = false;
-        
-		
+    private void Start() {
+        if (transitioningRoom) {
+            try {
+                transitions[nextTPoint].EnterRoomFromHere(player);
+                nextTPoint = 0;
+            }
+            catch {
+                Debug.Log("Apparently the transition point requested [" + nextTPoint + "] doesn't exist. Might wanna fix that.");
+            }
+        }
+        else {
+            player.Mode = CharacterMode.Active;
+        }
+    }
+
+    public void InitializeGame() {
+        StartCoroutine(Load());
 	}
 	
 	// Update is called once per frame
@@ -47,11 +75,13 @@ public class GameController : MonoBehaviour {
         }
     }
 
-    private IEnumerator LoadGame() {
+    private IEnumerator Load() {
+        /*
         for (int i = 0; i < familiarsDatabase.Length; i++) {
             GameObject obj = Instantiate(familiarsDatabase[i], player.transform.position, Quaternion.identity);
             familiars.Add(obj.GetComponent<Familiar>());
         }
+        */
 
         yield return new WaitForSeconds(3f);
     }
@@ -70,7 +100,13 @@ public class GameController : MonoBehaviour {
     }
 
     public void StartCutscene(Cutscene scene) {
-        StartCoroutine("activeCutscene");
-        sceneRunning = true;
+        StartCoroutine(scene());
+        cutsceneRunning = true;
+    }
+
+    public static void MoveToRoom(string sceneName, int transitionPoint) {
+        transitioningRoom = true;
+        nextTPoint = transitionPoint;
+        SceneManager.LoadScene(sceneName);
     }
 }
