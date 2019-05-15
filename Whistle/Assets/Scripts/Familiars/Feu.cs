@@ -2,20 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Whistle.Familiars;
-using Whistle.Characters;
+using Whistle.Actors;
 using System.Threading;
 
-[RequireComponent(typeof(CharController))]
+[RequireComponent(typeof(ActorController))]
 public class Feu : Familiar {
 
     private Player player;
     private float speed;
-    private CharController controller;
+    private ActorController controller;
 
     [SerializeField] private bool active;
-    [SerializeField] private CharacterMode charMode;
+    [SerializeField] private ActorMode charMode;
 
-    public override CharController Controller {
+    public override ActorController Controller {
         get {
             return controller;
         }
@@ -25,7 +25,7 @@ public class Feu : Familiar {
         }
     }
     
-    public override CharacterMode Mode {
+    public override ActorMode Mode {
         get {
             return charMode;
         }
@@ -69,8 +69,8 @@ public class Feu : Familiar {
     void Start() {
         player = FindObjectOfType<Player>();
         AI = new NavAgent(NavMesh.SceneNavMesh);
-        Mode = CharacterMode.Active;
-        Controller = GetComponent<CharController>();
+        Mode = ActorMode.Active;
+        Controller = GetComponent<ActorController>();
 
         DisplayName = "Feu";
     }

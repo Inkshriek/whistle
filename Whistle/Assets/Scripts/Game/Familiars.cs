@@ -2,16 +2,16 @@
 using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
-using Whistle.Characters;
+using Whistle.Actors;
 using Whistle.Conditions;
 
 namespace Whistle.Familiars {
 
-    public abstract class Familiar : MonoBehaviour, ICharacter, IConditions {
+    public abstract class Familiar : MonoBehaviour, IActor, IConditions {
         public string DisplayName { get; set; }
 
-        public abstract CharController Controller { get; set; }
-        public abstract CharacterMode Mode { get; set; }
+        public abstract ActorController Controller { get; set; }
+        public abstract ActorMode Mode { get; set; }
 
         protected NavAgent AI;
         public abstract Player Player { get; set; }

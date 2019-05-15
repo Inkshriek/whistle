@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Threading;
-using Whistle.Characters;
+using Whistle.Actors;
 
 public class NavAgent {
 

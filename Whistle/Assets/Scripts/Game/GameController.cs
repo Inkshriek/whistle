@@ -2,36 +2,28 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using Whistle.Characters;
+using Whistle.Actors;
 using Whistle.Familiars;
 using Whistle.Conditions;
 using Whistle.Cutscenes;
 
 public class GameController : MonoBehaviour {
 
+    private static GameController instance;
+    private static SceneData sceneData;
     private static GameObject[] familiarsDatabase;
 
-    [SerializeField] public string roomName; //The name of the room.
-    [SerializeField] private Player player; //The player character. This gets put somewhere in the scene according to the transition points.
-    [SerializeField] private TransitionPoint[] transitions; //A set of transition points the player can enter the scene in and out from. You should set these cuz this thing won't find them for you.
+    [SerializeField] private Player player; //The player character.
 
     private static List<Familiar> familiars; //The list of familiars the player presently has access to. These are intended to be prefabs.
     private static Familiar currentFamiliar; //The familiar currently active.
 
     public static bool cutsceneRunning = false;
-    public static bool transitioningRoom = false;
-    public static int nextTPoint = 0;
 
     public static KeyCode jumpKey = KeyCode.Space;
 
-    public static GameController SceneGameController {
-        //Assuming you need the specific one in the scene, anyway.
-        get {
-            return (GameController)FindObjectOfType(typeof(GameController));
-        }
-    }
-
     private void Awake() {
+        SceneManager.sceneLoaded += OnSceneLoaded;
         Debug.Log("Initializing!");
         familiarsDatabase = new GameObject[] {
             Resources.Load("Familiars/Familiar_Feu") as GameObject
@@ -39,29 +31,28 @@ public class GameController : MonoBehaviour {
         Debug.Log(familiarsDatabase.Length);
 
         cutsceneRunning = false;
+        instance = this;
 
-        InitializeGame();
+        DontDestroyOnLoad(this.gameObject);
     }
 
     // Use this for initialization
     private void Start() {
-        if (transitioningRoom) {
-            try {
-                transitions[nextTPoint].EnterRoomFromHere(player);
-                nextTPoint = 0;
-            }
-            catch {
-                Debug.Log("Apparently the transition point requested [" + nextTPoint + "] doesn't exist. Might wanna fix that.");
-            }
-        }
-        else {
-            player.Mode = CharacterMode.Active;
-        }
+
     }
 
-    public void InitializeGame() {
-        StartCoroutine(Load());
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
+        sceneData = FindObjectOfType<SceneData>();
+        InitializeRoom();
+    }
+
+    public void InitializeRoom() {
+        
 	}
+
+    private void LoadGame() {
+
+    }
 	
 	// Update is called once per frame
 	private void Update () {
@@ -100,13 +91,6 @@ public class GameController : MonoBehaviour {
     }
 
     public void StartCutscene(Cutscene scene) {
-        StartCoroutine(scene());
         cutsceneRunning = true;
-    }
-
-    public static void MoveToRoom(string sceneName, int transitionPoint) {
-        transitioningRoom = true;
-        nextTPoint = transitionPoint;
-        SceneManager.LoadScene(sceneName);
     }
 }

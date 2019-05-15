@@ -17,7 +17,7 @@ public class HealthMeter : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        liquid.sizeDelta = new Vector2(normalSize. x * (player.CurrentHealth / 100), normalSize.y);
+        liquid.sizeDelta = new Vector2(normalSize. x * (player.Health / 100), normalSize.y);
         cog.Rotate(new Vector3(0, 0, 0.2f));
     }
 }

@@ -139,7 +139,7 @@ Light:
   serializedVersion: 8
   m_Type: 0
   m_Color: {r: 1, g: 0.99843127, b: 0.7311321, a: 1}
-  m_Intensity: 27.42
+  m_Intensity: 15.5
   m_Range: 56
   m_SpotAngle: 74
   m_CookieSize: 10
@@ -3047,7 +3047,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 396526941
-  m_SortingLayer: 4
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300004, guid: f62f84f36e3ddbe4789c64a2680b4576, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -3194,7 +3194,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 396526941
-  m_SortingLayer: 4
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300006, guid: f62f84f36e3ddbe4789c64a2680b4576, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

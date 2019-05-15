@@ -5,21 +5,33 @@ using UnityEngine.UI;
 
 public class HUDController : MonoBehaviour {
 
+    private static HUDController instance;
+
     [SerializeField] public Image fade;
 
-    public static HUDController SceneHUD {
-        get {
-            return (HUDController)FindObjectOfType(typeof(HUDController));
-        }
+	void Awake() {
+        instance = this;
     }
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
 	void Update () {
-		
+
 	}
+
+    public static IEnumerator Fade(float duration, float tick, Color target) {
+        Color old;
+        try {
+            old = instance.fade.color;
+        }
+        catch {
+            Debug.Log("The Fade animation could not be started. Is the HUD missing from the current scene?");
+            yield break;
+        }
+        float interp = 0;
+        while (instance.fade.color != target) {
+            interp += tick / duration;
+            instance.fade.color = Color.Lerp(old, target, interp);
+
+            yield return new WaitForSeconds(tick);
+        }
+    }
 }

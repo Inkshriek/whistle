@@ -69,7 +69,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1353445292349248}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -6.7, y: 2.36, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4176523658384662}
@@ -190,13 +190,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3bc32cfeca14fee43874df6f1f4873f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkSpeed: 4
-  runSpeed: 8
-  crouchSpeed: 2
-  jumpHeight: 12
-  maxHealth: 100
-  effectiveHealth: 0
-  currentHealth: 100
+  _walkSpeed: 4
+  _runSpeed: 8
+  _crouchSpeed: 2
+  _jumpHeight: 12
+  _health: 100
+  _healthDeficit: 0
+  _maxHealth: 100
+  _bleedRate: 0
 --- !u!114 &114402989280896872
 MonoBehaviour:
   m_ObjectHideFlags: 1

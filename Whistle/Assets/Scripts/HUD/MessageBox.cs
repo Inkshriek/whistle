@@ -5,21 +5,36 @@ using UnityEngine.UI;
 
 public class MessageBox : MonoBehaviour {
 
-    //A list of all messages in the game to be accessed.
-    private static string[] msgs = {
-        "Hello, friend! How are you today?",
-        "test"
-    };
-
     private static string defaultmsg = "how did you even manage to do this, you're a disgrace";
 
     [SerializeField] private Image messageContainer;
     [SerializeField] private Image messageTail;
 
+    public Status status { get; private set; }
+    public bool display {
+        set {
+            if (value) {
+                messageContainer.color = new Color(1, 1, 1, 1);
+                messageTail.color = new Color(1, 1, 1, 1);
+            }
+            else {
+                messageContainer.color = new Color(1, 1, 1, 0);
+                messageTail.color = new Color(1, 1, 1, 0);
+            }
+        }
+    }
+
+    public enum Status {
+        //The status of the message box at the moment.
+        Typing,
+        Waiting,
+        Standby
+    }
+
     // Use this for initialization
     void Start () {
-        messageContainer.color = new Color(1, 1, 1, 0);
-        messageTail.color = new Color(1, 1, 1, 0);
+        display = false;
+        status = Status.Standby;
     }
 	
 	// Update is called once per frame
@@ -27,28 +42,15 @@ public class MessageBox : MonoBehaviour {
 		
 	}
 
-    public static void Initiate(int message) {
-        MessageBox messageBox = (MessageBox)FindObjectOfType(typeof(MessageBox));
+    public void Initalize() {
 
-        string msg;
-
-        try {
-            msg = msgs[message];
-        }
-        catch {
-            msg = defaultmsg;
-            Debug.LogError("Some idiot messed up and didn't give a message the right fuckin' index, lets hope he or she fixes it.");
-        }
-
-        try {
-            
-        }
-        catch {
-
-        }
     }
 
     private IEnumerator TypeOut(string message) {
         return null;
     }
 }
+
+
+
+

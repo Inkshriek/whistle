@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using Whistle.Characters;
+using Whistle.Actors;
 
 namespace Whistle.Conditions {
 
@@ -45,46 +45,46 @@ namespace Whistle.Conditions {
 
 
         /* ~~~ Quick Guide to Using Conditions ~~~
-         * 
-         * 
-         * 
+         *
+         *
+         *
          * - Instantiating
-         * 
+         *
          * Instantiate new conditions using the constructor of the condition in question, while calling the "AddCond" method of the thing you're assigning it to. Only classes that implement the IConditions interface will have this method.
          * Example:
          *      player.AddCond(new Speed(30));
-         * 
-         * 
-         * 
+         *
+         *
+         *
          * - Making New Ones
-         * 
+         *
          * It's a simple task to make one! In "ApplyInitialEffect" for instance, you'll first want to grab a component for the condition to be making changes to.
          * Example:
          *      ICharacter character = obj.GetComponent<ICharacter>();
-         * 
+         *
          * If you're finding an attached character script this way, you'll then also want to check the type to ensure you're getting the character you want.
          * Example:
          *      if (character.GetType() == typeof(Player)) {
          *          (character as Player).CurrentHealth -= 20;
          *      }
-         * 
+         *
          * From there, you can make all the changes you want through the condition, whether it be at first, or every frame. Just remember to undo unwanted permanent changes using "RemoveEffect".
-         * 
-         * 
-         * 
+         *
+         *
+         *
          * - Controllers
-         * 
+         *
          * If you want to make new classes that implement IConditions, you will have to work out how to manage the class's list of conditions and remember to call the condition's methods appropriately.
          * Rules of Thumb:
          *      You should always remember to assign the GameObject to the condition's "obj" somewhere.
-         *      When you have your "AddCond" called, call the "ApplyInitialEffect" method of the condition, and then add it to a list. 
+         *      When you have your "AddCond" called, call the "ApplyInitialEffect" method of the condition, and then add it to a list.
          *      Or, if there is another condition of that kind already in the list and the condition is overwriteable, instead just simply call "OverwriteEffect" from the original with the new one as the parameter.
          *      Then, every frame where appropriate, tick down the condition's time left relative to Time.deltaTime and call its "ApplyContinuousEffect".
-         *      In general, if the condition's time has reached 0 or less, you should remove it with "RemoveCond". 
+         *      In general, if the condition's time has reached 0 or less, you should remove it with "RemoveCond".
          *      Whenever "RemoveCond" is called, you'll want to call the condition's "RemoveEffect" method, then delete it from your list.
-         * 
-         * 
-         * 
+         *
+         *
+         *
          * Whoever is reading this, I hope you like this, cuz I SPENT TIME ON IT.
          */
     }
@@ -126,7 +126,7 @@ namespace Whistle.Conditions {
         public static float AdjustNumber(List<Cond> conditions, float value, Tag tag) {
             //This returns an adjusted number according to the modifiers of the ID, adding first and then multiplying.
 
-            float  result = value;
+            float result = value;
             float flat = 0;
             float mult = 1;
 
@@ -254,14 +254,14 @@ namespace Whistle.Conditions {
 
         public override void ApplyInitialEffect() {
 
-
+					
         }
 
         public override void ApplyContinuousEffect() {
-            ICharacter character = obj.GetComponent<ICharacter>();
+            IActor character = obj.GetComponent<IActor>();
             if (character.GetType() == typeof(Player)) {
 
-                (character as Player).CurrentHealth -= 2 * Time.deltaTime;
+                (character as Player).Health -= 2 * Time.deltaTime;
             }
             else {
                 Debug.LogError(obj.name + " is not a valid recipient for " + this.name);

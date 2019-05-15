@@ -9,7 +9,7 @@ public class CameraController : MonoBehaviour {
     [SerializeField] public Vector2 maxConstraints;
     [SerializeField] public bool following;
     [SerializeField] public bool constrained;
-	
+
 	// Update is called once per frame
 	void Update () {
         if (following && objectToFollow != null) {
@@ -19,4 +19,6 @@ public class CameraController : MonoBehaviour {
             transform.position = new Vector3(Mathf.Clamp(transform.position.x, minConstraints.x, maxConstraints.x), Mathf.Clamp(transform.position.y, minConstraints.y, maxConstraints.y), transform.position.z);
         }
 	}
+
+
 }
