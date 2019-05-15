@@ -1,6 +1,6 @@
-.DS_Store
-Library
-Temp
+#Whistle .gitignore file
+Library/*
+Temp/*
 *.csproj
 *.pidb
 *.sln 
