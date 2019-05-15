@@ -1,18 +1,6 @@
-# Unity3D .gitignore file.
-# Store this file at the root of your local repository.
 .DS_Store
-Whistle/Library/AssetImportState
-Whistle/Library/AssetServerCacheV3
-Whistle/Library/FailedAssetImports.txt
-Whistle/Library/ScriptAssemblies
-Whistle/Library/ScriptMapper
-Whistle/Library/assetDatabase3
-Whistle/Library/cache
-Whistle/Library/expandedItems
-Whistle/Library/metadata
-Whistle/Library/previews
-Whistle/Library/guidmapper
-Whistle/Temp
-Whistle/*.csproj
-Whistle/*.pidb
-Whistle/*.sln 
+Library
+Temp
+*.csproj
+*.pidb
+*.sln 
