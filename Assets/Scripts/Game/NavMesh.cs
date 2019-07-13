@@ -28,7 +28,7 @@ public class NavMesh : MonoBehaviour {
         //GenerateNodeGraph();
     }
 
-    public Vector2[] GetPath(Vector2 start, Vector2 end, Accuracy accuracy) { 
+    public Vector2[] GetPath(Vector2 start, Vector2 end, NavAgent.Skill skill) {
 
         //This finds a full set of Vector2 that constitutes the best valid "path" for the recipient to take.
         //Do not call this directly, as it will be executed in the main thread. Instead use the NavAgent class for all operations.
@@ -41,100 +41,88 @@ public class NavMesh : MonoBehaviour {
             return null;
         }
 
-        //Deciding how to calculate this, based on accuracy.
-        switch (accuracy) {
-            case Accuracy.High:
+        //Calculating the path!
 
-                List<Node> openLocs = new List<Node>();
-                HashSet<Node> closedLocs = new HashSet<Node>();
-                Node[] adjacentNodes;
+        List<Node> openLocs = new List<Node>();
+        HashSet<Node> closedLocs = new HashSet<Node>();
+        Node[] adjacentNodes;
 
-                Node current = new Node(start);
-                Node final = new Node(end);
-                openLocs.Add(current);
+        Node current = new Node(start);
+        Node final = new Node(end);
+        openLocs.Add(current);
 
-                while (openLocs.Count > 0) {
-                    current = openLocs[0];
+        while (openLocs.Count > 0) {
+            current = openLocs[0];
 
-                    int savedi = 0;
-                    for (int i = 0; i < openLocs.Count; i++) {
-                        if ((openLocs[i].Fcost == current.Fcost && openLocs[i].Hcost < current.Hcost) || openLocs[i].Fcost < current.Fcost) {
-                            current = openLocs[i];
-                            savedi = i;
-                        }
-                    }
-
-                    openLocs.RemoveAt(savedi);
-                    closedLocs.Add(current);
-
-                    if (current.loc == end) {
-                        final.parent = current.parent;
-                        break;
-                    }
-
-                    adjacentNodes = new Node[] {
-                            GetNodeFromMesh(new Vector2(current.loc.x - nodeSpacing.x, current.loc.y)),
-                            GetNodeFromMesh(new Vector2(current.loc.x - nodeSpacing.x, current.loc.y + nodeSpacing.y)),
-                            GetNodeFromMesh(new Vector2(current.loc.x, current.loc.y + nodeSpacing.y)),
-                            GetNodeFromMesh(new Vector2(current.loc.x + nodeSpacing.x, current.loc.y + nodeSpacing.y)),
-                            GetNodeFromMesh(new Vector2(current.loc.x + nodeSpacing.x, current.loc.y)),
-                            GetNodeFromMesh(new Vector2(current.loc.x + nodeSpacing.x, current.loc.y - nodeSpacing.y)),
-                            GetNodeFromMesh(new Vector2(current.loc.x, current.loc.y - nodeSpacing.y)),
-                            GetNodeFromMesh(new Vector2(current.loc.x - nodeSpacing.x, current.loc.y - nodeSpacing.y)),
-                        };
-
-                    foreach (Node adjacent in adjacentNodes) {
-                        if (!IsTraversible(adjacent.flag) || IsInGroup(adjacent.loc, closedLocs)) {
-                            continue;
-                        }
-
-                        float costToAdjacent = current.Gcost + Vector2.Distance(current.loc, adjacent.loc);
-
-                        if (costToAdjacent < adjacent.Gcost || !IsInGroup(adjacent.loc, openLocs)) {
-                            adjacent.Gcost = costToAdjacent;
-                            adjacent.Hcost = Vector2.Distance(adjacent.loc, end);
-                            adjacent.parent = current;
-
-                            if (!IsInGroup(adjacent.loc, openLocs)) {
-                                openLocs.Add(adjacent);
-                            }
-                        }
-                    }
+            int savedi = 0;
+            for (int i = 0; i < openLocs.Count; i++) {
+                if ((openLocs[i].Fcost == current.Fcost && openLocs[i].Hcost < current.Hcost) || openLocs[i].Fcost < current.Fcost) {
+                    current = openLocs[i];
+                    savedi = i;
                 }
+            }
 
-                //Returning path found.
-                Node processingNode = final;
-                List<Node> pathNodes = new List<Node>();
+            openLocs.RemoveAt(savedi);
+            closedLocs.Add(current);
 
-                bool gettingPath = true;
-
-                while (gettingPath) {
-                    if (processingNode.parent != null) {
-                        processingNode = processingNode.parent;
-                        pathNodes.Add(processingNode);
-
-                    }
-                    else {
-                        gettingPath = false;
-                    }
-                }
-
-                Vector2[] path = new Vector2[pathNodes.Count];
-                for (int i = 0; i < path.Length; i++) {
-                    path[i] = pathNodes[i].loc;
-                }
-
-                return path;
-
-            case Accuracy.Medium:
-
+            if (current.loc == end) {
+                final.parent = current.parent;
                 break;
-            case Accuracy.Low:
+            }
 
-                break;
+            adjacentNodes = new Node[] {
+                    GetNodeFromMesh(new Vector2(current.loc.x - nodeSpacing.x, current.loc.y)),
+                    GetNodeFromMesh(new Vector2(current.loc.x - nodeSpacing.x, current.loc.y + nodeSpacing.y)),
+                    GetNodeFromMesh(new Vector2(current.loc.x, current.loc.y + nodeSpacing.y)),
+                    GetNodeFromMesh(new Vector2(current.loc.x + nodeSpacing.x, current.loc.y + nodeSpacing.y)),
+                    GetNodeFromMesh(new Vector2(current.loc.x + nodeSpacing.x, current.loc.y)),
+                    GetNodeFromMesh(new Vector2(current.loc.x + nodeSpacing.x, current.loc.y - nodeSpacing.y)),
+                    GetNodeFromMesh(new Vector2(current.loc.x, current.loc.y - nodeSpacing.y)),
+                    GetNodeFromMesh(new Vector2(current.loc.x - nodeSpacing.x, current.loc.y - nodeSpacing.y)),
+                };
+
+            foreach (Node adjacent in adjacentNodes) {
+                if (!IsTraversible(current, adjacent, skill) || IsInGroup(adjacent.loc, closedLocs)) {
+                    continue;
+                }
+
+                float costToAdjacent = current.Gcost + Vector2.Distance(current.loc, adjacent.loc);
+
+                if (costToAdjacent < adjacent.Gcost || !IsInGroup(adjacent.loc, openLocs)) {
+                    adjacent.Gcost = costToAdjacent;
+                    adjacent.Hcost = Vector2.Distance(adjacent.loc, end);
+                    adjacent.parent = current;
+
+                    if (!IsInGroup(adjacent.loc, openLocs)) {
+                        openLocs.Add(adjacent);
+                    }
+                }
+            }
         }
 
-        return null;
+        //Returning path found.
+        Node processingNode = final;
+        List<Node> pathNodes = new List<Node>();
+
+        bool gettingPath = true;
+
+        while (gettingPath) {
+            if (processingNode.parent != null) {
+                processingNode = processingNode.parent;
+                pathNodes.Add(processingNode);
+
+            }
+            else {
+                gettingPath = false;
+            }
+        }
+
+        Vector2[] path = new Vector2[pathNodes.Count];
+        for (int i = 0; i < path.Length; i++) {
+            path[i] = pathNodes[i].loc;
+        }
+
+        return path;
     }
 
     /*
@@ -237,10 +225,17 @@ public class NavMesh : MonoBehaviour {
 
     }
 
-    private bool IsTraversible(NavRectFlag flag) {
-        switch (flag) {
+    private bool IsTraversible(Node from, Node to, NavAgent.Skill capabilities) {
+        switch (to.flag) {
             case NavRectFlag.Normal:
                 return true;
+            case NavRectFlag.Flight:
+                if ((to.loc.y > from.loc.y) && !capabilities.canFly) {
+                    return false;
+                }
+                else {
+                    return true;
+                }
             default:
                 return false;
         }
@@ -269,16 +264,12 @@ public class NavMesh : MonoBehaviour {
     public enum NavRectFlag {
         //The various flags used for labeling NavRects. Helps with AI, and is displayed real nice too in the editor.
         Normal,
+        Flight,
+        Climb,
+        Underwater,
         Transient,
         Dangerous,
         Nothing
-    }
-
-    public enum Accuracy {
-        //A few levels in how accurate to allow the pathfinding algorithm to be.
-        Low,
-        Medium,
-        High
     }
 
     public NavRectFlag PointIntersecting(Vector2 point) {
@@ -435,7 +426,7 @@ public class NavMesh : MonoBehaviour {
         return overlaps;
     }
 
-    public static NavMesh SceneNavMesh {
+    public static NavMesh SceneNav {
         //Very definitely shorthand way of getting the navigation mesh for the current scene.
 
         get {

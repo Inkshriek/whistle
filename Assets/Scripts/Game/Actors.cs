@@ -8,15 +8,14 @@ namespace Whistle.Actors {
         //The most basic interface meant for all actors (characters) to use.
         string DisplayName { get; }
         ActorController Controller { get; }
-        ActorMode Mode { get; set; }
+        bool Active { get; set; }
     }
 
     public interface IHealth {
         //This interface works with "health" values on a basic level. Probably best used with characters the player can damage.
         float Health { get; set; }
         float MaxHealth { get; set; }
-        void Damage(float value);
-        void Heal(float value);
+        void Damage(float value, DamageType type);
     }
 
     public interface IUseable {
@@ -25,7 +24,7 @@ namespace Whistle.Actors {
         void OnUse();
     }
 
-    public enum PlayerAction {
+    public enum PlayerState {
         //This is just a set of states intended exclusively for the player.
         Crouching,
         Walking,
@@ -34,15 +33,16 @@ namespace Whistle.Actors {
         LedgeGrabbed
     }
 
-    public enum ActorMode {
-        //A set of modes intended to be used for switching a character's default behavior on and off.
-        Inactive,
-        Active
-    }
-
     public enum MovementType {
-        //A set of movement types used for defining what a character is capable of doing. Meant for pathfinding and defining CharController behavior.
+        //A set of movement types used for defining what an actor is capable of doing. Meant for pathfinding and defining ActorController behavior.
         Normal,  
         Flying
+    }
+
+    public enum DamageType {
+        //A set of damage types. Used for determining how an actor reacts to certain forms of damage.
+        Normal,
+        Fire,
+        Poison
     }
 }

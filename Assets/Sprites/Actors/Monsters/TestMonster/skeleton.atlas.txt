@@ -1,0 +1,213 @@
+
+skeleton.png
+size: 2048,2048
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+idle aggro
+  rotate: false
+  xy: 2, 487
+  size: 1024, 483
+  orig: 1024, 483
+  offset: 0, 0
+  index: -1
+run 1
+  rotate: true
+  xy: 1028, 972
+  size: 1024, 483
+  orig: 1024, 483
+  offset: 0, 0
+  index: -1
+run 8
+  rotate: true
+  xy: 1028, 972
+  size: 1024, 483
+  orig: 1024, 483
+  offset: 0, 0
+  index: -1
+run 2
+  rotate: false
+  xy: 2, 2
+  size: 1024, 483
+  orig: 1024, 483
+  offset: 0, 0
+  index: -1
+run 3
+  rotate: true
+  xy: 1513, 972
+  size: 1024, 483
+  orig: 1024, 483
+  offset: 0, 0
+  index: -1
+walk 9
+  rotate: false
+  xy: 2, 972
+  size: 1024, 1024
+  orig: 1024, 1024
+  offset: 0, 0
+  index: -1
+
+skeleton2.png
+size: 2048,2048
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+attack
+  rotate: false
+  xy: 2, 972
+  size: 1024, 1024
+  orig: 1024, 1024
+  offset: 0, 0
+  index: -1
+run 4
+  rotate: false
+  xy: 2, 487
+  size: 1024, 483
+  orig: 1024, 483
+  offset: 0, 0
+  index: -1
+run 5
+  rotate: true
+  xy: 1028, 972
+  size: 1024, 483
+  orig: 1024, 483
+  offset: 0, 0
+  index: -1
+run 6
+  rotate: false
+  xy: 2, 2
+  size: 1024, 483
+  orig: 1024, 483
+  offset: 0, 0
+  index: -1
+run 7
+  rotate: true
+  xy: 1513, 972
+  size: 1024, 483
+  orig: 1024, 483
+  offset: 0, 0
+  index: -1
+
+skeleton3.png
+size: 2048,2048
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+idle
+  rotate: false
+  xy: 2, 2
+  size: 1024, 1024
+  orig: 1024, 1024
+  offset: 0, 0
+  index: -1
+
+skeleton4.png
+size: 2048,2048
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+walk 1
+  rotate: false
+  xy: 2, 2
+  size: 1024, 1024
+  orig: 1024, 1024
+  offset: 0, 0
+  index: -1
+
+skeleton5.png
+size: 2048,2048
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+walk 2
+  rotate: false
+  xy: 2, 2
+  size: 1024, 1024
+  orig: 1024, 1024
+  offset: 0, 0
+  index: -1
+walk 3
+  rotate: false
+  xy: 2, 2
+  size: 1024, 1024
+  orig: 1024, 1024
+  offset: 0, 0
+  index: -1
+
+skeleton6.png
+size: 2048,2048
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+walk 4
+  rotate: false
+  xy: 2, 2
+  size: 1024, 1024
+  orig: 1024, 1024
+  offset: 0, 0
+  index: -1
+
+skeleton7.png
+size: 2048,2048
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+walk 5
+  rotate: false
+  xy: 2, 2
+  size: 1024, 1024
+  orig: 1024, 1024
+  offset: 0, 0
+  index: -1
+
+skeleton8.png
+size: 2048,2048
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+walk 6
+  rotate: false
+  xy: 2, 2
+  size: 1024, 1024
+  orig: 1024, 1024
+  offset: 0, 0
+  index: -1
+
+skeleton9.png
+size: 2048,2048
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+walk 7
+  rotate: false
+  xy: 2, 2
+  size: 1024, 1024
+  orig: 1024, 1024
+  offset: 0, 0
+  index: -1
+
+skeleton10.png
+size: 2048,2048
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+walk 8
+  rotate: false
+  xy: 2, 2
+  size: 1024, 1024
+  orig: 1024, 1024
+  offset: 0, 0
+  index: -1
+
+skeleton11.png
+size: 2048,2048
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+walk 10
+  rotate: false
+  xy: 2, 2
+  size: 1024, 1024
+  orig: 1024, 1024
+  offset: 0, 0
+  index: -1

@@ -34,8 +34,8 @@ public class TransitionPoint : MonoBehaviour {
     public IEnumerator Transition(Player player) {
         DontDestroyOnLoad(this);
 
-        player.Mode = ActorMode.Inactive;
-        player.Action = PlayerAction.Running;
+        player.Active = false;
+        player.Action = PlayerState.Running;
 
         switch (type) {
             case TransitionType.Left:
@@ -70,7 +70,7 @@ public class TransitionPoint : MonoBehaviour {
         yield return new WaitForSeconds(1);
 
         player.Controller.Motion = Vector2.zero;
-        player.Mode = ActorMode.Active;
+        player.Active = true;
 
         sceneData.transitions[destinationTPoint].gameObject.SetActive(true);
         Destroy(this.gameObject);

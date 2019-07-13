@@ -42,7 +42,7 @@ GameObject:
   - component: {fileID: 114430491252993612}
   - component: {fileID: 114769448412379360}
   m_Layer: 8
-  m_Name: Familiar_Feu
+  m_Name: TestFamiliar
   m_TagString: Familiar
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -228,8 +228,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1472888380549500}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4878f2edba306114388f6eb534453737, type: 3}
+  m_Script: {fileID: 11500000, guid: 2dcb3f89722f6584c926d78f9453fc94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  active: 1
-  charMode: 1
+  _currentFamiliar: 0

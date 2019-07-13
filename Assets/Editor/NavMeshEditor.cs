@@ -100,6 +100,9 @@ public class NavMeshEditor : Editor {
                     case NavMesh.NavRectFlag.Transient:
                         Handles.DrawSolidRectangleWithOutline(points, new Color(0.5f, 0.3f, 0.7f, 0.2f), Color.blue);
                         break;
+                    case NavMesh.NavRectFlag.Flight:
+                        Handles.DrawSolidRectangleWithOutline(points, new Color(0.2f, 0.8f, 0.7f, 0.2f), Color.green);
+                        break;
                     case NavMesh.NavRectFlag.Dangerous:
                         Handles.DrawSolidRectangleWithOutline(points, new Color(0.8f, 0.4f, 0.4f, 0.2f), Color.red);
                         break;

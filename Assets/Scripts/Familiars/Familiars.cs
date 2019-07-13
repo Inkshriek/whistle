@@ -10,15 +10,14 @@ namespace Whistle.Familiars {
     public abstract class Familiar : MonoBehaviour, IActor, IConditions {
         public string DisplayName { get; set; }
 
-        public abstract ActorController Controller { get; set; }
-        public abstract ActorMode Mode { get; set; }
+        public ActorController Controller { get; set; }
+        public bool Active { get; set; }
 
-        protected NavAgent AI;
-        public abstract Player Player { get; set; }
-        public abstract float Speed { get; set; }
-        public abstract bool Active { get; set; }
+        protected NavAgent AI { get; set; }
+        public Player Player { get; set; }
+        public float Speed { get; set; }
 
-        protected virtual void Update() {
+        protected void Update() {
             if (!Active) {
 
             }

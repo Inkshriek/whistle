@@ -25,17 +25,17 @@ public class Player : MonoBehaviour, IActor, IConditions, IHealth {
 
     public ActorController Controller { get; private set; }
 
-    public ActorMode Mode { get; set; }
-    public PlayerAction Action { get; set; }
+    public bool Active { get; set; }
+    public PlayerState Action { get; set; }
 
     public float Speed {
         get {
             switch (Action) {
 
-                case PlayerAction.Crouching:
+                case PlayerState.Crouching:
                     return Modifier.AdjustNumber(conds, _crouchSpeed, Modifier.Tag.Speed);
 
-                case PlayerAction.Running:
+                case PlayerState.Running:
                     return Modifier.AdjustNumber(conds, _runSpeed, Modifier.Tag.Speed);
 
                 default:
@@ -96,7 +96,7 @@ public class Player : MonoBehaviour, IActor, IConditions, IHealth {
         }
     }
 
-    void Awake() {
+    private void Awake() {
         DontDestroyOnLoad(this);
 
         DisplayName = "Ichabod";
@@ -105,13 +105,13 @@ public class Player : MonoBehaviour, IActor, IConditions, IHealth {
         rb = GetComponent<Rigidbody2D>();
         Controller = GetComponent<ActorController>();
 
-        Mode = ActorMode.Active;
-        Action = PlayerAction.Walking;
+        Active = true;
+        Action = PlayerState.Walking;
         jumping = false;
     }
 
-    void Update() {
-        if (Mode == ActorMode.Active) {
+    private void Update() {
+        if (Active) {
             if (Controller.isTouchingGround && Input.GetKeyDown(GameController.jumpKey)) {
                 Controller.ApplyJump(JumpHeight);
                 jumping = true;
@@ -119,13 +119,13 @@ public class Player : MonoBehaviour, IActor, IConditions, IHealth {
             }
 
             if (Input.GetAxisRaw("Vertical") < 0) {
-                Action = PlayerAction.Crouching;
+                Action = PlayerState.Crouching;
             }
             else if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)) {
-                Action = PlayerAction.Running;
+                Action = PlayerState.Running;
             }
             else {
-                Action = PlayerAction.Walking;
+                Action = PlayerState.Walking;
             }
 
             if (Controller.isTouchingGround) {
@@ -145,14 +145,9 @@ public class Player : MonoBehaviour, IActor, IConditions, IHealth {
         }
     }
 
-    public void Damage(float value) {
+    public void Damage(float value, DamageType type) {
         value = Modifier.AdjustNumber(conds, value, Modifier.Tag.Damage);
         HealthDeficit += value;
-    }
-
-    public void Heal(float value) {
-        value = Modifier.AdjustNumber(conds, value, Modifier.Tag.Healing);
-        HealthDeficit -= value;
     }
 
     private void BleedHealth() {
@@ -167,7 +162,7 @@ public class Player : MonoBehaviour, IActor, IConditions, IHealth {
         }
         else {
             adjustment = 0;
-            //It wants me to do this apparently
+            //*lip smack* nice
         }
         
         HealthDeficit -= adjustment;

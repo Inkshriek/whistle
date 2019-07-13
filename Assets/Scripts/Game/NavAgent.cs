@@ -11,8 +11,8 @@ public class NavAgent {
 
     public NavMesh mesh;
     public List<Vector2> navpath;
-
     public int operations;
+    public Skill skill;
 
     public bool Operating {
         get {
@@ -36,22 +36,28 @@ public class NavAgent {
         }
     }
 
+    public struct Skill {
+        public bool canFly;
+        public bool canClimb;
+        public bool canSwim;
+    }
 
-    public NavAgent(NavMesh mesh) {
+    public NavAgent(NavMesh mesh, Skill skill) {
         //The constructor. 
         //If you want to start running operations for AI with a character, give them an agent using this: AIAgent namegoeshere = new AIAgent(NavMesh.SceneNavMesh);
 
         this.mesh = mesh;
+        this.skill = skill;
         navpath = new List<Vector2>();
         operations = 0;
     }
 
-    public void GeneratePath(Vector2 start, Vector2 end) {
-        //This method generates a new path under the agent. It can then be accessed for whatever you need to be doing.
+    public void GenerateNewPath(Vector2 start, Vector2 end) {
+        //This method starts generating a new path under the agent. It can then be accessed for whatever you need to be doing.
 
         operations++;
 
-        Thread navParse = new Thread(() => BeginOperation(start, end));
+        Thread navParse = new Thread(() => Build(start, end));
         navParse.Start();
     }
 
@@ -95,12 +101,13 @@ public class NavAgent {
         return index;
     }
 
-    private void BeginOperation(Vector2 start, Vector2 end) {
+    private void Build(Vector2 start, Vector2 end) {
+        //This method is intended to be executed outside the main thread, in its own. When executed, a path is built from GetPath and registered into the NavAgent.
 
         System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
         sw.Start();
 
-        Vector2[] path = mesh.GetPath(start, end, NavMesh.Accuracy.High);
+        Vector2[] path = mesh.GetPath(start, end, skill);
         if (path != null) {
             for (int i = path.Length; i > 0; i--) {
                 navpath.Add(path[i - 1]);

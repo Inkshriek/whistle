@@ -10,7 +10,7 @@ public class Hurt : MonoBehaviour {
     private void OnTriggerEnter2D(Collider2D collision) {
         IHealth thing = collision.gameObject.GetComponent<IHealth>();
         if (thing != null) {
-            thing.Damage(amount);
+            thing.Damage(amount, DamageType.Poison);
             Debug.Log("Damaged someone!");
         }
     }

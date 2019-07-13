@@ -27,20 +27,20 @@ public class PlayerAnimator : MonoBehaviour {
             if (controller.Motion.x != 0) {
                 
                 switch (player.Action) {
-                    case PlayerAction.Running:
+                    case PlayerState.Running:
                         changeState("run", true);
                         break;
-                    case PlayerAction.Crouching:
+                    case PlayerState.Crouching:
                         changeState("crouch_walk", true);
                         break;
-                    case PlayerAction.Walking:
+                    case PlayerState.Walking:
                         changeState("walk", true);
                         break;
                 }
             }
             else {
                 switch (player.Action) {
-                    case PlayerAction.Crouching:
+                    case PlayerState.Crouching:
                         changeState("crouch_idle", true);
                         break;
                     default:
