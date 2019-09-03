@@ -5,37 +5,39 @@ using System.Threading;
 
 public class NavMesh : MonoBehaviour {
 
-    [SerializeField] public NavRect[] mesh;
-    [SerializeField] public Vector2 nodeSpacing;
-    [SerializeField] public Bounds nodeBounds;
-    //private Dictionary<Vector2, NavRectFlag> nodeGraph = new Dictionary<Vector2, NavRectFlag>();
-    public bool forceStop = false;
+    [SerializeField] public NavRect[] Mesh;
+    [SerializeField] public Vector2 NodeSpacing;
+    [SerializeField] public Bounds NodeBounds;
 
     void OnValidate() {
         //Checks to make sure the mesh is initialized correctly and has at least one element upon the script's creation.
-        if (mesh == null) {
-            mesh = new NavRect[1];
-            mesh[0] = new NavRect("Rect 0", true, NavRectFlag.Normal, new Vector2(-1, 1), new Vector2(1, 1), new Vector2(-1, -1), new Vector2(1, -1));
+        if (Mesh == null) {
+            Mesh = new NavRect[1];
+            Mesh[0] = new NavRect("Rect 0", true, NavRectFlag.Normal, new Vector2(-1, 1), new Vector2(1, 1), new Vector2(-1, -1), new Vector2(1, -1));
         }
     }
 
     void Start() {
-        nodeSpacing = new Vector2(0.5f,0.5f);
-        nodeBounds = new Bounds();
-        nodeBounds.center = Vector2.zero;
-        nodeBounds.size = new Vector2(30, 30);
-
-        //GenerateNodeGraph();
+        NodeSpacing = new Vector2(0.5f,0.5f);
+        NodeBounds = new Bounds();
+        NodeBounds.center = Vector2.zero;
+        NodeBounds.size = new Vector2(30, 30);
     }
 
-    public Vector2[] GetPath(Vector2 start, Vector2 end, NavAgent.Skill skill) {
+    public struct AgentSkill {
+        public bool canFly;
+        public bool canClimb;
+        public bool canSwim;
+    }
+
+    public Vector2[] GetPath(Vector2 start, Vector2 end, AgentSkill skills) {
 
         //This finds a full set of Vector2 that constitutes the best valid "path" for the recipient to take.
         //Do not call this directly, as it will be executed in the main thread. Instead use the NavAgent class for all operations.
 
         //Realigning the input vectors to the node graph.
-        start = new Vector2(Mathf.Round(start.x / nodeSpacing.x) * nodeSpacing.x, Mathf.Round(start.y / nodeSpacing.y) * nodeSpacing.y);
-        end = new Vector2(Mathf.Round(end.x / nodeSpacing.x) * nodeSpacing.x, Mathf.Round(end.y / nodeSpacing.y) * nodeSpacing.y);
+        start = new Vector2(Mathf.Round(start.x / NodeSpacing.x) * NodeSpacing.x, Mathf.Round(start.y / NodeSpacing.y) * NodeSpacing.y);
+        end = new Vector2(Mathf.Round(end.x / NodeSpacing.x) * NodeSpacing.x, Mathf.Round(end.y / NodeSpacing.y) * NodeSpacing.y);
 
         if (PointIntersecting(end) == NavRectFlag.Nothing) {
             return null;
@@ -71,18 +73,18 @@ public class NavMesh : MonoBehaviour {
             }
 
             adjacentNodes = new Node[] {
-                    GetNodeFromMesh(new Vector2(current.loc.x - nodeSpacing.x, current.loc.y)),
-                    GetNodeFromMesh(new Vector2(current.loc.x - nodeSpacing.x, current.loc.y + nodeSpacing.y)),
-                    GetNodeFromMesh(new Vector2(current.loc.x, current.loc.y + nodeSpacing.y)),
-                    GetNodeFromMesh(new Vector2(current.loc.x + nodeSpacing.x, current.loc.y + nodeSpacing.y)),
-                    GetNodeFromMesh(new Vector2(current.loc.x + nodeSpacing.x, current.loc.y)),
-                    GetNodeFromMesh(new Vector2(current.loc.x + nodeSpacing.x, current.loc.y - nodeSpacing.y)),
-                    GetNodeFromMesh(new Vector2(current.loc.x, current.loc.y - nodeSpacing.y)),
-                    GetNodeFromMesh(new Vector2(current.loc.x - nodeSpacing.x, current.loc.y - nodeSpacing.y)),
+                    GetNodeFromMesh(new Vector2(current.loc.x - NodeSpacing.x, current.loc.y)),
+                    GetNodeFromMesh(new Vector2(current.loc.x - NodeSpacing.x, current.loc.y + NodeSpacing.y)),
+                    GetNodeFromMesh(new Vector2(current.loc.x, current.loc.y + NodeSpacing.y)),
+                    GetNodeFromMesh(new Vector2(current.loc.x + NodeSpacing.x, current.loc.y + NodeSpacing.y)),
+                    GetNodeFromMesh(new Vector2(current.loc.x + NodeSpacing.x, current.loc.y)),
+                    GetNodeFromMesh(new Vector2(current.loc.x + NodeSpacing.x, current.loc.y - NodeSpacing.y)),
+                    GetNodeFromMesh(new Vector2(current.loc.x, current.loc.y - NodeSpacing.y)),
+                    GetNodeFromMesh(new Vector2(current.loc.x - NodeSpacing.x, current.loc.y - NodeSpacing.y)),
                 };
 
             foreach (Node adjacent in adjacentNodes) {
-                if (!IsTraversible(current, adjacent, skill) || IsInGroup(adjacent.loc, closedLocs)) {
+                if (!IsTraversible(current, adjacent, skills) || IsInGroup(adjacent.loc, closedLocs)) {
                     continue;
                 }
 
@@ -225,12 +227,12 @@ public class NavMesh : MonoBehaviour {
 
     }
 
-    private bool IsTraversible(Node from, Node to, NavAgent.Skill capabilities) {
+    private bool IsTraversible(Node from, Node to, AgentSkill skills) {
         switch (to.flag) {
             case NavRectFlag.Normal:
                 return true;
             case NavRectFlag.Flight:
-                if ((to.loc.y > from.loc.y) && !capabilities.canFly) {
+                if ((to.loc.y > from.loc.y) && !skills.canFly) {
                     return false;
                 }
                 else {
@@ -275,7 +277,7 @@ public class NavMesh : MonoBehaviour {
     public NavRectFlag PointIntersecting(Vector2 point) {
         //This is used to determine if a point lies within the navigation mesh.
 
-        foreach (NavRect rect in mesh) {
+        foreach (NavRect rect in Mesh) {
             bool eval = true;
             bool[] checks = {
                 CheckLeftOfLine(point, rect.b, rect.a),
@@ -301,7 +303,7 @@ public class NavMesh : MonoBehaviour {
     public bool PointIntersecting(Vector2 point, NavRectFlag flag) {
         //Same as above, though also uses a flag as a filter so we only return "true" for specific NavRects.
 
-        foreach (NavRect rect in mesh) {
+        foreach (NavRect rect in Mesh) {
             if (rect.flag != flag) {
                 continue;
             }
@@ -338,7 +340,7 @@ public class NavMesh : MonoBehaviour {
             new Vector2 (collider.bounds.max.x, (collider.bounds.min.y))
         };
 
-        foreach (NavRect rect in mesh) {
+        foreach (NavRect rect in Mesh) {
             int overlaps = 0;
 
             overlaps += CheckAreaOverlaps(points, rect.Points);
@@ -362,7 +364,7 @@ public class NavMesh : MonoBehaviour {
             new Vector2 (collider.bounds.max.x, (collider.bounds.min.y))
         };
 
-        foreach (NavRect rect in mesh) {
+        foreach (NavRect rect in Mesh) {
 
             if (rect.flag != flag) {
                 continue;

@@ -8,49 +8,49 @@ public class NavMeshEditor : Editor {
 
     //This whole thing here is used for displaying the NavMesh script all nicely in the Scene and Inspector. Don't touch it!!
 
-    NavMesh meshScript;
-    SerializedProperty nodeSpacing;
-    SerializedProperty nodeBounds;
+    NavMesh _meshScript;
+    SerializedProperty _nodeSpacing;
+    SerializedProperty _nodeBounds;
 
-    private bool safeToDraw;
+    private bool _safeToDraw;
 
     private void OnEnable() {
 
-        safeToDraw = false;
+        _safeToDraw = false;
     }
     
     public override void OnInspectorGUI() {
         serializedObject.Update();
-        meshScript = target as NavMesh;
+        _meshScript = target as NavMesh;
 
         EditorGUI.indentLevel += 1;
-        for (int i = 0; i < meshScript.mesh.Length; i++) {
-            meshScript.mesh[i].display = EditorGUILayout.Foldout(meshScript.mesh[i].display, meshScript.mesh[i].name);
-            if (meshScript.mesh[i].display) {
-                meshScript.mesh[i].name = EditorGUILayout.TextField(meshScript.mesh[i].name);
+        for (int i = 0; i < _meshScript.Mesh.Length; i++) {
+            _meshScript.Mesh[i].display = EditorGUILayout.Foldout(_meshScript.Mesh[i].display, _meshScript.Mesh[i].name);
+            if (_meshScript.Mesh[i].display) {
+                _meshScript.Mesh[i].name = EditorGUILayout.TextField(_meshScript.Mesh[i].name);
                 EditorGUILayout.Space();
-                meshScript.mesh[i].flag = (NavMesh.NavRectFlag)EditorGUILayout.EnumPopup("Flag", meshScript.mesh[i].flag);
+                _meshScript.Mesh[i].flag = (NavMesh.NavRectFlag)EditorGUILayout.EnumPopup("Flag", _meshScript.Mesh[i].flag);
                 EditorGUILayout.Space();
-                meshScript.mesh[i].a = EditorGUILayout.Vector2Field("Point A", meshScript.mesh[i].a);
-                meshScript.mesh[i].b = EditorGUILayout.Vector2Field("Point B", meshScript.mesh[i].b);
-                meshScript.mesh[i].c = EditorGUILayout.Vector2Field("Point C", meshScript.mesh[i].c);
-                meshScript.mesh[i].d = EditorGUILayout.Vector2Field("Point D", meshScript.mesh[i].d);
+                _meshScript.Mesh[i].a = EditorGUILayout.Vector2Field("Point A", _meshScript.Mesh[i].a);
+                _meshScript.Mesh[i].b = EditorGUILayout.Vector2Field("Point B", _meshScript.Mesh[i].b);
+                _meshScript.Mesh[i].c = EditorGUILayout.Vector2Field("Point C", _meshScript.Mesh[i].c);
+                _meshScript.Mesh[i].d = EditorGUILayout.Vector2Field("Point D", _meshScript.Mesh[i].d);
 
                 EditorGUILayout.Space();
                 GUILayout.BeginHorizontal();
                 GUILayout.FlexibleSpace();
                 if (GUILayout.Button("Delete", GUILayout.Width(150))) {
-                    NavMesh.NavRect[] newRectList = new NavMesh.NavRect[meshScript.mesh.Length - 1];
+                    NavMesh.NavRect[] newRectList = new NavMesh.NavRect[_meshScript.Mesh.Length - 1];
                     for (int e = 0; e < newRectList.Length; e++) {
                         if (e >= i) {
-                            newRectList[e] = meshScript.mesh[e + 1];
+                            newRectList[e] = _meshScript.Mesh[e + 1];
                         }
                         else {
-                            newRectList[e] = meshScript.mesh[e];
+                            newRectList[e] = _meshScript.Mesh[e];
                         }
                         
                     }
-                    meshScript.mesh = newRectList;
+                    _meshScript.Mesh = newRectList;
                 }
 
                 GUILayout.EndHorizontal();
@@ -65,35 +65,35 @@ public class NavMeshEditor : Editor {
         GUILayout.BeginHorizontal();
         GUILayout.FlexibleSpace();
         if (GUILayout.Button("New Rectangle", GUILayout.Height(30), GUILayout.Width(250))) {
-            NavMesh.NavRect[] newRectList = new NavMesh.NavRect[meshScript.mesh.Length + 1];
+            NavMesh.NavRect[] newRectList = new NavMesh.NavRect[_meshScript.Mesh.Length + 1];
             for (int i = 0; i < newRectList.Length; i++) {
-                if (i == meshScript.mesh.Length) {
+                if (i == _meshScript.Mesh.Length) {
                     newRectList[i] = new NavMesh.NavRect("Rect " + i, true, NavMesh.NavRectFlag.Normal, new Vector2 (-1, 1), new Vector2(1, 1), new Vector2(-1, -1), new Vector2(1, -1));
                 }
                 else {
-                    newRectList[i] = meshScript.mesh[i];
+                    newRectList[i] = _meshScript.Mesh[i];
                 }
             }
-            meshScript.mesh = newRectList;
+            _meshScript.Mesh = newRectList;
         }
         GUILayout.FlexibleSpace();
         GUILayout.EndHorizontal();
 
-        safeToDraw = true;
+        _safeToDraw = true;
         serializedObject.ApplyModifiedProperties();
         SceneView.lastActiveSceneView.Repaint();
     }
 
     public void OnSceneGUI() {
 
-        if (safeToDraw) {
-            for (int i = 0; i < meshScript.mesh.Length; i++) {
+        if (_safeToDraw) {
+            for (int i = 0; i < _meshScript.Mesh.Length; i++) {
 
-                Vector3[] points = { meshScript.mesh[i].a, meshScript.mesh[i].b, meshScript.mesh[i].d, meshScript.mesh[i].c };
+                Vector3[] points = { _meshScript.Mesh[i].a, _meshScript.Mesh[i].b, _meshScript.Mesh[i].d, _meshScript.Mesh[i].c };
 
                 EditorGUI.BeginChangeCheck();
 
-                switch (meshScript.mesh[i].flag) {
+                switch (_meshScript.Mesh[i].flag) {
                     case NavMesh.NavRectFlag.Normal:
                         Handles.DrawSolidRectangleWithOutline(points, new Color(0.5f, 0.5f, 0.5f, 0.2f), Color.white);
                         break;
@@ -111,17 +111,17 @@ public class NavMeshEditor : Editor {
                         break;
                 }
 
-                if (meshScript.mesh[i].flag != NavMesh.NavRectFlag.Nothing) {
-                    meshScript.mesh[i].a = Handles.Slider2D(meshScript.mesh[i].a, Vector3.forward, Vector2.right, Vector2.up, 0.1f, Handles.DotHandleCap, 0.1f);
-                    meshScript.mesh[i].b = Handles.Slider2D(meshScript.mesh[i].b, Vector3.forward, Vector2.right, Vector2.up, 0.1f, Handles.DotHandleCap, 0.1f);
-                    meshScript.mesh[i].c = Handles.Slider2D(meshScript.mesh[i].c, Vector3.forward, Vector2.right, Vector2.up, 0.1f, Handles.DotHandleCap, 0.1f);
-                    meshScript.mesh[i].d = Handles.Slider2D(meshScript.mesh[i].d, Vector3.forward, Vector2.right, Vector2.up, 0.1f, Handles.DotHandleCap, 0.1f);
+                if (_meshScript.Mesh[i].flag != NavMesh.NavRectFlag.Nothing) {
+                    _meshScript.Mesh[i].a = Handles.Slider2D(_meshScript.Mesh[i].a, Vector3.forward, Vector2.right, Vector2.up, 0.1f, Handles.DotHandleCap, 0.1f);
+                    _meshScript.Mesh[i].b = Handles.Slider2D(_meshScript.Mesh[i].b, Vector3.forward, Vector2.right, Vector2.up, 0.1f, Handles.DotHandleCap, 0.1f);
+                    _meshScript.Mesh[i].c = Handles.Slider2D(_meshScript.Mesh[i].c, Vector3.forward, Vector2.right, Vector2.up, 0.1f, Handles.DotHandleCap, 0.1f);
+                    _meshScript.Mesh[i].d = Handles.Slider2D(_meshScript.Mesh[i].d, Vector3.forward, Vector2.right, Vector2.up, 0.1f, Handles.DotHandleCap, 0.1f);
 
-                    meshScript.mesh[i].Position = Handles.Slider2D(meshScript.mesh[i].Position, Vector3.forward, Vector2.right, Vector2.up, 0.1f, Handles.DotHandleCap, 0.1f);
+                    _meshScript.Mesh[i].Position = Handles.Slider2D(_meshScript.Mesh[i].Position, Vector3.forward, Vector2.right, Vector2.up, 0.1f, Handles.DotHandleCap, 0.1f);
                 }
 
                 if (EditorGUI.EndChangeCheck()) {
-                    meshScript.mesh[i].display = true;
+                    _meshScript.Mesh[i].display = true;
                 }
             }
         }

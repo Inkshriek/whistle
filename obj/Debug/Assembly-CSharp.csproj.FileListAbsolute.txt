@@ -174,3 +174,7 @@ C:\Users\noahj\OneDrive\Documents\GitHub\whistle\Whistle\Temp\bin\Debug\UnityEng
 C:\Users\noahj\OneDrive\Documents\GitHub\whistle\Whistle\obj\Debug\Assembly-CSharp.csproj.CopyComplete
 C:\Users\noahj\OneDrive\Documents\GitHub\whistle\Whistle\obj\Debug\Assembly-CSharp.dll
 C:\Users\noahj\OneDrive\Documents\GitHub\whistle\Whistle\obj\Debug\Assembly-CSharp.pdb
+C:\Users\noahj\OneDrive\Documents\GitHub\whistle\obj\Debug\Assembly-CSharp.csprojAssemblyReference.cache
+C:\Users\noahj\OneDrive\Documents\GitHub\whistle\obj\Debug\Assembly-CSharp.csproj.CoreCompileInputs.cache
+C:\Users\noahj\OneDrive\Documents\GitHub\whistle\obj\Debug\Assembly-CSharp.dll
+C:\Users\noahj\OneDrive\Documents\GitHub\whistle\obj\Debug\Assembly-CSharp.pdb

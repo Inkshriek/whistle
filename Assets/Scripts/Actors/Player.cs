@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Whistle.Conditions;
+using Spine.Unity;
 using Whistle.Actors;
 
 [RequireComponent(typeof(ActorController))]
-public class Player : MonoBehaviour, IActor, IConditions, IHealth {
+public class Player : ActorMethods, IActor, IConditions, IHealth {
 
     public string DisplayName { get; set; }
 
@@ -17,29 +18,39 @@ public class Player : MonoBehaviour, IActor, IConditions, IHealth {
     [SerializeField] private float _healthDeficit;
     [SerializeField] private float _maxHealth;
     [SerializeField] private float _bleedRate;
+    [SerializeField] private SkeletonAnimation _animation;
 
-    private Rigidbody2D rb;
+    private Rigidbody2D _rb;
 
-    private List<Cond> conds;
-    private bool jumping;
+    private List<Cond> _conds;
+    private bool _jumping;
 
     public ActorController Controller { get; private set; }
 
     public bool Active { get; set; }
     public PlayerState Action { get; set; }
 
+    public enum PlayerState {
+        //This is just a set of states intended exclusively for the player.
+        Crouching,
+        Walking,
+        Running,
+        Pushing,
+        LedgeGrabbed
+    }
+
     public float Speed {
         get {
             switch (Action) {
 
                 case PlayerState.Crouching:
-                    return Modifier.AdjustNumber(conds, _crouchSpeed, Modifier.Tag.Speed);
+                    return Modifier.AdjustNumber(_conds, _crouchSpeed, Modifier.Tag.Speed);
 
                 case PlayerState.Running:
-                    return Modifier.AdjustNumber(conds, _runSpeed, Modifier.Tag.Speed);
+                    return Modifier.AdjustNumber(_conds, _runSpeed, Modifier.Tag.Speed);
 
                 default:
-                    return Modifier.AdjustNumber(conds, _walkSpeed, Modifier.Tag.Speed);
+                    return Modifier.AdjustNumber(_conds, _walkSpeed, Modifier.Tag.Speed);
             }
         }
         set {
@@ -53,7 +64,7 @@ public class Player : MonoBehaviour, IActor, IConditions, IHealth {
 
     public float JumpHeight {
         get {
-            return Modifier.AdjustNumber(conds, _jumpHeight, Modifier.Tag.JumpHeight);
+            return Modifier.AdjustNumber(_conds, _jumpHeight, Modifier.Tag.JumpHeight);
         }
         set {
             _jumpHeight = value;
@@ -80,7 +91,7 @@ public class Player : MonoBehaviour, IActor, IConditions, IHealth {
 
     public float MaxHealth {
         get {
-            return Modifier.AdjustNumber(conds, _maxHealth, Modifier.Tag.MaxHealth);
+            return Modifier.AdjustNumber(_conds, _maxHealth, Modifier.Tag.MaxHealth);
         }
         set {
             _maxHealth = Mathf.Max(0, value);
@@ -89,7 +100,7 @@ public class Player : MonoBehaviour, IActor, IConditions, IHealth {
 
     public float BleedRate {
         get {
-            return Modifier.AdjustNumber(conds, _bleedRate, Modifier.Tag.PlayerBleed);
+            return Modifier.AdjustNumber(_conds, _bleedRate, Modifier.Tag.PlayerBleed);
         }
         set {
             _bleedRate = Mathf.Abs(value);
@@ -100,22 +111,22 @@ public class Player : MonoBehaviour, IActor, IConditions, IHealth {
         DontDestroyOnLoad(this);
 
         DisplayName = "Ichabod";
-        conds = new List<Cond>();
+        _conds = new List<Cond>();
 
-        rb = GetComponent<Rigidbody2D>();
+        _rb = GetComponent<Rigidbody2D>();
         Controller = GetComponent<ActorController>();
 
         Active = true;
         Action = PlayerState.Walking;
-        jumping = false;
+        _jumping = false;
     }
 
     private void Update() {
         if (Active) {
-            if (Controller.isTouchingGround && Input.GetKeyDown(GameController.jumpKey)) {
+            if (Controller.IsTouchingGround && Input.GetKeyDown(GameController.jumpKey)) {
                 Controller.ApplyJump(JumpHeight);
-                jumping = true;
-                rb.gravityScale /= 1.5f;
+                _jumping = true;
+                _rb.gravityScale /= 1.5f;
             }
 
             if (Input.GetAxisRaw("Vertical") < 0) {
@@ -128,25 +139,52 @@ public class Player : MonoBehaviour, IActor, IConditions, IHealth {
                 Action = PlayerState.Walking;
             }
 
-            if (Controller.isTouchingGround) {
+            if (Controller.IsTouchingGround) {
                 Controller.Motion = new Vector2(Input.GetAxisRaw("Horizontal") * Speed, 0);
             }
             else {
                 Controller.Motion = new Vector2(Input.GetAxisRaw("Horizontal") * _walkSpeed, 0);
             }
 
-            if (jumping && (!Input.GetKey(GameController.jumpKey) || rb.velocity.y < 0)) {
-                rb.gravityScale *= 1.5f;
-                jumping = false;
+            if (_jumping && (!Input.GetKey(GameController.jumpKey) || _rb.velocity.y < 0)) {
+                _rb.gravityScale *= 1.5f;
+                _jumping = false;
             }
 
             TickConds();
             BleedHealth();
         }
+
+        if (_jumping) {
+            _animation.AnimationName = "jump";
+        }
+        else if (Controller.Motion.x == 0) {
+            if (Action == PlayerState.Crouching) {
+                _animation.AnimationName = "crouch idle";
+            }
+            else {
+                _animation.AnimationName = "idle";
+            }
+        }
+        else if (Action == PlayerState.Walking) {
+            _animation.AnimationName = "walk";
+        }
+        else if (Action == PlayerState.Running) {
+            _animation.AnimationName = "run";
+        }
+        else if (Action == PlayerState.Crouching) {
+            _animation.AnimationName = "crouch walk";
+        }
+
+        Vector3 animScale = _animation.transform.localScale;
+
+        if (Controller.Motion.x != 0) {
+            _animation.transform.localScale = new Vector3(Mathf.Abs(animScale.x) * Mathf.Sign(Controller.Motion.x), animScale.y, animScale.z);
+        }
     }
 
     public void Damage(float value, DamageType type) {
-        value = Modifier.AdjustNumber(conds, value, Modifier.Tag.Damage);
+        value = Modifier.AdjustNumber(_conds, value, Modifier.Tag.Damage);
         HealthDeficit += value;
     }
 
@@ -176,43 +214,43 @@ public class Player : MonoBehaviour, IActor, IConditions, IHealth {
     public void AddCond(Cond cond) {
         cond.obj = gameObject;
         bool duplicateFound = false;
-        for (int i = 0; i < conds.Count; i++) {
-            if (conds[i] != null && conds[i].name == cond.name && cond.overwriteable == true) {
-                Debug.Log(conds[i].name + " was reapplied to " + DisplayName + "!");
-                conds[i].OverwriteEffect(cond);
+        for (int i = 0; i < _conds.Count; i++) {
+            if (_conds[i] != null && _conds[i].name == cond.name && cond.overwriteable == true) {
+                Debug.Log(_conds[i].name + " was reapplied to " + DisplayName + "!");
+                _conds[i].OverwriteEffect(cond);
                 duplicateFound = true;
                 break;
             }
         }
         if (!duplicateFound) {
-            conds.Add(cond);
+            _conds.Add(cond);
             Debug.Log(cond.name + " was applied to " + name + "!");
             cond.ApplyInitialEffect();
         }
     }
 
     public void RemoveCond(string name) {
-        for (int i = 0; i < conds.Count; i++) {
-            if (conds[i] != null && conds[i].name == name) {
-                Debug.Log(conds[i].name + " has been removed from " + DisplayName + ".");
-                conds[i].RemoveEffect();
-                conds[i] = null;
+        for (int i = 0; i < _conds.Count; i++) {
+            if (_conds[i] != null && _conds[i].name == name) {
+                Debug.Log(_conds[i].name + " has been removed from " + DisplayName + ".");
+                _conds[i].RemoveEffect();
+                _conds[i] = null;
                 break;
             }
         }
     }
 
     protected void TickConds() {
-        for (int i = 0; i < conds.Count; i++) {
-            if (conds[i] != null) {
-                conds[i].time -= Time.deltaTime;
-                if (conds[i].time <= 0) {
-                    Debug.Log(conds[i].name + " has been removed from " + DisplayName + " after running out of time.");
-                    conds[i].RemoveEffect();
-                    conds[i] = null;
+        for (int i = 0; i < _conds.Count; i++) {
+            if (_conds[i] != null) {
+                _conds[i].time -= Time.deltaTime;
+                if (_conds[i].time <= 0) {
+                    Debug.Log(_conds[i].name + " has been removed from " + DisplayName + " after running out of time.");
+                    _conds[i].RemoveEffect();
+                    _conds[i] = null;
                 }
                 else {
-                    conds[i].ApplyContinuousEffect();
+                    _conds[i].ApplyContinuousEffect();
                 }
             }
         }

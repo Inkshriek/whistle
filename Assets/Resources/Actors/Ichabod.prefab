@@ -42,6 +42,7 @@ GameObject:
   - component: {fileID: 23635051092246552}
   - component: {fileID: 114402989280896872}
   - component: {fileID: 114121972190223266}
+  - component: {fileID: 95494560377510864}
   m_Layer: 8
   m_Name: Ichabod Sprites
   m_TagString: Untagged
@@ -69,7 +70,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1353445292349248}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.7, y: 2.36, z: 0}
+  m_LocalPosition: {x: -6.711, y: 2.36, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4176523658384662}
@@ -167,6 +168,24 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.5, y: 2.75}
   m_EdgeRadius: 0
+--- !u!95 &95494560377510864
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1605745995388814}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: b5544fd906d1e784488849d8d759e34f, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &114121972190223266
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -197,7 +216,7 @@ MonoBehaviour:
   _health: 100
   _healthDeficit: 0
   _maxHealth: 100
-  _bleedRate: 0
+  _bleedRate: 5
 --- !u!114 &114402989280896872
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -222,7 +241,7 @@ MonoBehaviour:
   tintBlack: 0
   singleSubmesh: 0
   addNormals: 0
-  calculateTangents: 1
+  calculateTangents: 0
   logErrors: 0
   disableRenderingOnOverride: 1
   _animationName: idle
@@ -239,13 +258,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e374ca103ee1e8347bd8fc22f6b338f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementType: 0
-  friction: 1
-  aerialControl: 1
-  slopeTolerance: 60
-  snapdownRadius: 0.25
-  horizontalRays: 20
-  verticalRays: 5
-  isTouchingGround: 1
-  H: 0
-  V: 0
+  MovementType: 0
+  Friction: 1
+  AerialControl: 1
+  SlopeTolerance: 60
+  SnapdownRadius: 0.2
+  HorizontalRays: 20
+  VerticalRays: 5

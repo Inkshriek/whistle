@@ -2,11 +2,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Spine.Unity;
 using Whistle.Actors;
 
 [RequireComponent(typeof(ActorController))]
-public abstract class MonsterBase : MonoBehaviour, IActor, IHealth {
-
+[RequireComponent(typeof(ActorSenses))]
+public abstract class MonsterBase : ActorMethods, IActor, IHealth {
 
     public string DisplayName { get; set; }
     public ActorController Controller { get; protected set; }
@@ -32,26 +33,19 @@ public abstract class MonsterBase : MonoBehaviour, IActor, IHealth {
         }
     }
 
-    [SerializeField] protected float _stunTime;
-
-    public enum MonsterState {
-        //A set of states that monsters use.
+    protected enum MonsterState {
         Patrolling,
         Alert,
         Chasing,
         Enraged
     }
 
-    private MonsterState _status;
-    public MonsterState State {
-        get {
-            return _status;
-        }
-        set {
-            _status = value;
-            OnStateChange(value);
-        }
-    }
+    protected NavAgent AI { get; set; }
+    protected MonsterState State { get; set; }
+    public ActorSenses Senses { get; protected set; }
+
+    [SerializeField] protected float _stunDuration;
+    [SerializeField] protected SkeletonAnimation _animation;
 
     //A monster is any type of regular enemy that Ichabod faces.
     //Monster AI functions off a system of states and events, and scripts that inherit this must control these states and define their functionality.
@@ -64,9 +58,14 @@ public abstract class MonsterBase : MonoBehaviour, IActor, IHealth {
 
     //This class serves as the base for all monsters in the game. Be sure to implement it for each one.
 
-    // Update is called once per frame
-    private void Update () {
-        if (_stunTime > 0 && !_acting && Active) {
+    private void Awake() {
+        Controller = GetComponent<ActorController>();
+        Senses = GetComponent<ActorSenses>();
+
+    }
+
+    private void FixedUpdate () {
+        if (_stunDuration <= 0 && !Busy && Active) {
             switch (State) {
                 case MonsterState.Patrolling:
                     Patrolling();
@@ -81,35 +80,18 @@ public abstract class MonsterBase : MonoBehaviour, IActor, IHealth {
                     Enraged();
                     break;
                 default:
+                    Debug.Log(DisplayName + " is in an invalid state! Might wanna fix that.");
                     break;
             }
         }
 
-        _stunTime = Mathf.Max(_stunTime - Time.deltaTime, 0);
+        _stunDuration = Mathf.Max(_stunDuration - Time.deltaTime, 0);
 	}
 
     protected abstract void Patrolling();
     protected abstract void Alert();
     protected abstract void Chasing();
     protected abstract void Enraged();
-
-    protected abstract void OnStateChange(MonsterState state);
-
-    //Actions are here as a way of temporarily stopping the monster's behavior while they do something, like attack or climb something. Use all this to make it easy to do.
-    public delegate IEnumerator Action();
-    private bool _acting;
-    private IEnumerator coroutine;
-    public void StartAction(Action method) {
-        StopCoroutine(coroutine);
-        _acting = true;
-        coroutine = method();
-        StartCoroutine(coroutine);
-    }
-    public void EndAction() {
-        StopCoroutine(coroutine);
-        _acting = false;
-    }
-    //If you're starting an action, always be sure to call EndAction() at the end of the IEnumerator, so that _acting will be set to false and the monster can behave as normal afterwards.
 
     public virtual void Damage(float value, DamageType type) {
         Health -= value;

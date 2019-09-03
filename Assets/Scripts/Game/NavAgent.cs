@@ -9,14 +9,16 @@ public class NavAgent {
     //This whole class here is meant for managing navigation operations as efficiently as possible, using multithreading.
     //If you're developing AI for characters with pathfinding, you should probably use this.
 
-    public NavMesh mesh;
-    public List<Vector2> navpath;
-    public int operations;
-    public Skill skill;
+    public NavMesh Mesh;
+    public List<Vector2> NavPath;
+    public int Operations;
+    public bool CanFly;
+    public bool CanClimb;
+    public bool CanSwim;
 
     public bool Operating {
         get {
-            if (operations > 0) {
+            if (Operations > 0) {
                 return true;
             }
             else {
@@ -27,7 +29,7 @@ public class NavAgent {
 
     public bool PathReady {
         get {
-            if (navpath.Count > 0) {
+            if (NavPath.Count > 0) {
                 return true;
             }
             else {
@@ -36,33 +38,29 @@ public class NavAgent {
         }
     }
 
-    public struct Skill {
-        public bool canFly;
-        public bool canClimb;
-        public bool canSwim;
-    }
-
-    public NavAgent(NavMesh mesh, Skill skill) {
+    public NavAgent(NavMesh mesh, bool canFly, bool canClimb, bool canSwim) {
         //The constructor. 
-        //If you want to start running operations for AI with a character, give them an agent using this: AIAgent namegoeshere = new AIAgent(NavMesh.SceneNavMesh);
+        //If you want to start running operations for AI with a character, give them an agent using this: AIAgent namegoeshere = new AIAgent(NavMesh.SceneNav);
 
-        this.mesh = mesh;
-        this.skill = skill;
-        navpath = new List<Vector2>();
-        operations = 0;
+        this.Mesh = mesh;
+        this.CanFly = canFly;
+        this.CanClimb = canClimb;
+        this.CanSwim = canSwim;
+        NavPath = new List<Vector2>();
+        Operations = 0;
     }
 
     public void GenerateNewPath(Vector2 start, Vector2 end) {
         //This method starts generating a new path under the agent. It can then be accessed for whatever you need to be doing.
 
-        operations++;
+        Operations++;
 
         Thread navParse = new Thread(() => Build(start, end));
         navParse.Start();
     }
 
     public void ResetPath() {
-        navpath = new List<Vector2>();
+        NavPath = new List<Vector2>();
     }
 
     public int ParsePathForDirection(Vector2 positionFrom, out Vector2 output) {
@@ -71,16 +69,16 @@ public class NavAgent {
 
         float shortestDistance = Mathf.Infinity;
         int closestNode = 0;
-        for (int i = 0; i < navpath.Count; i++) {
-            float distance = Vector2.Distance(positionFrom, navpath[i]);
+        for (int i = 0; i < NavPath.Count; i++) {
+            float distance = Vector2.Distance(positionFrom, NavPath[i]);
             if (distance < shortestDistance) {
                 closestNode = i;
                 shortestDistance = distance;
             }
         }
 
-        if (closestNode < navpath.Count) {
-            output = navpath[closestNode + 1] - navpath[closestNode];
+        if (closestNode < NavPath.Count) {
+            output = NavPath[closestNode + 1] - NavPath[closestNode];
         }
         else {
             output = Vector2.zero;
@@ -92,8 +90,8 @@ public class NavAgent {
 
         //Does the above, but returns the direction to go in based on the input index instead.
 
-        if (index < navpath.Count - 1) {
-            output = navpath[index + 1] - navpath[index];
+        if (index < NavPath.Count - 1) {
+            output = NavPath[index + 1] - NavPath[index];
         }
         else {
             output = Vector2.zero;
@@ -107,15 +105,20 @@ public class NavAgent {
         System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
         sw.Start();
 
-        Vector2[] path = mesh.GetPath(start, end, skill);
+        NavMesh.AgentSkill skills;
+        skills.canClimb = CanClimb;
+        skills.canFly = CanFly;
+        skills.canSwim = CanSwim;
+
+        Vector2[] path = Mesh.GetPath(start, end, skills);
         if (path != null) {
             for (int i = path.Length; i > 0; i--) {
-                navpath.Add(path[i - 1]);
+                NavPath.Add(path[i - 1]);
             }
         }
 
         sw.Stop();
 
-        operations--;
+        Operations--;
     }
 }

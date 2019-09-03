@@ -15,10 +15,10 @@ TagManager:
   - UI
   - 
   - 
-  - Character
-  - 
-  - 
-  - 
+  - Player
+  - Monster
+  - Familiar
+  - NPC
   - 
   - 
   - 

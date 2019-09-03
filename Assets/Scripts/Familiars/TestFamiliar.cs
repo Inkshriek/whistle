@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Whistle.Familiars;
-using Whistle.Actors;
 using System.Threading;
+using Whistle.Actors;
 
 [RequireComponent(typeof(ActorController))]
 public class TestFamiliar : Familiar {
@@ -13,11 +13,7 @@ public class TestFamiliar : Familiar {
     // Use this for initialization
     void Start() {
         Player = FindObjectOfType<Player>();
-        NavAgent.Skill skill;
-        skill.canClimb = false;
-        skill.canFly = false;
-        skill.canSwim = false;
-        AI = new NavAgent(NavMesh.SceneNav, skill);
+        AI = new NavAgent(NavMesh.SceneNav, false, false, false);
         Active = true;
         Controller = GetComponent<ActorController>();
 
@@ -40,8 +36,6 @@ public class TestFamiliar : Familiar {
                         break;
                     }
                 }
-
-                Debug.Log(direction);
 
                 if (direction.x != 0) {
                     Controller.Motion = new Vector2(Mathf.Sign(direction.x) * 5, 0);
