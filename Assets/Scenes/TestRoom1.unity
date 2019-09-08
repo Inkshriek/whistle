@@ -2334,7 +2334,7 @@ Prefab:
         type: 2}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: c6540fdaafdc08446a646188bcf15faa, type: 2}
+      objectReference: {fileID: 2100000, guid: 8668185dafd812e4da20e04941951ad0, type: 2}
     - target: {fileID: 114402989280896872, guid: fbc425c0d17c8b9468335ebcc0e89de8,
         type: 2}
       propertyPath: skeletonDataAsset
@@ -2350,6 +2350,11 @@ Prefab:
       propertyPath: _animation
       value: 
       objectReference: {fileID: 2073670398}
+    - target: {fileID: 114402989280896872, guid: fbc425c0d17c8b9468335ebcc0e89de8,
+        type: 2}
+      propertyPath: _animationName
+      value: damage
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 114121972190223266, guid: fbc425c0d17c8b9468335ebcc0e89de8, type: 2}
   m_SourcePrefab: {fileID: 100100000, guid: fbc425c0d17c8b9468335ebcc0e89de8, type: 2}
