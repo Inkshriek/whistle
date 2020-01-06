@@ -1,213 +1,159 @@
 
 skeleton.png
-size: 2048,2048
-format: RGBA8888
-filter: Linear,Linear
-repeat: none
-idle aggro
-  rotate: false
-  xy: 2, 487
-  size: 1024, 483
-  orig: 1024, 483
-  offset: 0, 0
-  index: -1
-run 1
-  rotate: true
-  xy: 1028, 972
-  size: 1024, 483
-  orig: 1024, 483
-  offset: 0, 0
-  index: -1
-run 8
-  rotate: true
-  xy: 1028, 972
-  size: 1024, 483
-  orig: 1024, 483
-  offset: 0, 0
-  index: -1
-run 2
-  rotate: false
-  xy: 2, 2
-  size: 1024, 483
-  orig: 1024, 483
-  offset: 0, 0
-  index: -1
-run 3
-  rotate: true
-  xy: 1513, 972
-  size: 1024, 483
-  orig: 1024, 483
-  offset: 0, 0
-  index: -1
-walk 9
-  rotate: false
-  xy: 2, 972
-  size: 1024, 1024
-  orig: 1024, 1024
-  offset: 0, 0
-  index: -1
-
-skeleton2.png
-size: 2048,2048
+size: 1998,1971
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
 attack
   rotate: false
-  xy: 2, 972
-  size: 1024, 1024
+  xy: 2, 1285
+  size: 968, 684
   orig: 1024, 1024
-  offset: 0, 0
+  offset: 56, 59
+  index: -1
+idle
+  rotate: false
+  xy: 2, 494
+  size: 620, 789
+  orig: 1024, 1024
+  offset: 193, 59
+  index: -1
+idle aggro
+  rotate: false
+  xy: 972, 1575
+  size: 988, 394
+  orig: 1024, 483
+  offset: 36, 19
+  index: -1
+run 2
+  rotate: false
+  xy: 972, 1222
+  size: 1024, 351
+  orig: 1024, 483
+  offset: 0, 32
+  index: -1
+run 3
+  rotate: false
+  xy: 967, 283
+  size: 1024, 273
+  orig: 1024, 483
+  offset: 0, 46
   index: -1
 run 4
-  rotate: false
-  xy: 2, 487
-  size: 1024, 483
+  rotate: true
+  xy: 624, 301
+  size: 982, 341
   orig: 1024, 483
-  offset: 0, 0
+  offset: 42, 32
   index: -1
 run 5
-  rotate: true
-  xy: 1028, 972
-  size: 1024, 483
+  rotate: false
+  xy: 967, 872
+  size: 982, 348
   orig: 1024, 483
-  offset: 0, 0
+  offset: 42, 32
   index: -1
 run 6
   rotate: false
-  xy: 2, 2
-  size: 1024, 483
+  xy: 613, 2
+  size: 982, 279
   orig: 1024, 483
-  offset: 0, 0
+  offset: 42, 85
   index: -1
 run 7
-  rotate: true
-  xy: 1513, 972
-  size: 1024, 483
+  rotate: false
+  xy: 967, 558
+  size: 982, 312
   orig: 1024, 483
-  offset: 0, 0
+  offset: 42, 32
   index: -1
-
-skeleton3.png
-size: 2048,2048
-format: RGBA8888
-filter: Linear,Linear
-repeat: none
-idle
-  rotate: false
-  xy: 2, 2
-  size: 1024, 1024
+walk 8
+  rotate: true
+  xy: 2, 147
+  size: 345, 609
   orig: 1024, 1024
-  offset: 0, 0
+  offset: 279, 178
   index: -1
 
-skeleton4.png
-size: 2048,2048
+skeleton2.png
+size: 1676,1416
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
+run 1
+  rotate: true
+  xy: 2, 509
+  size: 905, 370
+  orig: 1024, 483
+  offset: 119, 23
+  index: -1
+run 8
+  rotate: true
+  xy: 2, 509
+  size: 905, 370
+  orig: 1024, 483
+  offset: 119, 23
+  index: -1
 walk 1
-  rotate: false
-  xy: 2, 2
-  size: 1024, 1024
+  rotate: true
+  xy: 1028, 669
+  size: 414, 636
   orig: 1024, 1024
-  offset: 0, 0
+  offset: 324, 79
   index: -1
-
-skeleton5.png
-size: 2048,2048
-format: RGBA8888
-filter: Linear,Linear
-repeat: none
+walk 10
+  rotate: true
+  xy: 1028, 1085
+  size: 329, 646
+  orig: 1024, 1024
+  offset: 281, 86
+  index: -1
 walk 2
   rotate: false
-  xy: 2, 2
-  size: 1024, 1024
+  xy: 715, 744
+  size: 311, 670
   orig: 1024, 1024
-  offset: 0, 0
+  offset: 289, 79
   index: -1
 walk 3
   rotate: false
-  xy: 2, 2
-  size: 1024, 1024
+  xy: 715, 744
+  size: 311, 670
   orig: 1024, 1024
-  offset: 0, 0
+  offset: 289, 79
   index: -1
-
-skeleton6.png
-size: 2048,2048
-format: RGBA8888
-filter: Linear,Linear
-repeat: none
 walk 4
   rotate: false
-  xy: 2, 2
-  size: 1024, 1024
+  xy: 374, 714
+  size: 339, 700
   orig: 1024, 1024
-  offset: 0, 0
+  offset: 261, 64
   index: -1
-
-skeleton7.png
-size: 2048,2048
-format: RGBA8888
-filter: Linear,Linear
-repeat: none
 walk 5
   rotate: false
-  xy: 2, 2
-  size: 1024, 1024
+  xy: 770, 13
+  size: 389, 654
   orig: 1024, 1024
-  offset: 0, 0
+  offset: 273, 87
   index: -1
-
-skeleton8.png
-size: 2048,2048
-format: RGBA8888
-filter: Linear,Linear
-repeat: none
 walk 6
   rotate: false
-  xy: 2, 2
-  size: 1024, 1024
+  xy: 1161, 34
+  size: 367, 633
   orig: 1024, 1024
-  offset: 0, 0
+  offset: 302, 87
   index: -1
-
-skeleton9.png
-size: 2048,2048
-format: RGBA8888
-filter: Linear,Linear
-repeat: none
 walk 7
   rotate: false
   xy: 2, 2
-  size: 1024, 1024
+  size: 422, 505
   orig: 1024, 1024
-  offset: 0, 0
+  offset: 321, 215
   index: -1
-
-skeleton10.png
-size: 2048,2048
-format: RGBA8888
-filter: Linear,Linear
-repeat: none
-walk 8
+walk 9
   rotate: false
-  xy: 2, 2
-  size: 1024, 1024
+  xy: 426, 30
+  size: 342, 682
   orig: 1024, 1024
-  offset: 0, 0
-  index: -1
-
-skeleton11.png
-size: 2048,2048
-format: RGBA8888
-filter: Linear,Linear
-repeat: none
-walk 10
-  rotate: false
-  xy: 2, 2
-  size: 1024, 1024
-  orig: 1024, 1024
-  offset: 0, 0
+  offset: 257, 67
   index: -1

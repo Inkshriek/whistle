@@ -8,11 +8,11 @@ public class ActorSenses : MonoBehaviour {
     //This script can be read by other scripts to get information about what an actor (or some other entity) is "seeing" and "hearing".
     //This is most important to AI. Use it wisely.
 
-    [SerializeField] [Range(0, 180)] public int VisionRadius;
-    [SerializeField] [Range(0, 359)] public int VisionDirection;
-    [SerializeField] public float VisionRange;
-    [SerializeField] public float HearingRange;
-    [SerializeField] public BoxCollider2D Target;
+    public int VisionRange;
+    public int VisionDirection;
+    public float VisionRadius;
+    public float HearingRadius;
+    public BoxCollider2D Target;
 
     private Transform _transform;
     private Transform _targettransform;
@@ -41,7 +41,7 @@ public class ActorSenses : MonoBehaviour {
         else {
             TargetVisible = false;
         }
-        DrawCone();
+
     }
 
     private bool CheckVisionWithinRange() {
@@ -49,7 +49,7 @@ public class ActorSenses : MonoBehaviour {
         float angleDifference = (Vector2.Angle(TargetPosition - ThisPosition, visionAngle));
         float distance = Mathf.Abs(Vector2.Distance(ThisPosition, TargetPosition));
 
-        if ((angleDifference <= (VisionRadius / 2)) && distance <= VisionRange) {
+        if ((angleDifference <= (VisionRange / 2)) && distance <= VisionRadius) {
             return true;
         }
         else {
@@ -65,15 +65,6 @@ public class ActorSenses : MonoBehaviour {
         else {
             return false;
         }
-    }
-
-    private void DrawCone() {
-        Vector2 angleUpper = new Vector2(Mathf.Cos(Mathf.Deg2Rad * (VisionDirection + VisionRadius / 2)), Mathf.Sin(Mathf.Deg2Rad * (VisionDirection + VisionRadius / 2)));
-        Vector2 angleLower = new Vector2(Mathf.Cos(Mathf.Deg2Rad * (VisionDirection - VisionRadius / 2)), Mathf.Sin(Mathf.Deg2Rad * (VisionDirection - VisionRadius / 2)));
-        Debug.DrawRay(ThisPosition, angleUpper * VisionRange, Color.cyan);
-        Debug.DrawRay(ThisPosition, angleLower * VisionRange, Color.cyan);
-
-        Debug.DrawRay(ThisPosition, new Vector2(Mathf.Cos(Mathf.Deg2Rad * VisionDirection), Mathf.Sin(Mathf.Deg2Rad * VisionDirection)) * VisionRange, Color.cyan);
     }
 
     public void FlipVision() { 

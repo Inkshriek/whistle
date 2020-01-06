@@ -35,15 +35,15 @@ public class TransitionPoint : MonoBehaviour {
         DontDestroyOnLoad(this);
 
         player.Active = false;
-        player.Action = Player.PlayerState.Running;
+        player.State = Player.PlayerState.Running;
 
         switch (type) {
             case TransitionType.Left:
-                player.Controller.Motion = new Vector2(-8, 0);
+                player.Controller.InputMotion = new Vector2(-8, 0);
 
                 break;
             case TransitionType.Right:
-                player.Controller.Motion = new Vector2(8, 0);
+                player.Controller.InputMotion = new Vector2(8, 0);
 
                 break;
             default:
@@ -69,7 +69,7 @@ public class TransitionPoint : MonoBehaviour {
         StartCoroutine(HUDController.Fade(1f, 0.05f, new Color(0, 0, 0, 0)));
         yield return new WaitForSeconds(1);
 
-        player.Controller.Motion = Vector2.zero;
+        player.Controller.InputMotion = Vector2.zero;
         player.Active = true;
 
         sceneData.transitions[destinationTPoint].gameObject.SetActive(true);

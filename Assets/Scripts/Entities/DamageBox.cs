@@ -23,7 +23,7 @@ public class DamageBox : MonoBehaviour {
     //The value is applied once if continuous is set to false, or repeatedly each second otherwise (relative to Time.deltaTime)
     //The tag is also checked to ensure the ideal target is damaged, though you may make it blank to target everything.
 
-    public static GameObject Create(Transform parent, Vector2 origin, Vector2 size, float value, float lifespan, bool continuous, DamageType type, string tag) {
+    public static GameObject Create(Transform parent, Vector2 origin, Vector2 size, float value, float lifespan, bool continuous, DamageType type) {
         GameObject obj = new GameObject();
         obj.transform.SetParent(parent);
         obj.transform.localPosition = origin;
@@ -36,7 +36,7 @@ public class DamageBox : MonoBehaviour {
         box.Lifespan = lifespan;
         box.Continuous = continuous;
         box.Type = type;
-        box.Tag = tag;
+        box.Tag = "Player";
 
         Debug.Log("New DamageBox created at " + origin);
         return obj;

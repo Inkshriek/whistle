@@ -5,23 +5,21 @@ using System.Threading;
 
 public class NavMesh : MonoBehaviour {
 
-    [SerializeField] public NavRect[] Mesh;
-    [SerializeField] public Vector2 NodeSpacing;
-    [SerializeField] public Bounds NodeBounds;
+    public NavRect[] mesh; //The mesh of polygons defining areas of interest.
+    [SerializeField]
+    public float nodeSpacing;
+    public BoundsInt nodeBounds;
 
     void OnValidate() {
         //Checks to make sure the mesh is initialized correctly and has at least one element upon the script's creation.
-        if (Mesh == null) {
-            Mesh = new NavRect[1];
-            Mesh[0] = new NavRect("Rect 0", true, NavRectFlag.Normal, new Vector2(-1, 1), new Vector2(1, 1), new Vector2(-1, -1), new Vector2(1, -1));
+        if (mesh == null) {
+            mesh = new NavRect[1];
+            mesh[0] = new NavRect("Rect 0", true, NavFlag.Normal, new Vector2(-1, 1), new Vector2(1, 1), new Vector2(-1, -1), new Vector2(1, -1));
         }
     }
 
-    void Start() {
-        NodeSpacing = new Vector2(0.5f,0.5f);
-        NodeBounds = new Bounds();
-        NodeBounds.center = Vector2.zero;
-        NodeBounds.size = new Vector2(30, 30);
+    void Awake() {
+
     }
 
     public struct AgentSkill {
@@ -36,10 +34,10 @@ public class NavMesh : MonoBehaviour {
         //Do not call this directly, as it will be executed in the main thread. Instead use the NavAgent class for all operations.
 
         //Realigning the input vectors to the node graph.
-        start = new Vector2(Mathf.Round(start.x / NodeSpacing.x) * NodeSpacing.x, Mathf.Round(start.y / NodeSpacing.y) * NodeSpacing.y);
-        end = new Vector2(Mathf.Round(end.x / NodeSpacing.x) * NodeSpacing.x, Mathf.Round(end.y / NodeSpacing.y) * NodeSpacing.y);
+        start = new Vector2(Mathf.Round(start.x / nodeSpacing) * nodeSpacing, Mathf.Round(start.y / nodeSpacing) * nodeSpacing);
+        end = new Vector2(Mathf.Round(end.x / nodeSpacing) * nodeSpacing, Mathf.Round(end.y / nodeSpacing) * nodeSpacing);
 
-        if (PointIntersecting(end) == NavRectFlag.Nothing) {
+        if (PointIntersecting(end) == NavFlag.Nothing) {
             return null;
         }
 
@@ -73,14 +71,14 @@ public class NavMesh : MonoBehaviour {
             }
 
             adjacentNodes = new Node[] {
-                    GetNodeFromMesh(new Vector2(current.loc.x - NodeSpacing.x, current.loc.y)),
-                    GetNodeFromMesh(new Vector2(current.loc.x - NodeSpacing.x, current.loc.y + NodeSpacing.y)),
-                    GetNodeFromMesh(new Vector2(current.loc.x, current.loc.y + NodeSpacing.y)),
-                    GetNodeFromMesh(new Vector2(current.loc.x + NodeSpacing.x, current.loc.y + NodeSpacing.y)),
-                    GetNodeFromMesh(new Vector2(current.loc.x + NodeSpacing.x, current.loc.y)),
-                    GetNodeFromMesh(new Vector2(current.loc.x + NodeSpacing.x, current.loc.y - NodeSpacing.y)),
-                    GetNodeFromMesh(new Vector2(current.loc.x, current.loc.y - NodeSpacing.y)),
-                    GetNodeFromMesh(new Vector2(current.loc.x - NodeSpacing.x, current.loc.y - NodeSpacing.y)),
+                    GetNode(new Vector2(current.loc.x - nodeSpacing, current.loc.y)),
+                    GetNode(new Vector2(current.loc.x - nodeSpacing, current.loc.y + nodeSpacing)),
+                    GetNode(new Vector2(current.loc.x, current.loc.y + nodeSpacing)),
+                    GetNode(new Vector2(current.loc.x + nodeSpacing, current.loc.y + nodeSpacing)),
+                    GetNode(new Vector2(current.loc.x + nodeSpacing, current.loc.y)),
+                    GetNode(new Vector2(current.loc.x + nodeSpacing, current.loc.y - nodeSpacing)),
+                    GetNode(new Vector2(current.loc.x, current.loc.y - nodeSpacing)),
+                    GetNode(new Vector2(current.loc.x - nodeSpacing, current.loc.y - nodeSpacing)),
                 };
 
             foreach (Node adjacent in adjacentNodes) {
@@ -137,7 +135,7 @@ public class NavMesh : MonoBehaviour {
         }
     }
     */
-    
+
 
     [System.Serializable]
     public struct NavRect {
@@ -145,14 +143,14 @@ public class NavMesh : MonoBehaviour {
 
         public string name;
         public bool display;
-        public NavRectFlag flag;
+        public NavFlag flag;
 
         public Vector2 a;
         public Vector2 b;
         public Vector2 c;
         public Vector2 d;
 
-        public NavRect(string name, bool display, NavRectFlag flag, Vector2 a, Vector2 b, Vector2 c, Vector2 d) {
+        public NavRect(string name, bool display, NavFlag flag, Vector2 a, Vector2 b, Vector2 c, Vector2 d) {
             this.name = name;
             this.display = display;
             this.flag = flag;
@@ -192,7 +190,7 @@ public class NavMesh : MonoBehaviour {
 
     private class Node {
         public Vector2 loc;
-        public NavRectFlag flag;
+        public NavFlag flag;
         public Node parent;
 
         public float Gcost;
@@ -211,27 +209,76 @@ public class NavMesh : MonoBehaviour {
         }
     }
 
-    private Node GetNodeFromMesh(Vector2 loc) {
-        /*
-        NavRectFlag flag;
+    /*
+    public void BakeGraph() {
+        //This method here uses the saved NavRects to generate every possible point's flag. This must be done everytime the navigation mesh changes.
 
-        nodeGraph.TryGetValue(new Vector2(loc.x, loc.y), out flag);
-        return new Node(loc, flag);
-        */
+        Debug.Log("Baking in graph...");
+
+        int x = Mathf.RoundToInt(nodeBounds.size.x / nodeSpacing);
+        int y = Mathf.RoundToInt(nodeBounds.size.y / nodeSpacing);
+        if (x * y >= maxPoints || x <= 0 || y <= 0) {
+            //Expected points unfortunately exceeded the maximum (or the array limits somehow were bad), so the graph won't be generated. This is just a precaution.
+            Debug.Log("Expected points exceeded maximum or were zero!");
+            return;
+        }
+        NavFlag[] newGraph = new NavFlag[x * y];
+
+        //Fills up each column, from top to bottom, until the array is completed.
+        for (int i = 0; i < x; i++) {
+            for (int j = 0; j < y; j++) {
+                try {
+                    Vector2 point = new Vector2(i * nodeSpacing + nodeBounds.min.x, j * nodeSpacing + nodeBounds.min.y);
+                    newGraph[i + j * x] = PointIntersecting(point);
+                }
+                catch {
+                    newGraph = null;
+                    Debug.Log("Failed to generate graph due to an unexpected error.");
+                    return;
+                }
+            }
+        }
+        Debug.Log("Graph was fully baked with " + (x * y) + " points!");
+        graphRows = y;
+        graphColumns = x;
+        Debug.Log("Columns (x): " + graphColumns);
+        Debug.Log("Rows (y): " + graphRows);
+        graph = newGraph;
+    }
+    */
+
+    private Node GetNode(Vector2 loc) {
+
+        /*
+        int x = Mathf.RoundToInt((loc.x - nodeBounds.min.x) / nodeSpacing);  
+        int y = Mathf.RoundToInt((loc.y - nodeBounds.min.y) / nodeSpacing);
+        Debug.Log("(" + x + "," + y + ")");
+        if (x > graphColumns || y > graphRows || x < 0 || y < 0) {
+            Debug.LogWarning("Someone is trying to get a position from NavMesh with an x or y value that surpasses the baked bounds. (" + x + "," + y + ")");
+            return null;
+        }
 
         Node node = new Node(loc);
+        NavFlag find;
+        try {
+            find = graph[x + y * graphColumns];
+        }
+        catch {
+            find = NavFlag.Nothing;
+        }
+        node.flag = find;
+        */
+        
+        Node node = new Node(loc);
         node.flag = PointIntersecting(loc);
-        
         return node;
-        
-
     }
 
     private bool IsTraversible(Node from, Node to, AgentSkill skills) {
         switch (to.flag) {
-            case NavRectFlag.Normal:
+            case NavFlag.Normal:
                 return true;
-            case NavRectFlag.Flight:
+            case NavFlag.Flight:
                 if ((to.loc.y > from.loc.y) && !skills.canFly) {
                     return false;
                 }
@@ -263,7 +310,7 @@ public class NavMesh : MonoBehaviour {
         return false;
     }
 
-    public enum NavRectFlag {
+    public enum NavFlag {
         //The various flags used for labeling NavRects. Helps with AI, and is displayed real nice too in the editor.
         Normal,
         Flight,
@@ -274,10 +321,10 @@ public class NavMesh : MonoBehaviour {
         Nothing
     }
 
-    public NavRectFlag PointIntersecting(Vector2 point) {
+    public NavFlag PointIntersecting(Vector2 point) {
         //This is used to determine if a point lies within the navigation mesh.
 
-        foreach (NavRect rect in Mesh) {
+        foreach (NavRect rect in mesh) {
             bool eval = true;
             bool[] checks = {
                 CheckLeftOfLine(point, rect.b, rect.a),
@@ -297,13 +344,13 @@ public class NavMesh : MonoBehaviour {
             }
         }
 
-        return NavRectFlag.Nothing;
+        return NavFlag.Nothing;
     }
 
-    public bool PointIntersecting(Vector2 point, NavRectFlag flag) {
+    public bool PointIntersecting(Vector2 point, NavFlag flag) {
         //Same as above, though also uses a flag as a filter so we only return "true" for specific NavRects.
 
-        foreach (NavRect rect in Mesh) {
+        foreach (NavRect rect in mesh) {
             if (rect.flag != flag) {
                 continue;
             }
@@ -330,7 +377,7 @@ public class NavMesh : MonoBehaviour {
         return false;
     }
 
-    public NavRectFlag ColliderIntersecting(BoxCollider2D collider) {
+    public NavFlag ColliderIntersecting(BoxCollider2D collider) {
         //This is used to determine if a collider happens to intersect any NavRect in the navigation mesh.
 
         Vector2[] points = {
@@ -340,7 +387,7 @@ public class NavMesh : MonoBehaviour {
             new Vector2 (collider.bounds.max.x, (collider.bounds.min.y))
         };
 
-        foreach (NavRect rect in Mesh) {
+        foreach (NavRect rect in mesh) {
             int overlaps = 0;
 
             overlaps += CheckAreaOverlaps(points, rect.Points);
@@ -351,10 +398,10 @@ public class NavMesh : MonoBehaviour {
             }
         }
 
-        return NavRectFlag.Nothing;
+        return NavFlag.Nothing;
     }
 
-    public bool ColliderIntersecting(BoxCollider2D collider, NavRectFlag flag) {
+    public bool ColliderIntersecting(BoxCollider2D collider, NavFlag flag) {
         //Same as above, only again using a flag as a filter.
 
         Vector2[] points = {
@@ -364,7 +411,7 @@ public class NavMesh : MonoBehaviour {
             new Vector2 (collider.bounds.max.x, (collider.bounds.min.y))
         };
 
-        foreach (NavRect rect in Mesh) {
+        foreach (NavRect rect in mesh) {
 
             if (rect.flag != flag) {
                 continue;
@@ -386,7 +433,7 @@ public class NavMesh : MonoBehaviour {
     private bool CheckLeftOfLine(Vector2 point, Vector2 a, Vector2 b) {
         //Shorthand way of checking if something is to the left side of a line. Just for mathing.
 
-        return ((b.x - a.x) * (point.y - a.y) - (b.y - a.y) * (point.x - a.x)) > 0;
+        return ((b.x - a.x) * (point.y - a.y) - (b.y - a.y) * (point.x - a.x)) >= 0;
     }
 
     private int CheckAreaOverlaps(Vector2[] a, Vector2[] b) {

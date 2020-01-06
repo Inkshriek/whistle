@@ -8,18 +8,20 @@ public abstract class ActorMethods : MonoBehaviour {
     //This here allows you to temporarily make the actor "act" something out over a duration. Handy and automatic.
     public bool Busy { get; private set; }
     private Coroutine coroutine;
-    public void StartBehavior(Whistle.Actors.Behavior method) {
+    public void StartAction(Whistle.Actors.Action method) {
         if (coroutine != null) {
             StopCoroutine(coroutine);
         }
         Busy = true;
         coroutine = StartCoroutine(method());
     }
-    public void EndBehavior() {
+    public void FinishAction() {
         StopCoroutine(coroutine);
         Busy = false;
     }
-    //If you're using this though, ALWAYS call EndBehavior to set Busy back to false at the end of a coroutine. That's what isn't automatic, so be sure to.
+    //If you're using this though, ALWAYS call EndAction to set Busy back to false at the end of a coroutine. That's what isn't automatic, so be sure to.
+
+
 }
 
 namespace Whistle.Actors {
@@ -44,20 +46,21 @@ namespace Whistle.Actors {
         void OnUse();
     }
 
-    public enum MovementType {
-        //A set of movement types used for defining what an actor is capable of doing. Meant for pathfinding and defining ActorController behavior.
+    public enum NavType {
+        //A set of navigation types used for defining what an actor is capable of doing.
         Normal,
-        Flying
+        Flying,
+        Familiar
     }
 
     public enum DamageType {
-        //A set of damage types. Used for determining how an actor reacts to certain forms of damage.
+        //A set of damage types. In particular, used for determining how an actor reacts to certain forms of damage.
         Normal,
         Fire,
         Poison
     }
 
-    public delegate IEnumerator Behavior();
+    public delegate IEnumerator Action();
 
 }
 

@@ -4,7 +4,8 @@
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -12,4 +13,11 @@ MonoBehaviour:
   m_Name: skeleton_Atlas
   m_EditorClassIdentifier: 
   atlasFile: {fileID: 4900000, guid: e264b037ce1144f46af6bc1ed9b92db8, type: 3}
-  materials: []
+  materials:
+  - {fileID: 2100000, guid: f491b7128b792ae4b861464cc32be8b4, type: 2}
+  - {fileID: 2100000, guid: 892f647adaa05db40b0281ffa5c47215, type: 2}
+  - {fileID: 2100000, guid: df947d4ea7b87c0468946a207207621d, type: 2}
+  - {fileID: 2100000, guid: ef6c8beee12198843b1eea1b8f165f2e, type: 2}
+  - {fileID: 2100000, guid: 2d6a24a681244f64a9709d4ef92d15f9, type: 2}
+  - {fileID: 2100000, guid: 8b6eb2187e605bb408be0b4df3f6120a, type: 2}
+  - {fileID: 2100000, guid: b353ec25499d59e4aba9e64ccb08ca6c, type: 2}

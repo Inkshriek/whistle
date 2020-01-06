@@ -4,173 +4,225 @@ using Whistle.Actors;
 
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(BoxCollider2D))]
+[DisallowMultipleComponent]
 public class ActorController : MonoBehaviour {
 
-    [SerializeField] public MovementType MovementType;
-    [SerializeField] public float Friction;
-    [SerializeField] public float AerialControl;
-    [SerializeField] [Range(0, 90)] public float SlopeTolerance;
-    [SerializeField] [Range(0, 1)] public float SnapdownRadius;
-    [SerializeField] public int HorizontalRays;
-    [SerializeField] public int VerticalRays;
+    [SerializeField] public NavType movementType;
+    [SerializeField] public float friction;
+    [SerializeField] public float aerialControl;
+    [SerializeField] [Range(0, 90)] public float slopeTolerance;
+    [SerializeField] [Range(0, 1)] public float snapdownRadius;
+    [SerializeField] public int horizontalRays;
+    [SerializeField] public int verticalRays;
 
-    private Rigidbody2D _rb;
-    private BoxCollider2D _col;
-    private PhysicsMaterial2D _baseMaterial;
-    private PhysicsMaterial2D _airMaterial;
-
-    private bool _hasJumped;
-    private int _layerMask;
-    private RaycastHit2D _neargroundCheck;
-    private float _forceSmoothed;
-
-    public Vector2 Motion { get; set; }
+    public Vector2 InputMotion { get; set; }
     public bool IsTouchingGround { get; private set; }
-    public float H { get; private set; }
-    public float V { get; private set; }
 
-    private List<ContactPoint2D> _validContacts;
-    private float _ang;
+    private Rigidbody2D rb;
+    private BoxCollider2D col;
+    private PhysicsMaterial2D baseMaterial;
+    private PhysicsMaterial2D airMaterial;
 
-    public void ApplyJump(float height) {
-        _rb.velocity += new Vector2(0, height);
-        _hasJumped = true;
+    private bool hasJumped;
+    private int layerMask;
+    private RaycastHit2D neargroundCheck;
+    private Vector2 forceSmoothed;
+    private List<ContactPoint2D> groundContacts;
+    private List<ContactPoint2D> wallContacts;
+    private float ang;
+
+    public delegate void ActorEvent(string message);
+    public event ActorEvent Jumped;
+    public event ActorEvent InAir;
+    public event ActorEvent GroundTouched;
+
+    protected bool debugMode = false;
+    private Vector2 last;
+
+    void Awake () {
+        rb = GetComponent<Rigidbody2D>();
+        col = GetComponent<BoxCollider2D>();
+
+        layerMask = 1;
+        forceSmoothed = new Vector2(0, 0);
+        hasJumped = false;
+
+        baseMaterial = Resources.Load("Mat_ActorGround") as PhysicsMaterial2D;
+        airMaterial = Resources.Load("Mat_ActorAir") as PhysicsMaterial2D;
+
+        if (gameObject.GetComponents<ActorController>().Length > 1) {
+            Debug.LogError("I'm not sure how you did it but you shouldn't be using more than one ActorController on a GameObject.");
+        }
     }
-
-
-    void Start () {
-        _rb = GetComponent<Rigidbody2D>();
-        _col = GetComponent<BoxCollider2D>();
-
-        _layerMask = 1;
-
-        _baseMaterial = Resources.Load("Mat_ActorGround") as PhysicsMaterial2D;
-        _airMaterial = Resources.Load("Mat_ActorAir") as PhysicsMaterial2D;
-    }
-	
 
 	void FixedUpdate () {
-        _validContacts = CheckGroundContacts();
+        groundContacts = CheckGroundContacts();
+        wallContacts = CheckWallContacts();
 
         bool snapToGround = false;
 
-        if (_validContacts.Count > 0) {
-            _ang = Vector2.SignedAngle(transform.up, _validContacts[0].normal);
+        if (groundContacts.Count > 0 && !hasJumped) {
+            ang = Vector2.SignedAngle(transform.up, groundContacts[0].normal);
 
             if (!IsTouchingGround) {
-                _forceSmoothed = _rb.velocity.x;
-                _rb.velocity = Vector2.zero;
+                forceSmoothed.x = rb.velocity.x;
+                rb.velocity = Vector2.zero;
+                GroundTouched?.Invoke(name + " touched the ground!");
             }
 
             IsTouchingGround = true;
         }
         else {
-            _ang = 0;
+            ang = 0;
+            if (rb.velocity.y < 0) {
+                hasJumped = false;
+            }
 
             if (IsTouchingGround) {
-                _neargroundCheck = CheckColliders(VerticalRays, Vector2.down * SnapdownRadius, new Vector2(_col.bounds.min.x, _col.bounds.min.y), new Vector2(_col.bounds.max.x, _col.bounds.min.y));
-                if (_neargroundCheck && Vector2.Angle(transform.up, _neargroundCheck.normal) < SlopeTolerance && !_hasJumped) {
+                neargroundCheck = CheckColliders(verticalRays, Vector2.down * snapdownRadius, new Vector2(col.bounds.min.x, col.bounds.min.y), new Vector2(col.bounds.max.x, col.bounds.min.y));
+                if (neargroundCheck && Vector2.Angle(transform.up, neargroundCheck.normal) < slopeTolerance) {
                     snapToGround = true;
                 }
                 else {
-                    _hasJumped = false;
+                    rb.velocity += new Vector2(forceSmoothed.x, 0);
                     IsTouchingGround = false;
-                    _rb.velocity += new Vector2(_forceSmoothed, 0);
+                    InAir?.Invoke(name + " is in the air!");
                 }
             }
         }
 
-        switch (MovementType) {
-            case MovementType.Normal:
+        switch (movementType) {
+            case NavType.Normal:
                 if (IsTouchingGround) {
                     //If you are touching the ground, the script will simulate walking. 
-                    MoveOnGround(Motion.x, snapToGround);
+                    MoveOnGround(InputMotion.x, snapToGround);
 
                 }
                 else {
                     //If you are not touching the ground, the script will simulate being in the air.
-                    MoveOffGround(Motion);
+                    MoveOffGround(InputMotion, false);
                 }
                 break;
-            case MovementType.Flying:
-                MoveOffGround(Motion);
+            case NavType.Flying:
+                MoveOffGround(InputMotion, true);
                 break;
             default:
-                Debug.Log("oof");
+                Debug.Log("For some reason this ActorController is being a little bitch and trying impossible movement types.");
                 break;
+        }
+
+        if (debugMode == true) {
+            if (last == null) {
+                last = transform.position;
+            }
+            else {
+                Debug.DrawLine(last, transform.position, Color.green, 5);
+                last = transform.position;
+            }
         }
     }
 
     private void MoveOnGround(float force, bool snapdown) {
+
         if (snapdown) {
-            Debug.Log("Snapping!");
-            _rb.position += new Vector2(_forceSmoothed * Time.deltaTime, _neargroundCheck.point.y - _col.bounds.min.y);
+            rb.position += new Vector2(forceSmoothed.x * Time.deltaTime, neargroundCheck.point.y - col.bounds.min.y);
         }
         else {
 
-            if (_forceSmoothed < force) {
-                _forceSmoothed = Mathf.Min(_forceSmoothed + Friction, force);
+            if (forceSmoothed.x < force) {
+                forceSmoothed.x = Mathf.Min(forceSmoothed.x + friction, force);
             }
-            else if (_forceSmoothed > force) {
-                _forceSmoothed = Mathf.Max(_forceSmoothed - Friction, force);
+            else if (forceSmoothed.x > force) {
+                forceSmoothed.x = Mathf.Max(forceSmoothed.x - friction, force);
             }
 
-            _col.sharedMaterial = _baseMaterial;
+            col.sharedMaterial = baseMaterial;
 
-            H = _forceSmoothed * Mathf.Cos(Mathf.Deg2Rad * _ang);
-            V = _forceSmoothed * Mathf.Sin(Mathf.Deg2Rad * _ang);
 
-            Vector2 move = new Vector2(H, V);
+            Vector2 move = new Vector2(forceSmoothed.x * Mathf.Cos(Mathf.Deg2Rad * ang), forceSmoothed.x* Mathf.Sin(Mathf.Deg2Rad * ang));
+            move *= Time.deltaTime;
 
-            
+            Vector2 cornerPoint = new Vector2(rb.position.x + Mathf.Sign(forceSmoothed.x) * (col.size.x / 2), col.bounds.min.y);
+            RaycastHit2D sideCheck = CheckColliders(horizontalRays, move, new Vector2(rb.position.x + Mathf.Sign(forceSmoothed.x) * (col.size.x / 2), col.bounds.min.y), new Vector2(rb.position.x + Mathf.Sign(forceSmoothed.x) * (col.size.x / 2), col.bounds.max.y));
 
-            Vector2 cornerPoint = new Vector2(_rb.position.x + Mathf.Sign(_forceSmoothed) * (_col.size.x / 2), _col.bounds.min.y);
-            //RaycastHit2D sideCheck = Physics2D.Linecast(cornerPoint, move * Time.deltaTime + cornerPoint, layerMask);
+            /* TODO: Fix this issue.
+             * Sometimes, for one single frame, the player moves into slopes instead of stopping as they should.
+             * The "move" is so small the sideCheck returns nothing, yet you still move just enough to cause the weird "jittering".
+             */
 
-            RaycastHit2D sideCheck = CheckColliders(HorizontalRays, move * Time.deltaTime, new Vector2(_rb.position.x + Mathf.Sign(_forceSmoothed) * (_col.size.x / 2), _col.bounds.min.y), new Vector2(_rb.position.x + Mathf.Sign(_forceSmoothed) * (_col.size.x / 2), _col.bounds.max.y));
-            
-            if (sideCheck && Vector2.Angle(transform.up, sideCheck.normal) > SlopeTolerance) {
-                float distanceA = _col.bounds.SqrDistance(new Vector2(sideCheck.point.x - Mathf.Sign(_forceSmoothed) * 0.02f, sideCheck.point.y));
-                float distanceB = _col.bounds.SqrDistance(move * Time.deltaTime + cornerPoint);
+            if (sideCheck && Vector2.Angle(transform.up, sideCheck.normal) > slopeTolerance) {
+                float distanceA = col.bounds.SqrDistance(new Vector2(sideCheck.point.x - Mathf.Sign(forceSmoothed.x) * 0.02f, sideCheck.point.y));
+                float distanceB = col.bounds.SqrDistance(move + cornerPoint);
                 float percentdiff = distanceA / distanceB;
                 move *= Mathf.Max(percentdiff, 0);
-                _forceSmoothed = 0;
+                forceSmoothed.x = 0;
             }
 
-            _rb.position += move * Time.deltaTime;
+            if (move.x > 0.02 || move.x < -0.02) {
+                rb.position += move;
+            }
         }
     }
 
-    private void MoveOffGround(Vector2 force) {
+    private void MoveOffGround(Vector2 force, bool isFlying) {
 
-        _col.sharedMaterial = _airMaterial;
+        col.sharedMaterial = airMaterial;
 
-        if (_rb.velocity.x < force.x && force.x > 0) {
-            H = Mathf.Min(AerialControl, force.x - _rb.velocity.x);
+        if (rb.velocity.x < force.x && force.x > 0) {
+            forceSmoothed.x = Mathf.Min(aerialControl, force.x - rb.velocity.x);
         }
-        else if (_rb.velocity.x > force.x && force.x < 0) {
-            H = Mathf.Max(-AerialControl, force.x - _rb.velocity.x);
+        else if (rb.velocity.x > force.x && force.x < 0) {
+            forceSmoothed.x = Mathf.Max(-aerialControl, force.x - rb.velocity.x);
         }
         else {
-            H = 0;
+            forceSmoothed.x = 0;
         }
 
-        V = 0;
+        if (forceSmoothed.y < force.y && force.y > 0) {
+            forceSmoothed.y = Mathf.Min(aerialControl, force.y - rb.velocity.y);
+        }
+        else if (rb.velocity.y > force.y && force.y < 0) {
+            forceSmoothed.y = Mathf.Max(-aerialControl, force.y - rb.velocity.y);
+        }
+        else {
+            forceSmoothed.y = 0;
+        }
 
+        if (wallContacts.Count > 0) {
+            forceSmoothed.x = 0;
+        }
 
-        Vector2 move = new Vector2(H, V);
+        rb.velocity += forceSmoothed;
+    }
 
-
-        _rb.velocity += move;
+    public void ApplyJump(float height) {
+        rb.velocity += new Vector2(forceSmoothed.x, height);
+        IsTouchingGround = false;
+        hasJumped = true;
+        InAir?.Invoke(name + " is in the air!");
+        Jumped?.Invoke(name + " jumped by " + height + " units!");
     }
 
     private List<ContactPoint2D> CheckGroundContacts() {
         ContactPoint2D[] contactsAll = new ContactPoint2D[20];
         List<ContactPoint2D> contacts = new List<ContactPoint2D>();
-        int contactsNum = _col.GetContacts(contactsAll);
+        int contactsNum = col.GetContacts(contactsAll);
         for (int i = 0; i < contactsNum; i++) {
             float ang = Vector2.Angle(transform.up, contactsAll[i].normal);
-            if (ang < SlopeTolerance) {
+            if (ang < slopeTolerance) {
+                contacts.Add(contactsAll[i]);
+            }
+        }
+        return contacts;
+    }
+
+    private List<ContactPoint2D> CheckWallContacts() {
+        ContactPoint2D[] contactsAll = new ContactPoint2D[20];
+        List<ContactPoint2D> contacts = new List<ContactPoint2D>();
+        int contactsNum = col.GetContacts(contactsAll);
+        for (int i = 0; i < contactsNum; i++) {
+            float ang = Vector2.Angle(transform.up, contactsAll[i].normal);
+            if (ang >= slopeTolerance) {
                 contacts.Add(contactsAll[i]);
             }
         }
@@ -187,10 +239,10 @@ public class ActorController : MonoBehaviour {
             
             Vector2 originPoint = Vector2.Lerp(start, end, (float)i / (raycastCount - 1));
             Debug.DrawRay(originPoint, direction, Color.red);
-            RaycastHit2D ray = Physics2D.Linecast(originPoint, direction + originPoint, _layerMask);
+            RaycastHit2D ray = Physics2D.Linecast(originPoint, direction + originPoint, layerMask);
 
             if (ray) {
-                float rayDistance = _col.bounds.SqrDistance(ray.point);
+                float rayDistance = col.bounds.SqrDistance(ray.point);
                 if (rayDistance < closestDistance) {
                     bestValid = ray;
                 }
@@ -201,4 +253,6 @@ public class ActorController : MonoBehaviour {
 
         return bestValid;
     }
+
+
 }
