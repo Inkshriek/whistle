@@ -18,6 +18,7 @@ public class TestMonster : MonsterBase {
         if (check) {
             _speed *= -1;
             _animation.transform.localScale = new Vector3(-_animation.transform.localScale.x, _animation.transform.localScale.y, _animation.transform.localScale.z);
+            Senses.FlipVision();
         }
 
         if (Time.fixedTime % 10 == 0) {
@@ -63,7 +64,7 @@ public class TestMonster : MonsterBase {
             }
 
             AI.ResetPath();
-            AI.GenerateNewPath(transform.position, Senses.Target.transform.position);
+            AI.GenerateNewPath(transform.position, Senses.target.transform.position);
         }
 
         _animation.AnimationName = "run";

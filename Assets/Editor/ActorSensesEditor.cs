@@ -22,7 +22,7 @@ public class ActorSensesEditor : Editor {
         script.VisionRadius = EditorGUILayout.FloatField("Vision Radius", script.VisionRadius);
         script.HearingRadius = EditorGUILayout.FloatField("Hearing Radius", script.HearingRadius);
         EditorGUILayout.Space();
-        script.Target = (BoxCollider2D)EditorGUILayout.ObjectField("Target", script.Target, typeof(BoxCollider2D), true);
+        script.target = (BoxCollider2D)EditorGUILayout.ObjectField("Target", script.target, typeof(BoxCollider2D), true);
         if (GUI.changed) {
             Undo.RegisterCompleteObjectUndo(script, "Actor Senses Change");
         }
