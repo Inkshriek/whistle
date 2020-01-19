@@ -4,8 +4,23 @@ using Whistle.Actors;
 
 namespace Whistle.Conditions {
 
+    public class Conditions : MonoBehaviour {
+        //The Conditions class is a container of various modular effects and status intended to be read from and controlled by another class.
+        //They essentially "modify" other classes, in a way, when used properly. There could be a condition that slows a character's movement speed, for example.
+        //It's important to know they don't modify other classes by themselves. The class using these must apply them.
+
+        private void Awake() {
+            
+        }
+
+        private void Update() {
+            
+        }
+    }
+
     public interface IConditions {
         //This interface works with conditions. For classes that use them (especially characters), you should probably implement this.
+
         Cond GetCond(string name);
         void AddCond(Cond cond);
         void RemoveCond(string name);

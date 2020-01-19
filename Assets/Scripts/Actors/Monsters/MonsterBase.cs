@@ -13,23 +13,23 @@ public abstract class MonsterBase : ActorMethods, IActor, IHealth {
     public ActorController Controller { get; protected set; }
     public bool Active { get; set; }
 
-    [SerializeField] protected float _health;
+    [SerializeField] protected float health;
     public float Health {
         get {
-            return _health;
+            return health;
         }
         set {
-            _health = Mathf.Clamp(value, 0, MaxHealth);
+            health = Mathf.Clamp(value, 0, MaxHealth);
         }
     }
 
-    [SerializeField] protected float _maxHealth;
+    [SerializeField] protected float maxHealth;
     public float MaxHealth {
         get {
-            return _maxHealth;
+            return maxHealth;
         }
         set {
-            _maxHealth = Mathf.Max(0, value);
+            maxHealth = Mathf.Max(0, value);
         }
     }
 
@@ -44,8 +44,8 @@ public abstract class MonsterBase : ActorMethods, IActor, IHealth {
     protected MonsterState State { get; set; }
     public ActorSenses Senses { get; protected set; }
 
-    [SerializeField] protected float _stunDuration;
-    [SerializeField] protected SkeletonAnimation _animation;
+    [SerializeField] protected float stunDuration;
+    [SerializeField] protected SkeletonAnimation anim;
 
     //A monster is any type of regular enemy that Ichabod faces.
     //Monster AI functions off a system of states and events, and scripts that inherit this must control these states and define their functionality.
@@ -67,7 +67,7 @@ public abstract class MonsterBase : ActorMethods, IActor, IHealth {
 
     protected void BaseUpdate() {
         //Call this method in Update() or FixedUpdate() at the top.
-        if (_stunDuration <= 0 && !Busy && Active) {
+        if (stunDuration <= 0 && !Busy && Active) {
             switch (State) {
                 case MonsterState.Patrolling:
                     Patrolling();
@@ -87,7 +87,7 @@ public abstract class MonsterBase : ActorMethods, IActor, IHealth {
             }
         }
 
-        _stunDuration = Mathf.Max(_stunDuration - Time.deltaTime, 0);
+        stunDuration = Mathf.Max(stunDuration - Time.deltaTime, 0);
 	}
 
     protected abstract void Patrolling();

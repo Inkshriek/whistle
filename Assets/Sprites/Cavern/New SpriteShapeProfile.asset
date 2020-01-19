@@ -4,7 +4,8 @@
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -44,9 +45,5 @@ MonoBehaviour:
   - m_CornerType: 7
     m_Sprites:
     - {fileID: 21300014, guid: d2a7e8384a43d6f42872652587a26eab, type: 3}
-  m_FillPixelPerUnit: 100
-  m_BevelSize: 0
-  m_BevelCutoff: 0
   m_FillOffset: 0
-  m_WorldSpaceUV: 0
   m_UseSpriteBorders: 1

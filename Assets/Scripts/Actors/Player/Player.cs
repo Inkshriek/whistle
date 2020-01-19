@@ -159,6 +159,8 @@ public class Player : ActorMethods, IActor, IConditions, IHealth {
     public void Damage(float value, DamageType type) {
         value = Modifier.AdjustNumber(conds, value, Modifier.Tag.Damage);
         HealthDeficit += value;
+        Controller.InputMotion = new Vector2(2, 0);
+        Controller.ApplyJump(new Vector2(5,5));
     }
 
     private void BleedHealth() {

@@ -5,19 +5,19 @@ using Whistle.Actors;
 
 public class TestMonster : MonsterBase {
 
-    private Rigidbody2D _rb;
-    private BoxCollider2D _col;
-    private Transform _transform;
+    private Rigidbody2D rb;
+    private BoxCollider2D col;
+    private Transform trans;
 
-    private float _speed = 5;
+    private float speed = 5;
 
     protected override void Patrolling() {
-        _animation.AnimationName = "walk";
-        Controller.InputMotion = new Vector2(_speed, 0);
-        RaycastHit2D check = Physics2D.BoxCast((Vector2)_transform.position + _col.offset, new Vector2(1, _col.size.y * _transform.localScale.y), 0, Vector2.right * Mathf.Sign(_speed), 1, 1);
+        anim.AnimationName = "walk";
+        Controller.InputMotion = new Vector2(speed, 0);
+        RaycastHit2D check = Physics2D.BoxCast((Vector2)trans.position + col.offset, new Vector2(1, col.size.y * trans.localScale.y), 0, Vector2.right * Mathf.Sign(speed), 1, 1);
         if (check) {
-            _speed *= -1;
-            _animation.transform.localScale = new Vector3(-_animation.transform.localScale.x, _animation.transform.localScale.y, _animation.transform.localScale.z);
+            speed *= -1;
+            anim.transform.localScale = new Vector3(-anim.transform.localScale.x, anim.transform.localScale.y, anim.transform.localScale.z);
             Senses.FlipVision();
         }
 
@@ -38,7 +38,6 @@ public class TestMonster : MonsterBase {
     protected override void Chasing() {
         if (!AI.Operating) {
             if (AI.PathReady) {
-                Debug.Log("it do the thing");
                 Vector2 direction;
                 int index = AI.ParsePathForDirection(transform.position, out direction);
 
@@ -52,9 +51,9 @@ public class TestMonster : MonsterBase {
                     }
                 }
 
-                _speed = Mathf.Sign(direction.x) * Mathf.Abs(_speed);
+                speed = Mathf.Sign(direction.x) * Mathf.Abs(speed);
                 if (direction.x != 0) {
-                    Controller.InputMotion = new Vector2(_speed, 0);
+                    Controller.InputMotion = new Vector2(speed * 2, 0);
                 }
                 else {
                     Controller.InputMotion = new Vector2(0, 0);
@@ -67,13 +66,13 @@ public class TestMonster : MonsterBase {
             AI.GenerateNewPath(transform.position, Senses.target.transform.position);
         }
 
-        _animation.AnimationName = "run";
-        RaycastHit2D check = Physics2D.BoxCast((Vector2)_transform.position + _col.offset, _col.size, 0f, Vector2.right * Mathf.Sign(_speed), 2, LayerMask.GetMask("Player"));
+        anim.AnimationName = "run";
+        RaycastHit2D check = Physics2D.BoxCast((Vector2)trans.position + col.offset, col.size, 0f, Vector2.right * Mathf.Sign(speed), 2, LayerMask.GetMask("Player"));
         if (check) {
             StartAction(AttackAnim);
         }
 
-        _animation.transform.localScale = new Vector3(-Mathf.Sign(_speed) * Mathf.Abs(_animation.transform.localScale.x), _animation.transform.localScale.y, _animation.transform.localScale.z);
+        anim.transform.localScale = new Vector3(-Mathf.Sign(speed) * Mathf.Abs(anim.transform.localScale.x), anim.transform.localScale.y, anim.transform.localScale.z);
     }
 
     protected override void Enraged() {
@@ -82,7 +81,7 @@ public class TestMonster : MonsterBase {
     private IEnumerator IdleAnim() {
 
         Controller.InputMotion = new Vector2(0, 0);
-        _animation.AnimationName = "idle";
+        anim.AnimationName = "idle";
         for (float i = 0; i < 3; i += 0.1f) {
             if (Senses.TargetVisible) {
                 State = MonsterState.Chasing;
@@ -96,8 +95,9 @@ public class TestMonster : MonsterBase {
     private IEnumerator AttackAnim() {
 
         Controller.InputMotion = new Vector2(0, 0);
-        _animation.AnimationName = "attack";
-        DamageBox.Create(transform, new Vector2(2 * Mathf.Sign(_speed), 0), new Vector2(2, 2), 25, 1, false, DamageType.Normal);
+        anim.AnimationName = "attack";
+        //DamageArea.Spawn(transform, new Vector2(2 * Mathf.Sign(speed), 0), new Vector2(2, 2), 25, 1, false, DamageType.Normal);
+        DamageArea.Spawn((Vector2)transform.position + new Vector2(2 * Mathf.Sign(speed), 0), "Slash");
         yield return new WaitForSeconds(1);
         FinishAction();
         
@@ -108,9 +108,9 @@ public class TestMonster : MonsterBase {
 
         DisplayName = "Test";
         Active = true;
-        _rb = GetComponent<Rigidbody2D>();
-        _col = GetComponent<BoxCollider2D>();
-        _transform = GetComponent<Transform>();
+        rb = GetComponent<Rigidbody2D>();
+        col = GetComponent<BoxCollider2D>();
+        trans = GetComponent<Transform>();
         AI = new NavAgent(NavMesh.SceneNav, false, false, false);
     }
 

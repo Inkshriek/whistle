@@ -199,8 +199,16 @@ public class ActorController : MonoBehaviour {
         rb.velocity += new Vector2(forceSmoothed.x, height);
         IsTouchingGround = false;
         hasJumped = true;
-        InAir?.Invoke(name + " is in the air!");
+        InAir?.Invoke(name + " is in the air! (had jumped)");
         Jumped?.Invoke(name + " jumped by " + height + " units!");
+    }
+
+    public void ApplyJump(Vector2 force) {
+        rb.velocity += new Vector2(forceSmoothed.x + force.x, force.y);
+        IsTouchingGround = false;
+        hasJumped = true;
+        InAir?.Invoke(name + " is in the air! (had jumped)");
+        Jumped?.Invoke(name + " jumped by " + force.y + " units!");
     }
 
     private List<ContactPoint2D> CheckGroundContacts() {
