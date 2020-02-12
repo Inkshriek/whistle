@@ -22,13 +22,20 @@ public class NavMesh : MonoBehaviour {
 
     }
 
-    public struct AgentSkill {
+    public struct Attributes {
+        //This is a set of attributes that the NavMesh asks for when finding a path, so it can handle some additional logic.
         public bool canFly;
         public bool canClimb;
         public bool canSwim;
+
+        public Attributes(bool canFly, bool canClimb, bool canSwim) {
+            this.canFly = canFly;
+            this.canClimb = canClimb;
+            this.canSwim = canSwim;
+        }
     }
 
-    public Vector2[] GetPath(Vector2 start, Vector2 end, AgentSkill skills) {
+    public Vector2[] GetPath(Vector2 start, Vector2 end, Attributes atts) {
 
         //This finds a full set of Vector2 that constitutes the best valid "path" for the recipient to take.
         //Do not call this directly, as it will be executed in the main thread. Instead use the NavAgent class for all operations.
@@ -82,7 +89,7 @@ public class NavMesh : MonoBehaviour {
                 };
 
             foreach (Node adjacent in adjacentNodes) {
-                if (!IsTraversible(current, adjacent, skills) || IsInGroup(adjacent.loc, closedLocs)) {
+                if (!IsTraversible(current, adjacent, atts) || IsInGroup(adjacent.loc, closedLocs)) {
                     continue;
                 }
 
@@ -274,12 +281,12 @@ public class NavMesh : MonoBehaviour {
         return node;
     }
 
-    private bool IsTraversible(Node from, Node to, AgentSkill skills) {
+    private bool IsTraversible(Node from, Node to, Attributes atts) {
         switch (to.flag) {
             case NavFlag.Normal:
                 return true;
             case NavFlag.Flight:
-                if ((to.loc.y > from.loc.y) && !skills.canFly) {
+                if ((to.loc.y > from.loc.y) && !atts.canFly) {
                     return false;
                 }
                 else {

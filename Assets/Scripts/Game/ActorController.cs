@@ -7,13 +7,13 @@ using Whistle.Actors;
 [DisallowMultipleComponent]
 public class ActorController : MonoBehaviour {
 
-    [SerializeField] public NavType movementType;
-    [SerializeField] public float friction;
-    [SerializeField] public float aerialControl;
-    [SerializeField] [Range(0, 90)] public float slopeTolerance;
-    [SerializeField] [Range(0, 1)] public float snapdownRadius;
-    [SerializeField] public int horizontalRays;
-    [SerializeField] public int verticalRays;
+    public NavType movementType;
+    public float friction;
+    public float aerialControl;
+    [Range(0, 90)] public float slopeTolerance;
+    [Range(0, 1)] public float snapdownRadius;
+    public int horizontalRays;
+    public int verticalRays;
 
     public Vector2 InputMotion { get; set; }
     public bool IsTouchingGround { get; private set; }
