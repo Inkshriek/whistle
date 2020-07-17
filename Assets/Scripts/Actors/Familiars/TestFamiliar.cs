@@ -23,44 +23,40 @@ public class TestFamiliar : Familiar {
     }
 
     protected override void Behavior() {
-        if (!AI.Operating) {
-            if (AI.PathReady) {
-                //This part will move them left or right depending on which way will lead them closer to the player.
-                Vector2 direction;
-                int index = AI.ParsePathForDirection(transform.position, out direction);
+        if (AI.PathReady) {
+            //This part will move them left or right depending on which way will lead them closer to the player.
+            Vector2 direction;
+            int index = AI.GetNextDirection(transform.position, out direction);
 
-                while (direction.x == 0) {
-                    if (direction.y != 0) {
-                        index++;
-                        AI.ParsePathForDirection(index, out direction);
-                    }
-                    else {
-                        break;
-                    }
-                }
-
-                if (direction.x != 0) {
-                    if (Vector2.Distance(Player.gameObject.transform.position, transform.position) > 5) {
-                        Controller.InputMotion = new Vector2(Mathf.Sign(direction.x) * 10, 0);
-                    }
-                    else {
-                        Controller.InputMotion = new Vector2(Mathf.Sign(direction.x) * 5, 0);
-                    }
+            while (direction.x == 0) {
+                if (direction.y != 0) {
+                    index++;
+                    AI.GetNextDirection(index, out direction);
                 }
                 else {
-                    Controller.InputMotion = new Vector2(0, 0);
-                }
-
-                //Checking if they need to jump.
-                if (!Physics2D.OverlapBox(new Vector2(col.bounds.center.x + Mathf.Sign(Controller.InputMotion.x) * col.bounds.extents.x, col.bounds.min.y), col.size, 0) && Controller.IsTouchingGround) {
-                    Controller.ApplyJump(10);
-                    Debug.Log("test jump");
+                    break;
                 }
             }
 
-            AI.ResetPath();
-            AI.GenerateNewPath(transform.position, Player.transform.position);
+            if (direction.x != 0) {
+                if (Vector2.Distance(Player.gameObject.transform.position, transform.position) > 5) {
+                    Controller.InputMotion = new Vector2(Mathf.Sign(direction.x) * 10, 0);
+                }
+                else {
+                    Controller.InputMotion = new Vector2(Mathf.Sign(direction.x) * 5, 0);
+                }
+            }
+            else {
+                Controller.InputMotion = new Vector2(0, 0);
+            }
+
+            //Checking if they need to jump.
+            if (!Physics2D.OverlapBox(new Vector2(col.bounds.center.x + Mathf.Sign(Controller.InputMotion.x) * col.bounds.extents.x, col.bounds.min.y), col.size, 0) && Controller.IsTouchingGround) {
+                Controller.ApplyJump(10);
+                Debug.Log("test jump");
+            }
         }
+        AI.GenerateNewPath(transform.position, Player.transform.position, false);
     }
 
     protected override void FamiliarAbility() {

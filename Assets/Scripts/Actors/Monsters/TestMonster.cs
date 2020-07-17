@@ -36,35 +36,30 @@ public class TestMonster : MonsterBase {
     }
 
     protected override void Chasing() {
-        if (!AI.Operating) {
-            if (AI.PathReady) {
-                Vector2 direction;
-                int index = AI.ParsePathForDirection(transform.position, out direction);
+        if (AI.PathReady) {
+            Vector2 direction;
+            int index = AI.GetNextDirection(transform.position, out direction);
 
-                while (direction.x == 0) {
-                    if (direction.y != 0) {
-                        index++;
-                        AI.ParsePathForDirection(index, out direction);
-                    }
-                    else {
-                        break;
-                    }
-                }
-
-                speed = Mathf.Sign(direction.x) * Mathf.Abs(speed);
-                if (direction.x != 0) {
-                    Controller.InputMotion = new Vector2(speed * 2, 0);
+            while (direction.x == 0) {
+                if (direction.y != 0) {
+                    index++;
+                    AI.GetNextDirection(index, out direction);
                 }
                 else {
-                    Controller.InputMotion = new Vector2(0, 0);
+                    break;
                 }
-
-
             }
 
-            AI.ResetPath();
-            AI.GenerateNewPath(transform.position, Senses.target.transform.position);
+            speed = Mathf.Sign(direction.x) * Mathf.Abs(speed);
+            if (direction.x != 0) {
+                Controller.InputMotion = new Vector2(speed * 2, 0);
+            }
+            else {
+                Controller.InputMotion = new Vector2(0, 0);
+            }
+
         }
+        AI.GenerateNewPath(transform.position, Senses.target.transform.position, false);    
 
         anim.AnimationName = "run";
         RaycastHit2D check = Physics2D.BoxCast((Vector2)trans.position + col.offset, col.size, 0f, Vector2.right * Mathf.Sign(speed), 2, LayerMask.GetMask("Player"));

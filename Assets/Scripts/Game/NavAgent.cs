@@ -17,7 +17,7 @@ public class NavAgent {
 
     public bool Operating {
         get {
-            if (Operations > 0) {
+            if (operations > 0) {
                 return true;
             }
             else {
@@ -39,7 +39,6 @@ public class NavAgent {
 
     public NavMesh Mesh { get => mesh; set => mesh = value; }
     public Dictionary<NavMesh.NavFlag, int> Weights { get => weights; set => weights = value; }
-    public int Operations { get => operations; private set => operations = value; }
     public List<Vector2> NavPath { get => navPath; private set => navPath = value; }
     public NavMesh.Attributes Attributes { get => atts; set => atts = value; }
 
@@ -50,7 +49,7 @@ public class NavAgent {
         this.Mesh = mesh;
         this.NavPath = new List<Vector2>();
         this.Attributes = new NavMesh.Attributes(canClimb, canFly, canSwim);
-        this.Operations = 0;
+        this.operations = 0;
     }
 
     private void Build(Vector2 start, Vector2 end) {
@@ -68,24 +67,28 @@ public class NavAgent {
 
         sw.Stop();
 
-        Operations--;
+        operations--;
     }
 
-    public void GenerateNewPath(Vector2 start, Vector2 end) {
-        //This method starts generating a new path under the agent. It can then be accessed for whatever you need to be doing.
+    ///<summary>This method starts generating a new path under the agent in a separate thread. It can then be accessed for whatever you need to be doing once <c>PathReady</c> is true.
+    ///It won't interrupt a currently running execution unless you define "interrupt" as true.</summary>
+    public void GenerateNewPath(Vector2 start, Vector2 end, bool interrupt) {
 
-        Operations++;
-        Thread navParse = new Thread(() => Build(start, end));
-        navParse.Start();
+        if (!Operating || interrupt) {
+            ResetPath();
+            operations++;
+            Thread navParse = new Thread(() => Build(start, end));
+            navParse.Start();
+        }
     }
 
     public void ResetPath() {
         NavPath = new List<Vector2>();
     }
 
-    public int ParsePathForDirection(Vector2 positionFrom, out Vector2 output) {
-
-        //This method returns a direction to go in based on the path that's been generated, and the Vector2 given. Helpful if you just need to know where the character should go next according to where they are on the path.
+    ///<summary>Returns a direction to go in next based on the closest node the given Vector2 is on the NavPath.
+    ///Helpful if you just need to know where the character should go relative to where they are on the path so far.</summary>
+    public int GetNextDirection(Vector2 positionFrom, out Vector2 output) {
 
         float shortestDistance = Mathf.Infinity;
         int closestNode = 0;
@@ -106,7 +109,8 @@ public class NavAgent {
         return closestNode;
     }
 
-    public int ParsePathForDirection(int index, out Vector2 output) {
+    ///<summary>Returns a direction to go in next on the NavPath based on the input index.</summary>
+    public int GetNextDirection(int index, out Vector2 output) {
 
         //Does the above, but returns the direction to go in based on the input index instead.
 
@@ -117,16 +121,5 @@ public class NavAgent {
             output = Vector2.zero;
         }
         return index;
-    }
-
-    //Past this point are helper methods that make the process of controlling the AI's pathing easy.
-    public void MoveHere(Vector2 start, Vector2 end, ActorController controller) {
-        //This just gives an instruction to move somewhere and takes care of the finer details.
-        if (Operating)
-            return;
-
-        Operations++;
-        Thread navParse = new Thread(() => Build(start, end));
-        navParse.Start();
     }
 }
