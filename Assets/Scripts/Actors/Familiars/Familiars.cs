@@ -13,7 +13,7 @@ namespace Whistle.Familiars {
         public bool Active { get; set; }
         public Player Player { get; set; }
 
-        protected void FixedUpdate() {
+        protected void Update() {
             if (!Active) {
 
             }

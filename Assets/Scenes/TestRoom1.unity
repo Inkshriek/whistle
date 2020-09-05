@@ -1422,10 +1422,9 @@ MonoBehaviour:
   movementType: 0
   friction: 1
   aerialControl: 0.5
+  gravity: 1
   slopeTolerance: 60
   snapdownRadius: 0.2
-  horizontalRays: 20
-  verticalRays: 5
 --- !u!50 &987973800
 Rigidbody2D:
   serializedVersion: 4
@@ -1434,9 +1433,9 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 987973796}
-  m_BodyType: 0
+  m_BodyType: 1
   m_Simulated: 1
-  m_UseFullKinematicContacts: 0
+  m_UseFullKinematicContacts: 1
   m_UseAutoMass: 0
   m_Mass: 1
   m_LinearDrag: 0
@@ -2521,11 +2520,6 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 0}
-    - target: {fileID: 730544799871575635, guid: fbc425c0d17c8b9468335ebcc0e89de8,
-        type: 3}
-      propertyPath: m_Controller
-      value: 
-      objectReference: {fileID: 9100000, guid: b5544fd906d1e784488849d8d759e34f, type: 2}
     - target: {fileID: 2930840063987666207, guid: fbc425c0d17c8b9468335ebcc0e89de8,
         type: 3}
       propertyPath: friction
@@ -2536,5 +2530,10 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: b0bd73812bcaba9429be0a1c9e6b848f, type: 2}
+    - target: {fileID: 730544799871575635, guid: fbc425c0d17c8b9468335ebcc0e89de8,
+        type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: b5544fd906d1e784488849d8d759e34f, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fbc425c0d17c8b9468335ebcc0e89de8, type: 3}
