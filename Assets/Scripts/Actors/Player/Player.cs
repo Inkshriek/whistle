@@ -121,32 +121,34 @@ public class Player : ActorMethods, IActor, IConditions, IHealth {
 
     private void Update() {
         if (Active) {
-            if (Controller.IsTouchingGround && Input.GetKeyDown(GameController.jumpKey)) {
-                Controller.ApplyJump(JumpHeight);
-                jumping = true;
-                rb.gravityScale /= 1.5f;
-            }
+            if (!Busy) {
+                if (Controller.IsTouchingGround && Input.GetKeyDown(GameController.jumpKey)) {
+                    Controller.ApplyJump(JumpHeight);
+                    jumping = true;
+                    rb.gravityScale /= 1.5f;
+                }
 
-            if (Input.GetAxisRaw("Vertical") < 0) {
-                State = PlayerState.Crouching;
-            }
-            else if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)) {
-                State = PlayerState.Running;
-            }
-            else {
-                State = PlayerState.Walking;
-            }
+                if (Input.GetAxisRaw("Vertical") < 0) {
+                    State = PlayerState.Crouching;
+                }
+                else if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)) {
+                    State = PlayerState.Running;
+                }
+                else {
+                    State = PlayerState.Walking;
+                }
 
-            if (Controller.IsTouchingGround) {
-                Controller.InputMotion = new Vector2(Input.GetAxisRaw("Horizontal") * Speed, 0);
-            }
-            else {
-                Controller.InputMotion = new Vector2(Input.GetAxisRaw("Horizontal") * walkSpeed, 0);
-            }
+                if (Controller.IsTouchingGround) {
+                    Controller.InputMotion = new Vector2(Input.GetAxisRaw("Horizontal") * Speed, 0);
+                }
+                else {
+                    Controller.InputMotion = new Vector2(Input.GetAxisRaw("Horizontal") * walkSpeed, 0);
+                }
 
-            if (jumping && (!Input.GetKey(GameController.jumpKey) || rb.velocity.y < 0)) {
-                rb.gravityScale *= 1.5f;
-                jumping = false;
+                if (jumping && (!Input.GetKey(GameController.jumpKey) || rb.velocity.y < 0)) {
+                    rb.gravityScale *= 1.5f;
+                    jumping = false;
+                }
             }
 
             TickConds();

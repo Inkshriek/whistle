@@ -19,7 +19,7 @@ public abstract class ActorMethods : MonoBehaviour {
         StopCoroutine(coroutine);
         Busy = false;
     }
-    //If you're using this though, ALWAYS call EndAction to set Busy back to false at the end of a coroutine. That's what isn't automatic, so be sure to.
+    //If you're using this though, ALWAYS call FinishAction to set Busy back to false at the end of a coroutine. That's what isn't automatic, so be sure to.
 
 
 }

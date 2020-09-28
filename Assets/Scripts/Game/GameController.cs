@@ -21,6 +21,7 @@ public class GameController : MonoBehaviour {
     public static bool cutsceneRunning = false;
 
     public static KeyCode jumpKey = KeyCode.Space;
+    public static KeyCode useKey = KeyCode.E;
 
     private void Awake() {
         SceneManager.sceneLoaded += OnSceneLoaded;
