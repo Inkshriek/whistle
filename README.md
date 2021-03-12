@@ -5,6 +5,7 @@ Whistle is a Metroidvania platform game, where rather than a slayer of monsters,
 Just beware stepping into the light. After all, they can see you.
 
 ![image](https://user-images.githubusercontent.com/20692853/111009697-60dc0e00-8362-11eb-8514-cfb69d06584f.png)
+<br>
 <img src="https://media.giphy.com/media/x2zPjltFeSCgbdiD8Z/giphy.gif">
 
 This is presently very early in development, so presently 
