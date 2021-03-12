@@ -1,4 +1,8 @@
-# whistle
-The GitHub repository for the game "Whistle" we're developing.
+# Whistle
 
-We are not developing it at the present time much, though we are making slow updates and hoping to work full-time soon.
+Whistle is a Metroidvania platform game that's still in development, where rather than a slayer of monsters, you are a child looking to survive an abandoned underground city. All you have is your dagger, the clothes on your back, and a curious whistle for curious familiars. Though one may find there's much left behind here to discover. 
+
+Just beware stepping into the light. After all, they can see you.
+
+![image](https://user-images.githubusercontent.com/20692853/111009697-60dc0e00-8362-11eb-8514-cfb69d06584f.png)
+
