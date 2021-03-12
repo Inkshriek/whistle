@@ -8,4 +8,4 @@ Just beware stepping into the light. After all, they can see you.
 <br>
 <img src="https://media.giphy.com/media/x2zPjltFeSCgbdiD8Z/giphy.gif">
 
-This is presently very early in development, so presently 
+This is presently very early in development, so there isn't much to show just yet. We are prioritizing functionality for now, so look out for that!
